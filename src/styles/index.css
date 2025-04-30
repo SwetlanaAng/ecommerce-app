@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import './colors.css';
+
 * {
   padding: 0;
   margin: 0;
@@ -7,13 +10,8 @@
   text-decoration: none;
 }
 
-:root {
-  --bg-color: #f7f7f7;
-  --text-color: #2b1414;
-}
-
 body {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Nunito', sans-serif;
   line-height: 130%;
   font-weight: 400;
   margin: 0;
@@ -24,8 +22,29 @@ body {
   color: var(--text-color);
 }
 
+h1 {
+  line-height: 130%;
+  color: var(--text-color);
+  margin-bottom: 20px;
+}
+
+a {
+  color: var(--accent-color);
+  transition: all 0.3s ease;
+  &:hover {
+    color: var(--accent-color-hover);
+  }
+}
+
 .container {
-  max-width: 1200px;
+  max-width: 1258px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 15px;
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 22px;
+  }
 }

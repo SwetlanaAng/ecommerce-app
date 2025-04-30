@@ -5,6 +5,7 @@ import Login from '../pages/login/Login';
 import Register from '../pages/register/Register';
 import Header from '../components/header/Header';
 import { AppRouterPaths } from './AppRouterPathsEnums';
+import NotFound from '../pages/notFound/NotFound';
 
 const AppRouter: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const AppRouter: React.FC = () => {
               <Route path={AppRouterPaths.HOME} element={<Home />} />
               <Route path={AppRouterPaths.LOGIN} element={<Login />} />
               <Route path={AppRouterPaths.REGISTER} element={<Register />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </main>
