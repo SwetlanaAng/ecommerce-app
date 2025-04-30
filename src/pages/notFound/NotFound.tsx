@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import notFound from '../../assets/notFound.png';
-import Button from '../../components/header/button/Button';
+import Button from '../../components/button/Button';
 import './NotFound.css';
 
 const NotFound: React.FC = () => {
