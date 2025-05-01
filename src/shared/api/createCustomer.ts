@@ -1,7 +1,15 @@
 import { apiRoot } from './BuildClient';
+import { CustomerDraft, CustomerSignInResult, ClientResponse } from '@commercetools/platform-sdk';
 
-const getProject = () => {
-  return apiRoot.get().execute();
+const createCustomer = (
+  newCustomerData: CustomerDraft
+): Promise<ClientResponse<CustomerSignInResult>> => {
+  return apiRoot
+    .customers()
+    .post({
+      body: newCustomerData,
+    })
+    .execute();
 };
 
-getProject().then(console.log).catch(console.error);
+export default createCustomer;
