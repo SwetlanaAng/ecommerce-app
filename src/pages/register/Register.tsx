@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
-import { createCustomer } from '../../shared/api/createCustomer';
+import createCustomer from '../../shared/api/createCustomer';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
