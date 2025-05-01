@@ -18,6 +18,8 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@commercetools/platform-sdk": "^8.8.0",
+    "@commercetools/ts-client": "^3.3.0",
     "@eslint/js": "^9.22.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
