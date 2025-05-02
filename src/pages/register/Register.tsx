@@ -12,6 +12,7 @@ const Register: React.FC = () => {
     lastName: '',
   });
   const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -24,6 +25,7 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
       const customerDraft = {
@@ -34,9 +36,11 @@ const Register: React.FC = () => {
       };
 
       await createCustomer(customerDraft);
-      navigate(AppRouterPaths.HOME);
+      navigate(AppRouterPaths.LOGIN);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during registration');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,6 +59,7 @@ const Register: React.FC = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -68,6 +73,7 @@ const Register: React.FC = () => {
             onChange={handleChange}
             required
             minLength={8}
+            disabled={isLoading}
           />
         </div>
 
@@ -80,6 +86,7 @@ const Register: React.FC = () => {
             value={formData.firstName}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -92,11 +99,12 @@ const Register: React.FC = () => {
             value={formData.lastName}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
         </div>
 
-        <button type="submit" className="submit-button">
-          Register
+        <button type="submit" className="submit-button" disabled={isLoading}>
+          {isLoading ? 'Registering...' : 'Register'}
         </button>
       </form>
 

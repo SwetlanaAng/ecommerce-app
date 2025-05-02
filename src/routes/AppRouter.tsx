@@ -6,6 +6,8 @@ import Register from '../pages/register/Register';
 import Header from '../components/header/Header';
 import { AppRouterPaths } from './AppRouterPathsEnums';
 import NotFound from '../pages/notFound/NotFound';
+import { AuthProvider } from '../shared/context/AuthContext';
+import AuthGuard from '../shared/guards/AuthGuard';
 
 const AppRouter: React.FC = () => {
   return (
@@ -15,19 +17,35 @@ const AppRouter: React.FC = () => {
         v7_relativeSplatPath: true,
       }}
     >
-      <div className="app-container">
-        <Header />
-        <main className="main-content">
-          <div className="container">
-            <Routes>
-              <Route path={AppRouterPaths.HOME} element={<Home />} />
-              <Route path={AppRouterPaths.LOGIN} element={<Login />} />
-              <Route path={AppRouterPaths.REGISTER} element={<Register />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
-        </main>
-      </div>
+      <AuthProvider>
+        <div className="app-container">
+          <Header />
+          <main className="main-content">
+            <div className="container">
+              <Routes>
+                <Route path={AppRouterPaths.HOME} element={<Home />} />
+                <Route
+                  path={AppRouterPaths.LOGIN}
+                  element={
+                    <AuthGuard requireAuth={false}>
+                      <Login />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path={AppRouterPaths.REGISTER}
+                  element={
+                    <AuthGuard requireAuth={false}>
+                      <Register />
+                    </AuthGuard>
+                  }
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+          </main>
+        </div>
+      </AuthProvider>
     </BrowserRouter>
   );
 };
