@@ -1,15 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
 import './Header.css';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 
-const Header: React.FC = () => {
+const links = [
+  {
+    path: AppRouterPaths.HOME,
+    text: 'Главная',
+  },
+  {
+    path: AppRouterPaths.LOGIN,
+    text: 'Вход',
+  },
+  {
+    path: AppRouterPaths.REGISTER,
+    text: 'Регистрация',
+  },
+];
+
+interface HeaderProps {
+  isMobileMenuOpen: boolean;
+  toggleMobileMenu: () => void;
+  closeMobileMenu: () => void;
+}
+
+const Header: React.FC<HeaderProps> = () => {
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
     return location.pathname === path ? 'active' : '';
   };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
+  useEffect(() => {
+    closeMobileMenu();
+  }, [location]);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <header className="header">
@@ -20,17 +66,24 @@ const Header: React.FC = () => {
               <img src={logo} alt="logo" />
             </Link>
           </div>
-          <nav className="nav">
+
+          <div className={`hamburger ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          {mobileMenuOpen && <div className="menu-overlay" onClick={closeMobileMenu}></div>}
+
+          <nav className={`nav ${mobileMenuOpen ? 'active' : ''}`}>
             <ul>
-              <li className={isActive(AppRouterPaths.HOME)}>
-                <Link to={AppRouterPaths.HOME}>Главная</Link>
-              </li>
-              <li className={isActive(AppRouterPaths.LOGIN)}>
-                <Link to={AppRouterPaths.LOGIN}>Вход</Link>
-              </li>
-              <li className={isActive(AppRouterPaths.REGISTER)}>
-                <Link to={AppRouterPaths.REGISTER}>Регистрация</Link>
-              </li>
+              {links.map(link => (
+                <li className={isActive(link.path)} key={link.path}>
+                  <Link to={link.path} onClick={closeMobileMenu}>
+                    {link.text}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>
