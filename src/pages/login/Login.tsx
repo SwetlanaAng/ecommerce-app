@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
-import loginCustomer from '../../shared/api/loginCustomer';
+import { getCustomerToken } from '../../shared/api/getCustomerToken';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -29,10 +29,10 @@ const Login: React.FC = () => {
         password: formData.password,
       };
 
-      const response = await loginCustomer(loginData);
-      console.log('Login successful:', response);
+      const tokenData = await getCustomerToken(loginData);
 
-      localStorage.setItem('currentUser', JSON.stringify(response.body.customer));
+      localStorage.setItem('customerToken', tokenData.access_token);
+      localStorage.setItem('currentUser', JSON.stringify(tokenData));
 
       navigate(AppRouterPaths.HOME);
     } catch (err) {
