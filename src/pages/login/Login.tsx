@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
-import { useAuth } from '../../shared/context/AuthContext';
+import { useAuth } from '../../shared/hooks/useAuth';
 import { getCustomerToken } from '../../shared/api/getCustomerToken';
 
 const Login: React.FC = () => {
@@ -33,15 +33,22 @@ const Login: React.FC = () => {
         password: formData.password,
       };
 
-      const response = await loginCustomer(loginData);
-      login(response.body.customer);
+      const tokenData = await getCustomerToken(loginData);
+      localStorage.setItem('customerToken', tokenData.access_token);
+
+      const userData = {
+        id: tokenData.user_id || formData.email,
+        email: formData.email,
+      };
+
+      login(userData);
       navigate(AppRouterPaths.HOME);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Неверный email или пароль');
     } finally {
       setIsLoading(false);
     }
- };
+  };
 
   return (
     <div className="auth-page">
