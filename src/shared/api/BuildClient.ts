@@ -4,36 +4,31 @@ import {
   type HttpMiddlewareOptions,
 } from '@commercetools/ts-client';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
-
-const projectKey = 'gitinitshop';
-const clientId = 'xretPewcCVqHa-D-478PaIQ3';
-const clientSecret = 'Z-bbHsxBGYarShxah3q7deHpa4zZeM0x';
-const authUrl = 'https://auth.us-east-2.aws.commercetools.com';
-const apiUrl = 'https://api.us-east-2.aws.commercetools.com';
-
-const scopes = ['manage_customers:gitinitshop'];
+import { KEYS } from './keys';
 
 const authMiddlewareOptions: AuthMiddlewareOptions = {
-  host: authUrl,
-  projectKey,
+  host: KEYS.AUTH_URL,
+  projectKey: KEYS.PROJECT_KEY,
   credentials: {
-    clientId,
-    clientSecret,
+    clientId: KEYS.CLIENT_ID,
+    clientSecret: KEYS.CLIENT_SECRET,
   },
-  scopes,
+  scopes: KEYS.SCOPES,
   httpClient: fetch,
 };
 
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
-  host: apiUrl,
+  host: KEYS.API_URL,
   httpClient: fetch,
 };
 
 const ctpClient = new ClientBuilder()
-  .withProjectKey(projectKey)
+  .withProjectKey(KEYS.PROJECT_KEY)
   .withClientCredentialsFlow(authMiddlewareOptions)
   .withHttpMiddleware(httpMiddlewareOptions)
   .withLoggerMiddleware()
   .build();
 
-export const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
+export const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
+  projectKey: KEYS.PROJECT_KEY,
+});

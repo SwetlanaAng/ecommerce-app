@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
-import loginCustomer from '../../shared/api/loginCustomer';
 import { useAuth } from '../../shared/context/AuthContext';
+import { getCustomerToken } from '../../shared/api/getCustomerToken';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+ };
 
   return (
     <div className="auth-page">
