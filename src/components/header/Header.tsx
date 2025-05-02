@@ -1,15 +1,93 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
 import './Header.css';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
+import { useAuth } from '../../shared/context/AuthContext';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  isMobileMenuOpen?: boolean;
+  toggleMobileMenu?: () => void;
+  closeMobileMenu?: () => void;
+}
+
+interface NavLink {
+  path: string;
+  text: string;
+  isLogout?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
     return location.pathname === path ? 'active' : '';
   };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate(AppRouterPaths.HOME);
+    closeMobileMenu();
+  };
+
+  useEffect(() => {
+    closeMobileMenu();
+  }, [location]);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  const getNavLinks = (): NavLink[] => {
+    const navLinks: NavLink[] = [
+      {
+        path: AppRouterPaths.HOME,
+        text: 'Главная',
+      },
+    ];
+
+    if (isAuthenticated) {
+      navLinks.push({
+        path: '#',
+        text: 'Выйти',
+        isLogout: true,
+      });
+    } else {
+      navLinks.push(
+        {
+          path: AppRouterPaths.REGISTER,
+          text: 'Регистрация',
+        },
+        {
+          path: AppRouterPaths.LOGIN,
+          text: 'Вход',
+        }
+      );
+    }
+
+    return navLinks;
+  };
+
+  const navLinks = getNavLinks();
 
   return (
     <header className="header">
@@ -20,17 +98,30 @@ const Header: React.FC = () => {
               <img src={logo} alt="logo" />
             </Link>
           </div>
-          <nav className="nav">
+
+          <div className={`hamburger ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          {mobileMenuOpen && <div className="menu-overlay" onClick={closeMobileMenu}></div>}
+
+          <nav className={`nav ${mobileMenuOpen ? 'active' : ''}`}>
             <ul>
-              <li className={isActive(AppRouterPaths.HOME)}>
-                <Link to={AppRouterPaths.HOME}>Главная</Link>
-              </li>
-              <li className={isActive(AppRouterPaths.LOGIN)}>
-                <Link to={AppRouterPaths.LOGIN}>Вход</Link>
-              </li>
-              <li className={isActive(AppRouterPaths.REGISTER)}>
-                <Link to={AppRouterPaths.REGISTER}>Регистрация</Link>
-              </li>
+              {navLinks.map((link, index) => (
+                <li className={isActive(link.path)} key={index}>
+                  {link.isLogout ? (
+                    <a onClick={handleLogout} className="logout-link">
+                      {link.text}
+                    </a>
+                  ) : (
+                    <Link to={link.path} onClick={closeMobileMenu}>
+                      {link.text}
+                    </Link>
+                  )}
+                </li>
+              ))}
             </ul>
           </nav>
         </div>

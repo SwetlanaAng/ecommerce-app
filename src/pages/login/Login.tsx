@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
+import { useAuth } from '../../shared/context/AuthContext';
 import { getCustomerToken } from '../../shared/api/getCustomerToken';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,6 +25,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
       const loginData = {
@@ -29,17 +33,15 @@ const Login: React.FC = () => {
         password: formData.password,
       };
 
-      const tokenData = await getCustomerToken(loginData);
-
-      localStorage.setItem('customerToken', tokenData.access_token);
-      localStorage.setItem('currentUser', JSON.stringify(tokenData));
-
+      const response = await loginCustomer(loginData);
+      login(response.body.customer);
       navigate(AppRouterPaths.HOME);
     } catch (err) {
-      console.error('Login error:', err);
       setError(err instanceof Error ? err.message : 'Неверный email или пароль');
+    } finally {
+      setIsLoading(false);
     }
-  };
+ };
 
   return (
     <div className="auth-page">
@@ -71,8 +73,8 @@ const Login: React.FC = () => {
           />
         </div>
 
-        <button type="submit" className="submit-button">
-          Войти
+        <button type="submit" className="submit-button" disabled={isLoading}>
+          {isLoading ? 'Вход...' : 'Войти'}
         </button>
       </form>
 
