@@ -30,19 +30,20 @@
   .form-group:nth-child(5) {
     align-self: center;
   }
-}
-.submit-button {
-  cursor: pointer;
-  width: 100%;
-  padding: 16px 0;
-  border: none;
-  color: var(--white);
-  background-color: var(--accent-color);
-  border-radius: 4px;
-  &:hover {
-    background-color: var(--accent-color-hover);
+  .submit-button {
+    cursor: pointer;
+    width: 100%;
+    padding: 16px 0;
+    border: none;
+    color: var(--white);
+    background-color: var(--accent-color);
+    border-radius: 4px;
+    &:hover {
+      background-color: var(--accent-color-hover);
+    }
   }
 }
+
 .auth-links {
   padding-top: 31px;
 }

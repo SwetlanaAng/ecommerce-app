@@ -28,24 +28,26 @@ const Input = ({
   minLength,
   autoComplete,
 }: InputProps) => (
-  <label htmlFor={name} className="label">
-    <p>{labelText}</p>
-    <input
-      className={`${className ? className : ''} input`}
-      id={name}
-      name={name}
-      onChange={onChange}
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      required={required}
-      disabled={disabled}
-      minLength={minLength}
-      autoComplete={autoComplete}
-    >
-      {children}
-    </input>
-  </label>
+  <div className="form-group">
+    <label htmlFor={name} className="label">
+      <p>{labelText}</p>
+      <input
+        className={`${className ? className : ''} input`}
+        id={name}
+        name={name}
+        onChange={onChange}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        required={required}
+        disabled={disabled}
+        minLength={minLength}
+        autoComplete={autoComplete}
+      >
+        {children}
+      </input>
+    </label>
+  </div>
 );
 
 export default Input;

@@ -4,6 +4,7 @@ import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import createCustomer from '../../shared/api/createCustomer';
 import Input from '../../components/input/Input';
 import './Register.css';
+import Button from '../../components/button/Button';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -54,74 +55,66 @@ const Register: React.FC = () => {
       <form onSubmit={handleSubmit} className="auth-form">
         {error && <div className="error-message">{error}</div>}
 
-        <div className="form-group">
-          <Input
-            labelText="Email"
-            name="email"
-            onChange={handleChange}
-            type="email"
-            placeholder="user@example.com"
-            value={formData.email}
-            required={true}
-            disabled={isLoading}
-          ></Input>
-        </div>
+        <Input
+          labelText="Email"
+          name="email"
+          onChange={handleChange}
+          type="email"
+          placeholder="user@example.com"
+          value={formData.email}
+          required={true}
+          disabled={isLoading}
+        ></Input>
 
-        <div className="form-group">
-          <Input
-            labelText="Password"
-            name="password"
-            onChange={handleChange}
-            type="password"
-            placeholder="*************"
-            value={formData.password}
-            required={true}
-            disabled={isLoading}
-            minLength={8}
-          ></Input>
-        </div>
+        <Input
+          labelText="Password"
+          name="password"
+          onChange={handleChange}
+          type="password"
+          placeholder="*************"
+          value={formData.password}
+          required={true}
+          disabled={isLoading}
+          minLength={8}
+        ></Input>
 
-        <div className="form-group">
-          <Input
-            labelText="First Name"
-            name="firstName"
-            onChange={handleChange}
-            placeholder="John"
-            value={formData.firstName}
-            required={true}
-            disabled={isLoading}
-          ></Input>
-        </div>
+        <Input
+          labelText="First Name"
+          name="firstName"
+          onChange={handleChange}
+          placeholder="John"
+          value={formData.firstName}
+          required={true}
+          disabled={isLoading}
+        ></Input>
 
-        <div className="form-group">
-          <Input
-            labelText="Last Name"
-            name="lastName"
-            onChange={handleChange}
-            placeholder="Doe"
-            value={formData.lastName}
-            required={true}
-            disabled={isLoading}
-          ></Input>
-        </div>
+        <Input
+          labelText="Last Name"
+          name="lastName"
+          onChange={handleChange}
+          placeholder="Doe"
+          value={formData.lastName}
+          required={true}
+          disabled={isLoading}
+        ></Input>
 
-        <div className="form-group">
-          <Input
-            labelText="Birth date"
-            name="BirthDate"
-            type="date"
-            onChange={handleChange}
-            placeholder="01.01.2000"
-            value={formData.birthDate}
-            required={true}
-            disabled={isLoading}
-            autoComplete="off"
-          ></Input>
-        </div>
-
-        <button type="submit" className="submit-button" disabled={isLoading}>
-          {isLoading ? 'Registering...' : 'Register'}
-        </button>
+        <Input
+          labelText="Birth date"
+          name="BirthDate"
+          type="date"
+          onChange={handleChange}
+          placeholder="01.01.2000"
+          value={formData.birthDate}
+          required={true}
+          disabled={isLoading}
+          autoComplete="off"
+        ></Input>
+        <Button
+          className="submit-button"
+          disabled={isLoading}
+          type="submit"
+          children={isLoading ? 'Registering...' : 'Register'}
+        />
       </form>
 
       <div className="auth-links">
