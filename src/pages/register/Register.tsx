@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import createCustomer from '../../shared/api/createCustomer';
+import Input from '../../components/input/Input';
+import './Register.css';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -10,6 +12,7 @@ const Register: React.FC = () => {
     password: '',
     firstName: '',
     lastName: '',
+    birthDate: '',
   });
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +36,7 @@ const Register: React.FC = () => {
         password: formData.password,
         firstName: formData.firstName,
         lastName: formData.lastName,
+        birthDate: formData.birthDate,
       };
 
       await createCustomer(customerDraft);
@@ -51,56 +55,68 @@ const Register: React.FC = () => {
         {error && <div className="error-message">{error}</div>}
 
         <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
+          <Input
+            labelText="Email"
             name="email"
+            onChange={handleChange}
+            type="email"
+            placeholder="user@example.com"
             value={formData.email}
-            onChange={handleChange}
-            required
+            required={true}
             disabled={isLoading}
-          />
+          ></Input>
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
+          <Input
+            labelText="Password"
             name="password"
+            onChange={handleChange}
+            type="password"
+            placeholder="*************"
             value={formData.password}
-            onChange={handleChange}
-            required
+            required={true}
+            disabled={isLoading}
             minLength={8}
-            disabled={isLoading}
-          />
+          ></Input>
         </div>
 
         <div className="form-group">
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
+          <Input
+            labelText="First Name"
             name="firstName"
-            value={formData.firstName}
             onChange={handleChange}
-            required
+            placeholder="John"
+            value={formData.firstName}
+            required={true}
             disabled={isLoading}
-          />
+          ></Input>
         </div>
 
         <div className="form-group">
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
+          <Input
+            labelText="Last Name"
             name="lastName"
-            value={formData.lastName}
             onChange={handleChange}
-            required
+            placeholder="Doe"
+            value={formData.lastName}
+            required={true}
             disabled={isLoading}
-          />
+          ></Input>
+        </div>
+
+        <div className="form-group">
+          <Input
+            labelText="Birth date"
+            name="BirthDate"
+            type="date"
+            onChange={handleChange}
+            placeholder="01.01.2000"
+            value={formData.birthDate}
+            required={true}
+            disabled={isLoading}
+            autoComplete="off"
+          ></Input>
         </div>
 
         <button type="submit" className="submit-button" disabled={isLoading}>

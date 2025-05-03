@@ -1,0 +1,12 @@
+.input {
+  cursor: pointer;
+  flex-shrink: 1;
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 0.2rem;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+}
