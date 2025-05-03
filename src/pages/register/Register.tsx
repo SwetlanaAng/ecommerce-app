@@ -100,7 +100,7 @@ const Register: React.FC = () => {
 
         <Input
           labelText="Birth date"
-          name="BirthDate"
+          name="birthDate"
           type="date"
           onChange={handleChange}
           placeholder="01.01.2000"
