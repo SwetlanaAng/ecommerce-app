@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import createCustomer from '../../shared/api/createCustomer';
+import Input from '../../components/input/Input';
+import './Register.css';
+import Button from '../../components/button/Button';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -10,6 +13,7 @@ const Register: React.FC = () => {
     password: '',
     firstName: '',
     lastName: '',
+    birthDate: '',
   });
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +37,7 @@ const Register: React.FC = () => {
         password: formData.password,
         firstName: formData.firstName,
         lastName: formData.lastName,
+        birthDate: formData.birthDate,
       };
 
       await createCustomer(customerDraft);
@@ -50,62 +55,66 @@ const Register: React.FC = () => {
       <form onSubmit={handleSubmit} className="auth-form">
         {error && <div className="error-message">{error}</div>}
 
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          labelText="Email"
+          name="email"
+          onChange={handleChange}
+          type="email"
+          placeholder="user@example.com"
+          value={formData.email}
+          required={true}
+          disabled={isLoading}
+        ></Input>
 
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            minLength={8}
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          labelText="Password"
+          name="password"
+          onChange={handleChange}
+          type="password"
+          placeholder="*************"
+          value={formData.password}
+          required={true}
+          disabled={isLoading}
+          minLength={8}
+        ></Input>
 
-        <div className="form-group">
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          labelText="First Name"
+          name="firstName"
+          onChange={handleChange}
+          placeholder="John"
+          value={formData.firstName}
+          required={true}
+          disabled={isLoading}
+        ></Input>
 
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          labelText="Last Name"
+          name="lastName"
+          onChange={handleChange}
+          placeholder="Doe"
+          value={formData.lastName}
+          required={true}
+          disabled={isLoading}
+        ></Input>
 
-        <button type="submit" className="submit-button" disabled={isLoading}>
-          {isLoading ? 'Registering...' : 'Register'}
-        </button>
+        <Input
+          labelText="Birth date"
+          name="birthDate"
+          type="date"
+          onChange={handleChange}
+          placeholder="01.01.2000"
+          value={formData.birthDate}
+          required={true}
+          disabled={isLoading}
+          autoComplete="off"
+        ></Input>
+        <Button
+          className="submit-button"
+          disabled={isLoading}
+          type="submit"
+          children={isLoading ? 'Registering...' : 'Register'}
+        />
       </form>
 
       <div className="auth-links">
