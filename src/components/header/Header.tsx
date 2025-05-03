@@ -61,25 +61,25 @@ const Header: React.FC<HeaderProps> = () => {
     const navLinks: NavLink[] = [
       {
         path: AppRouterPaths.HOME,
-        text: 'Главная',
+        text: 'Main',
       },
     ];
 
     if (isAuthenticated) {
       navLinks.push({
         path: '#',
-        text: 'Выйти',
+        text: 'Log out',
         isLogout: true,
       });
     } else {
       navLinks.push(
         {
           path: AppRouterPaths.REGISTER,
-          text: 'Регистрация',
+          text: 'Register',
         },
         {
           path: AppRouterPaths.LOGIN,
-          text: 'Вход',
+          text: 'Log in',
         }
       );
     }

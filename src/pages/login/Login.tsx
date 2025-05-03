@@ -44,7 +44,7 @@ const Login: React.FC = () => {
       login(userData);
       navigate(AppRouterPaths.HOME);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Неверный email или пароль');
+      setError(err instanceof Error ? err.message : 'Incorrect email or password');
     } finally {
       setIsLoading(false);
     }
@@ -52,7 +52,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="auth-page">
-      <h1>Вход</h1>
+      <h1>Log in</h1>
       <form onSubmit={handleSubmit} className="auth-form">
         {error && <div className="error-message">{error}</div>}
 
@@ -69,7 +69,7 @@ const Login: React.FC = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Пароль:</label>
+          <label htmlFor="password">Password:</label>
           <input
             type="password"
             id="password"
@@ -81,13 +81,13 @@ const Login: React.FC = () => {
         </div>
 
         <button type="submit" className="submit-button" disabled={isLoading}>
-          {isLoading ? 'Вход...' : 'Войти'}
+          {isLoading ? 'Entering...' : 'Log in'}
         </button>
       </form>
 
       <div className="auth-links">
         <p>
-          Нет аккаунта? <Link to={AppRouterPaths.REGISTER}>Регистрация</Link>
+          Don't you have an account? <Link to={AppRouterPaths.REGISTER}>Register</Link>
         </p>
       </div>
     </div>

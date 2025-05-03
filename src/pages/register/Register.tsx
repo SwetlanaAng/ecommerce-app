@@ -119,7 +119,7 @@ const Register: React.FC = () => {
 
       <div className="auth-links">
         <p>
-          Уже есть аккаунт? <Link to={AppRouterPaths.LOGIN}>Вход</Link>
+          Do you already have an account? <Link to={AppRouterPaths.LOGIN}>Log in</Link>
         </p>
       </div>
     </div>
