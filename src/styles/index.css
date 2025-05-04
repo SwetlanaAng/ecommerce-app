@@ -23,6 +23,8 @@ body {
 }
 
 h1 {
+  font-size: 30px;
+  font-weight: 600;
   line-height: 130%;
   color: var(--text-color);
   margin-bottom: 20px;

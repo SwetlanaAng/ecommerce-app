@@ -3,17 +3,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import createCustomer from '../../shared/api/createCustomer';
 import Input from '../../components/input/Input';
-import './Register.css';
 import Button from '../../components/button/Button';
+import { useAuth } from '../../shared/hooks/useAuth';
+import { getCustomerToken } from '../../shared/api/getCustomerToken';
+import './Register.css';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     firstName: '',
     lastName: '',
-    birthDate: '',
+    dateOfBirth: '',
   });
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
@@ -37,11 +40,28 @@ const Register: React.FC = () => {
         password: formData.password,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        birthDate: formData.birthDate,
+        dateOfBirth: formData.dateOfBirth,
       };
 
-      await createCustomer(customerDraft);
-      navigate(AppRouterPaths.LOGIN);
+      const result = await createCustomer(customerDraft);
+
+      const tokenData = await getCustomerToken({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      localStorage.setItem('customerToken', tokenData.access_token);
+
+      const userData = {
+        id: tokenData.user_id || result.body.customer.id,
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        dateOfBirth: formData.dateOfBirth,
+      };
+
+      login(userData);
+      navigate(AppRouterPaths.HOME);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during registration');
     } finally {
@@ -51,7 +71,7 @@ const Register: React.FC = () => {
 
   return (
     <div className="auth-page">
-      <h1>Регистрация</h1>
+      <h1>Registration</h1>
       <form onSubmit={handleSubmit} className="auth-form">
         {error && <div className="error-message">{error}</div>}
 
@@ -100,11 +120,11 @@ const Register: React.FC = () => {
 
         <Input
           labelText="Birth date"
-          name="birthDate"
+          name="dateOfBirth"
           type="date"
           onChange={handleChange}
           placeholder="01.01.2000"
-          value={formData.birthDate}
+          value={formData.dateOfBirth}
           required={true}
           disabled={isLoading}
           autoComplete="off"
