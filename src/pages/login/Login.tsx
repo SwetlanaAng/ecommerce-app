@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
-import { useAuth } from '../../shared/hooks/useAuth';
-import { getCustomerToken } from '../../shared/api/getCustomerToken';
+import { useAuth } from '../../features/auth/hooks/useAuth';
+import handleLogin from '../../services/handleLogin';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -28,19 +28,7 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const loginData = {
-        email: formData.email,
-        password: formData.password,
-      };
-
-      const tokenData = await getCustomerToken(loginData);
-      localStorage.setItem('customerToken', tokenData.access_token);
-
-      const userData = {
-        id: tokenData.user_id || formData.email,
-        email: formData.email,
-      };
-
+      const userData = await handleLogin(formData.email, formData.password);
       login(userData);
       navigate(AppRouterPaths.HOME);
     } catch (err) {

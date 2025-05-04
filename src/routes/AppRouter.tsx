@@ -6,8 +6,8 @@ import Register from '../pages/register/Register';
 import Header from '../components/header/Header';
 import { AppRouterPaths } from './AppRouterPathsEnums';
 import NotFound from '../pages/notFound/NotFound';
-import { AuthProvider } from '../shared/context/AuthContext';
-import AuthGuard from '../shared/guards/AuthGuard';
+import { AuthProvider } from '../features/auth/context/AuthContext';
+import AuthGuard from '../features/auth/guards/AuthGuard';
 
 const AppRouter: React.FC = () => {
   return (

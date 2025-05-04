@@ -1,11 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-
-interface Customer {
-  id: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-}
+import { Customer } from '../../types/interfaces';
 
 export interface AuthContextType {
   isAuthenticated: boolean;
@@ -25,7 +19,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('currentUser');
+    const storedUser = localStorage.getItem('user');
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
@@ -33,7 +27,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsAuthenticated(true);
       } catch (error) {
         console.error('Error parsing user data:', error);
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
       }
     }
   }, []);
@@ -41,14 +36,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = (userData: Customer) => {
     setUser(userData);
     setIsAuthenticated(true);
-    localStorage.setItem('currentUser', JSON.stringify(userData));
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('customerToken');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
   const value = {
