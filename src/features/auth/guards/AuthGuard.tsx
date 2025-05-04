@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
+import { AppRouterPaths } from '../../../routes/AppRouterPathsEnums';
 
 interface AuthGuardProps {
   children: ReactNode;

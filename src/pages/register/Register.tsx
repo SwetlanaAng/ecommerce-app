@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
-import createCustomer from '../../shared/api/createCustomer';
+import { handleRegistration } from '../../services/handleRegistration';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
-import { useAuth } from '../../shared/hooks/useAuth';
-import { getCustomerToken } from '../../shared/api/getCustomerToken';
+import { useAuth } from '../../features/auth/hooks/useAuth';
+import { RegistrationData } from '../../types/interfaces';
+import { countryId } from '../../services/registration.service';
 import './Register.css';
 
 const Register: React.FC = () => {
@@ -18,6 +19,23 @@ const Register: React.FC = () => {
     lastName: '',
     dateOfBirth: '',
   });
+  const [addressData, setAddressData] = useState({
+    billingAddress: {
+      country: 'Spain',
+      city: '',
+      street: '',
+      postalCode: '',
+      isDefault: false,
+    },
+    shippingAddress: {
+      country: 'Spain',
+      city: '',
+      street: '',
+      postalCode: '',
+      isDefault: false,
+    },
+  });
+  const [sameAsShipping, setSameAsShipping] = useState(false);
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,39 +47,100 @@ const Register: React.FC = () => {
     }));
   };
 
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+
+    const [addressType, fieldName] = name.split('_');
+
+    if (addressType === 'billing' || addressType === 'shipping') {
+      setAddressData(prev => {
+        const newData = {
+          ...prev,
+          [`${addressType}Address`]: {
+            ...prev[`${addressType}Address` as keyof typeof prev],
+            [fieldName]: value,
+          },
+        };
+
+        if (sameAsShipping && addressType === 'billing') {
+          newData.shippingAddress = {
+            ...newData.shippingAddress,
+            [fieldName]: value,
+          };
+        }
+
+        return newData;
+      });
+    }
+  };
+
+  const handleSameAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setSameAsShipping(checked);
+
+    if (checked) {
+      setAddressData(prev => ({
+        ...prev,
+        shippingAddress: {
+          ...prev.billingAddress,
+        },
+      }));
+    }
+  };
+
+  const handleDefaultAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    const [addressType] = name.split('_');
+
+    setAddressData(prev => {
+      const newData = {
+        ...prev,
+        [`${addressType}Address`]: {
+          ...prev[`${addressType}Address` as keyof typeof prev],
+          isDefault: e.target.checked,
+        },
+      };
+
+      if (sameAsShipping && addressType === 'billing') {
+        newData.shippingAddress = {
+          ...newData.shippingAddress,
+          isDefault: e.target.checked,
+        };
+      }
+
+      return newData;
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
     try {
-      const customerDraft = {
+      const registrationData: RegistrationData = {
         email: formData.email,
         password: formData.password,
         firstName: formData.firstName,
-        lastName: formData.lastName,
-        dateOfBirth: formData.dateOfBirth,
+        secondName: formData.lastName,
+        date: formData.dateOfBirth,
+        billingAddress: addressData.billingAddress,
+        shippingAddress: addressData.shippingAddress,
       };
 
-      const result = await createCustomer(customerDraft);
+      const result = await handleRegistration(registrationData);
 
-      const tokenData = await getCustomerToken({
-        email: formData.email,
-        password: formData.password,
-      });
-
-      localStorage.setItem('customerToken', tokenData.access_token);
-
-      const userData = {
-        id: tokenData.user_id || result.body.customer.id,
-        email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        dateOfBirth: formData.dateOfBirth,
-      };
-
-      login(userData);
-      navigate(AppRouterPaths.HOME);
+      if (result.isSuccess) {
+        login({
+          id: result.message,
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        });
+        navigate(AppRouterPaths.HOME);
+      } else {
+        setError(result.message);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during registration');
     } finally {
@@ -123,12 +202,153 @@ const Register: React.FC = () => {
           name="dateOfBirth"
           type="date"
           onChange={handleChange}
-          placeholder="01.01.2000"
+          placeholder="dd/mm/yyyy"
           value={formData.dateOfBirth}
           required={true}
           disabled={isLoading}
           autoComplete="off"
         ></Input>
+
+        <h3>Billing Address</h3>
+
+        <div className="form-group">
+          <label htmlFor="billing_country">Country:</label>
+          <select
+            id="billing_country"
+            name="billing_country"
+            value={addressData.billingAddress.country}
+            onChange={handleAddressChange}
+            disabled={isLoading}
+            required
+          >
+            {Object.keys(countryId).map(country => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <Input
+          labelText="City"
+          name="billing_city"
+          onChange={handleAddressChange}
+          placeholder="Madrid"
+          value={addressData.billingAddress.city}
+          required={true}
+          disabled={isLoading}
+        ></Input>
+
+        <Input
+          labelText="Street"
+          name="billing_street"
+          onChange={handleAddressChange}
+          placeholder="Calle de la Princesa"
+          value={addressData.billingAddress.street}
+          required={true}
+          disabled={isLoading}
+        ></Input>
+
+        <Input
+          labelText="Postal Code"
+          name="billing_postalCode"
+          onChange={handleAddressChange}
+          placeholder="28001"
+          value={addressData.billingAddress.postalCode}
+          required={true}
+          disabled={isLoading}
+        ></Input>
+
+        <div className="form-group checkbox-group">
+          <input
+            type="checkbox"
+            id="default_billing"
+            name="billing_isDefault"
+            checked={addressData.billingAddress.isDefault}
+            onChange={handleDefaultAddressChange}
+            disabled={isLoading}
+          />
+          <label htmlFor="default_billing">Set as default billing address for future orders</label>
+        </div>
+
+        <div className="form-group checkbox-group">
+          <input
+            type="checkbox"
+            id="sameAsShipping"
+            checked={sameAsShipping}
+            onChange={handleSameAddressChange}
+            disabled={isLoading}
+          />
+          <label htmlFor="sameAsShipping">Use same address for shipping</label>
+        </div>
+
+        {!sameAsShipping && (
+          <>
+            <h3>Shipping Address</h3>
+            <div className="form-group">
+              <label htmlFor="shipping_country">Country:</label>
+              <select
+                id="shipping_country"
+                name="shipping_country"
+                value={addressData.shippingAddress.country}
+                onChange={handleAddressChange}
+                disabled={isLoading || sameAsShipping}
+                required
+              >
+                {Object.keys(countryId).map(country => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <Input
+              labelText="City"
+              name="shipping_city"
+              onChange={handleAddressChange}
+              placeholder="Madrid"
+              value={addressData.shippingAddress.city}
+              required={true}
+              disabled={isLoading || sameAsShipping}
+            ></Input>
+
+            <Input
+              labelText="Street"
+              name="shipping_street"
+              onChange={handleAddressChange}
+              placeholder="Calle de la Princesa"
+              value={addressData.shippingAddress.street}
+              required={true}
+              disabled={isLoading || sameAsShipping}
+            ></Input>
+
+            <Input
+              labelText="Postal Code"
+              name="shipping_postalCode"
+              onChange={handleAddressChange}
+              placeholder="28001"
+              value={addressData.shippingAddress.postalCode}
+              required={true}
+              disabled={isLoading || sameAsShipping}
+            ></Input>
+
+            <div className="form-group checkbox-group">
+              <input
+                type="checkbox"
+                id="default_shipping"
+                name="shipping_isDefault"
+                checked={addressData.shippingAddress.isDefault}
+                onChange={handleDefaultAddressChange}
+                disabled={isLoading || sameAsShipping}
+              />
+              <label htmlFor="default_shipping">
+                Set as default shipping address for future orders
+              </label>
+            </div>
+          </>
+        )}
+
         <Button
           className="submit-button"
           disabled={isLoading}
