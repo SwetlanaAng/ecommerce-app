@@ -3,13 +3,12 @@
   .input {
     font-size: 16px;
     cursor: pointer;
-    flex-shrink: 1;
     width: 100%;
     padding: 15px;
     border-radius: 0.2rem;
     border: none;
     color: var(--text-color);
-    transition: box-shadow 0.3s ease;
+    transition: all 0.3s ease;
 
     &:-webkit-autofill,
     &:-webkit-autofill:focus {
@@ -28,8 +27,9 @@
       color: #ada7ab;
     }
 
-    &:focus {
-      box-shadow: 0px 1px 10px 0px var(--color-hover);
+    &:focus,
+    &:hover {
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     }
 
     &:disabled {
@@ -41,6 +41,8 @@
   }
   .toggle-visibility {
     position: absolute;
+    width: 24px;
+    height: 24px;
     right: 8px;
     top: 50%;
     transform: translateY(-50%);
@@ -48,5 +50,15 @@
     border: none;
     cursor: pointer;
     font-size: 1.2rem;
+  }
+}
+
+.label-text {
+  margin-bottom: 4px;
+}
+
+.input-wrapper:has(.toggle-visibility) {
+  input {
+    padding-right: 40px;
   }
 }

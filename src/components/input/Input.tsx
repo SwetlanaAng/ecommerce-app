@@ -38,7 +38,7 @@ const Input = ({
   return (
     <div className="form-group">
       <label htmlFor={name} className="label">
-        <p>{labelText}</p>
+        <p className="label-text">{labelText}</p>
         <div className="input-wrapper">
           <input
             className={`${className ? className : ''} input`}
