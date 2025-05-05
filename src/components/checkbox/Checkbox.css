@@ -7,8 +7,7 @@
         appearance: none;
         width: 1rem;
         height: 1rem;
-        border: 1px solid rgb(176, 106, 106);
-        border-radius: 0.25rem;
+        border: 1px solid rgb(213, 213, 213);
         background-color: #fff;
         cursor: pointer;
         transition:
@@ -17,11 +16,17 @@
           border-color 0.15s ease-in-out,
           box-shadow 0.15s ease-in-out;
         margin: 0;
+        &:hover {
+          border: 1px solid rgb(178, 178, 178);
+          background-color: rgb(231, 231, 231);
+        }
         &:checked {
-          background-color: rgb(176, 106, 106);
+          background-color: var(--accent-color);
+          border: 1px solid var(--accent-color);
           background-image: url('../../assets/tick.svg');
-          background-position: right center;
-          background-size: 13px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: 11px;
         }
       }
       .label {
