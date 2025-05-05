@@ -22,6 +22,10 @@
         width: 100%;
       }
     }
+    h3 {
+      width: 100%;
+      padding: 20px 0;
+    }
     .submit-button {
       width: 100%;
     }

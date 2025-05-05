@@ -1,0 +1,32 @@
+.auth-page {
+  .auth-form {
+    .checkbox-group {
+      width: 100%;
+      input[type='checkbox'] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 1rem;
+        height: 1rem;
+        border: 1px solid rgb(176, 106, 106);
+        border-radius: 0.25rem;
+        background-color: #fff;
+        cursor: pointer;
+        transition:
+          color 0.15s ease-in-out,
+          background-color 0.15s ease-in-out,
+          border-color 0.15s ease-in-out,
+          box-shadow 0.15s ease-in-out;
+        margin: 0;
+        &:checked {
+          background-color: rgb(176, 106, 106);
+          background-image: url('../../assets/tick.svg');
+          background-position: right center;
+          background-size: 13px;
+        }
+      }
+      .label {
+        padding-left: 10px;
+      }
+    }
+  }
+}

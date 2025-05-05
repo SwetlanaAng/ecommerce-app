@@ -8,6 +8,8 @@ import { useAuth } from '../../features/auth/hooks/useAuth';
 import { RegistrationData } from '../../types/interfaces';
 import { countryId } from '../../services/registration.service';
 import './Register.css';
+import Select from '../../components/select/Select';
+import Checkbox from '../../components/checkbox/Checkbox';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -211,23 +213,16 @@ const Register: React.FC = () => {
 
         <h3>Billing Address</h3>
 
-        <div className="form-group">
-          <label htmlFor="billing_country">Country:</label>
-          <select
-            id="billing_country"
-            name="billing_country"
-            value={addressData.billingAddress.country}
-            onChange={handleAddressChange}
-            disabled={isLoading}
-            required
-          >
-            {Object.keys(countryId).map(country => (
-              <option key={country} value={country}>
-                {country}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          labelText="Country"
+          className="select"
+          onChange={handleAddressChange}
+          name="billing_country"
+          value={addressData.billingAddress.country}
+          required={true}
+          disabled={isLoading}
+          countryId={countryId}
+        />
 
         <Input
           labelText="City"
@@ -259,49 +254,38 @@ const Register: React.FC = () => {
           disabled={isLoading}
         ></Input>
 
-        <div className="form-group checkbox-group">
-          <input
-            type="checkbox"
-            id="default_billing"
-            name="billing_isDefault"
-            checked={addressData.billingAddress.isDefault}
-            onChange={handleDefaultAddressChange}
-            disabled={isLoading}
-          />
-          <label htmlFor="default_billing">Set as default billing address for future orders</label>
-        </div>
+        <Checkbox
+          labelText="Set as default billing address for future orders"
+          type="checkbox"
+          id="default_billing"
+          name="billing_isDefault"
+          checked={addressData.billingAddress.isDefault}
+          onChange={handleDefaultAddressChange}
+          disabled={isLoading}
+        />
 
-        <div className="form-group checkbox-group">
-          <input
-            type="checkbox"
-            id="sameAsShipping"
-            checked={sameAsShipping}
-            onChange={handleSameAddressChange}
-            disabled={isLoading}
-          />
-          <label htmlFor="sameAsShipping">Use same address for shipping</label>
-        </div>
+        <Checkbox
+          labelText="Use same address for shipping"
+          type="checkbox"
+          id="sameAsShipping"
+          checked={sameAsShipping}
+          onChange={handleSameAddressChange}
+          disabled={isLoading}
+        />
 
         {!sameAsShipping && (
           <>
             <h3>Shipping Address</h3>
-            <div className="form-group">
-              <label htmlFor="shipping_country">Country:</label>
-              <select
-                id="shipping_country"
-                name="shipping_country"
-                value={addressData.shippingAddress.country}
-                onChange={handleAddressChange}
-                disabled={isLoading || sameAsShipping}
-                required
-              >
-                {Object.keys(countryId).map(country => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              labelText="Country"
+              className="select"
+              onChange={handleAddressChange}
+              name="shipping_country"
+              value={addressData.shippingAddress.country}
+              required={true}
+              disabled={isLoading || sameAsShipping}
+              countryId={countryId}
+            />
 
             <Input
               labelText="City"
@@ -333,19 +317,15 @@ const Register: React.FC = () => {
               disabled={isLoading || sameAsShipping}
             ></Input>
 
-            <div className="form-group checkbox-group">
-              <input
-                type="checkbox"
-                id="default_shipping"
-                name="shipping_isDefault"
-                checked={addressData.shippingAddress.isDefault}
-                onChange={handleDefaultAddressChange}
-                disabled={isLoading || sameAsShipping}
-              />
-              <label htmlFor="default_shipping">
-                Set as default shipping address for future orders
-              </label>
-            </div>
+            <Checkbox
+              labelText="Set as default shipping address for future orders"
+              type="checkbox"
+              id="default_shipping"
+              name="shipping_isDefault"
+              checked={addressData.shippingAddress.isDefault}
+              onChange={handleDefaultAddressChange}
+              disabled={isLoading || sameAsShipping}
+            />
           </>
         )}
 
