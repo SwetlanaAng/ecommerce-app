@@ -3,6 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import handleLogin from '../../services/handleLogin';
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+import './Login.css';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -39,38 +42,40 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="auth-page">
+    <div className="login-page">
       <h1>Log in</h1>
-      <form onSubmit={handleSubmit} className="auth-form">
+      <form onSubmit={handleSubmit} className="login-form">
         {error && <div className="error-message">{error}</div>}
 
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <Input
+          labelText="Email"
+          name="email"
+          onChange={handleChange}
+          type="email"
+          placeholder="user@example.com"
+          value={formData.email}
+          required={true}
+          disabled={isLoading}
+        />
 
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <Input
+          labelText="Password"
+          name="password"
+          type="password"
+          onChange={handleChange}
+          placeholder="*************"
+          value={formData.password}
+          required={true}
+          disabled={isLoading}
+          minLength={8}
+        />
 
-        <button type="submit" className="submit-button" disabled={isLoading}>
-          {isLoading ? 'Entering...' : 'Log in'}
-        </button>
+        <Button
+          className="submit-button"
+          disabled={isLoading}
+          type="submit"
+          children={isLoading ? 'Entering...' : 'Log in'}
+        />
       </form>
 
       <div className="auth-links">
