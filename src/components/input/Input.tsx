@@ -8,13 +8,15 @@ interface InputProps {
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: 'text' | 'email' | 'password' | 'date' | 'checkbox';
-  placeholder: string;
-  name: string;
-  value: string;
-  required: boolean;
+  placeholder?: string;
+  name?: string;
+  value?: string;
+  id?: string;
+  required?: boolean;
   disabled: boolean;
   minLength?: number;
   autoComplete?: 'off' | 'on';
+  checked?: boolean;
 }
 
 const Input = ({
@@ -29,12 +31,31 @@ const Input = ({
   disabled,
   minLength,
   autoComplete,
+  id,
+  checked,
 }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const isPasswordField = type === 'password';
   const inputType = isPasswordField && showPassword ? 'text' : type;
-
+  if (type === 'checkbox') {
+    return (
+      <div className="form-group checkbox-group">
+        <input
+          type={type}
+          className={className}
+          id={id}
+          name={name}
+          onChange={onChange}
+          disabled={disabled}
+          checked={checked}
+        />
+        <label htmlFor={id} className="label">
+          {labelText}
+        </label>
+      </div>
+    );
+  }
   return (
     <div className="form-group">
       <label htmlFor={name} className="label">

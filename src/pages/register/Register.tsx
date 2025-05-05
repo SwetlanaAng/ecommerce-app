@@ -9,7 +9,6 @@ import { RegistrationData } from '../../types/interfaces';
 import { countryId } from '../../services/registration.service';
 import './Register.css';
 import Select from '../../components/select/Select';
-import Checkbox from '../../components/checkbox/Checkbox';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -254,7 +253,7 @@ const Register: React.FC = () => {
           disabled={isLoading}
         ></Input>
 
-        <Checkbox
+        <Input
           labelText="Set as default billing address for future orders"
           type="checkbox"
           id="default_billing"
@@ -264,7 +263,7 @@ const Register: React.FC = () => {
           disabled={isLoading}
         />
 
-        <Checkbox
+        <Input
           labelText="Use same address for shipping"
           type="checkbox"
           id="sameAsShipping"
@@ -317,7 +316,7 @@ const Register: React.FC = () => {
               disabled={isLoading || sameAsShipping}
             ></Input>
 
-            <Checkbox
+            <Input
               labelText="Set as default shipping address for future orders"
               type="checkbox"
               id="default_shipping"
