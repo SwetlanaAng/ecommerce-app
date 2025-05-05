@@ -9,11 +9,11 @@ interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: 'text' | 'email' | 'password' | 'date' | 'checkbox';
   placeholder?: string;
-  name?: string;
+  name: string;
   value?: string;
-  id?: string;
+  id: string;
   required?: boolean;
-  disabled: boolean;
+  disabled?: boolean;
   minLength?: number;
   autoComplete?: 'off' | 'on';
   checked?: boolean;
@@ -58,12 +58,12 @@ const Input = ({
   }
   return (
     <div className="form-group">
-      <label htmlFor={name} className="label">
+      <label htmlFor={id} className="label">
         <p className="label-text">{labelText}</p>
         <div className="input-wrapper">
           <input
             className={`${className ? className : ''} input`}
-            id={name}
+            id={id}
             name={name}
             onChange={onChange}
             type={inputType}

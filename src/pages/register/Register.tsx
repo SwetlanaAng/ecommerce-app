@@ -158,6 +158,7 @@ const Register: React.FC = () => {
         <Input
           labelText="Email"
           name="email"
+          id="email"
           onChange={handleChange}
           type="email"
           placeholder="user@example.com"
@@ -169,6 +170,7 @@ const Register: React.FC = () => {
         <Input
           labelText="Password"
           name="password"
+          id="password"
           onChange={handleChange}
           type="password"
           placeholder="*************"
@@ -181,6 +183,7 @@ const Register: React.FC = () => {
         <Input
           labelText="First Name"
           name="firstName"
+          id="firstName"
           onChange={handleChange}
           placeholder="John"
           value={formData.firstName}
@@ -191,6 +194,7 @@ const Register: React.FC = () => {
         <Input
           labelText="Last Name"
           name="lastName"
+          id="lastName"
           onChange={handleChange}
           placeholder="Doe"
           value={formData.lastName}
@@ -202,6 +206,7 @@ const Register: React.FC = () => {
           labelText="Birth date"
           name="dateOfBirth"
           type="date"
+          id="date"
           onChange={handleChange}
           placeholder="dd/mm/yyyy"
           value={formData.dateOfBirth}
@@ -220,12 +225,13 @@ const Register: React.FC = () => {
           value={addressData.billingAddress.country}
           required={true}
           disabled={isLoading}
-          countryId={countryId}
+          optionsList={countryId}
         />
 
         <Input
           labelText="City"
           name="billing_city"
+          id="billing_city"
           onChange={handleAddressChange}
           placeholder="Madrid"
           value={addressData.billingAddress.city}
@@ -236,6 +242,7 @@ const Register: React.FC = () => {
         <Input
           labelText="Street"
           name="billing_street"
+          id="billing_street"
           onChange={handleAddressChange}
           placeholder="Calle de la Princesa"
           value={addressData.billingAddress.street}
@@ -246,6 +253,7 @@ const Register: React.FC = () => {
         <Input
           labelText="Postal Code"
           name="billing_postalCode"
+          id="billing_postalCode"
           onChange={handleAddressChange}
           placeholder="28001"
           value={addressData.billingAddress.postalCode}
@@ -266,6 +274,7 @@ const Register: React.FC = () => {
         <Input
           labelText="Use same address for shipping"
           type="checkbox"
+          name="sameAsShipping"
           id="sameAsShipping"
           checked={sameAsShipping}
           onChange={handleSameAddressChange}
@@ -283,12 +292,13 @@ const Register: React.FC = () => {
               value={addressData.shippingAddress.country}
               required={true}
               disabled={isLoading || sameAsShipping}
-              countryId={countryId}
+              optionsList={countryId}
             />
 
             <Input
               labelText="City"
               name="shipping_city"
+              id="shipping_city"
               onChange={handleAddressChange}
               placeholder="Madrid"
               value={addressData.shippingAddress.city}
@@ -299,6 +309,7 @@ const Register: React.FC = () => {
             <Input
               labelText="Street"
               name="shipping_street"
+              id="shipping_street"
               onChange={handleAddressChange}
               placeholder="Calle de la Princesa"
               value={addressData.shippingAddress.street}
@@ -309,6 +320,7 @@ const Register: React.FC = () => {
             <Input
               labelText="Postal Code"
               name="shipping_postalCode"
+              id="shipping_postalCode"
               onChange={handleAddressChange}
               placeholder="28001"
               value={addressData.shippingAddress.postalCode}
