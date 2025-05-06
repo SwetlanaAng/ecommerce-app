@@ -8,11 +8,14 @@ import { useAuth } from '../../features/auth/hooks/useAuth';
 import { RegistrationData } from '../../types/interfaces';
 import { countryId } from '../../services/registration.service';
 import './Register.css';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import Select from '../../components/select/Select';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { formSchema } from '../../components/input/signInSchema';
 
 const Register: React.FC = () => {
-  const { handleSubmit, register } = useForm<FormFields>();
+  const { handleSubmit, register } = useForm<FormFields>({ resolver: zodResolver(formSchema) });
 
   const navigate = useNavigate();
   const { login } = useAuth();

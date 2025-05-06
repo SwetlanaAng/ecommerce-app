@@ -2,48 +2,36 @@ import { useState } from 'react';
 import view from '../../assets/view.png';
 import hide from '../../assets/hide.png';
 import './Input.css';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { UseFormRegister, useForm } from 'react-hook-form';
+import { formSchema } from './signInSchema';
 
-export interface FormFields {
-  /* [key: string]: string; */
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  date: string;
-  billing_city: string;
-  billing_street: string;
-  billing_postalCode: string;
-  default_billing: string;
-  sameAsShipping: string;
-  shipping_city: string;
-  shipping_street: string;
-  shipping_postalCode: string;
-  default_shipping: string;
-}
+export type FormFields = z.infer<typeof formSchema>;
 interface InputProps {
   labelText: string;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: 'text' | 'email' | 'password' | 'date' | 'checkbox';
   placeholder?: string;
-  name: string;
-  value?: string;
-  id: /* string*/
-  | 'email'
+  name:
+    | 'email'
     | 'password'
-    | 'date'
+    | 'dateOfBirth'
     | 'firstName'
     | 'lastName'
     | 'billing_city'
     | 'billing_street'
     | 'billing_postalCode'
-    | 'default_billing'
+    | 'billing_isDefault'
     | 'sameAsShipping'
     | 'shipping_city'
     | 'shipping_street'
     | 'shipping_postalCode'
-    | 'default_shipping';
+    | 'shipping_isDefault';
+  value?: string;
+  id: string;
+
   required?: boolean;
   disabled?: boolean;
   minLength?: number;
@@ -69,8 +57,8 @@ const Input = ({
   checked,
 }: InputProps) => {
   const {
-    /* register, */ formState: { errors },
-  } = useForm<FormFields>();
+    formState: { errors },
+  } = useForm<FormFields>({ resolver: zodResolver(formSchema) });
   const [showPassword, setShowPassword] = useState(false);
 
   const isPasswordField = type === 'password';
@@ -99,14 +87,17 @@ const Input = ({
         <p className="label-text">{labelText}</p>
         <div className="input-wrapper">
           <input
-            {...register(id, {
-              validate: value => {
-                if (!value.includes('@')) {
-                  return 'Huge mistake';
+            {...register(
+              name /* , {
+                validate: value => {
+                    if (typeof value !== 'string') {
+                        console.log(errors)
+                  return false;
                 }
                 return true;
               },
-            })}
+            } */
+            )}
             className={`${className ? className : ''} input`}
             id={id}
             name={name}
@@ -118,6 +109,7 @@ const Input = ({
             disabled={disabled}
             minLength={minLength}
             autoComplete={autoComplete}
+            aria-invalid={errors[name] ? 'true' : 'false'}
           />
           {isPasswordField && (
             <button
@@ -131,8 +123,8 @@ const Input = ({
           )}
         </div>
       </label>
-      {}
-      {errors[id] && <div> {errors[id]?.message}</div>}
+
+      {errors[name] && <div> {errors[name]?.message}</div>}
     </div>
   );
 };
