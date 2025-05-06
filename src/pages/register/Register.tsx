@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { handleRegistration } from '../../services/handleRegistration';
-import Input from '../../components/input/Input';
+import Input, { FormFields } from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import { RegistrationData } from '../../types/interfaces';
 import { countryId } from '../../services/registration.service';
 import './Register.css';
 import Select from '../../components/select/Select';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 const Register: React.FC = () => {
+  const { handleSubmit, register } = useForm<FormFields>();
+
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formData, setFormData] = useState({
@@ -113,8 +116,11 @@ const Register: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitData: SubmitHandler<FormFields> = async (
+    data: FormFields /* e: React.FormEvent */
+  ) => {
+    /* e.preventDefault(); */
+    console.log(data);
     setError('');
     setIsLoading(true);
 
@@ -152,7 +158,7 @@ const Register: React.FC = () => {
   return (
     <div className="auth-page">
       <h1>Registration</h1>
-      <form onSubmit={handleSubmit} className="auth-form">
+      <form onSubmit={handleSubmit(submitData)} className="auth-form">
         {error && <div className="error-message">{error}</div>}
 
         <Input
@@ -165,6 +171,7 @@ const Register: React.FC = () => {
           value={formData.email}
           required={true}
           disabled={isLoading}
+          register={register}
         ></Input>
 
         <Input
@@ -178,6 +185,7 @@ const Register: React.FC = () => {
           required={true}
           disabled={isLoading}
           minLength={8}
+          register={register}
         ></Input>
 
         <Input
@@ -189,6 +197,7 @@ const Register: React.FC = () => {
           value={formData.firstName}
           required={true}
           disabled={isLoading}
+          register={register}
         ></Input>
 
         <Input
@@ -200,6 +209,7 @@ const Register: React.FC = () => {
           value={formData.lastName}
           required={true}
           disabled={isLoading}
+          register={register}
         ></Input>
 
         <Input
@@ -213,6 +223,7 @@ const Register: React.FC = () => {
           required={true}
           disabled={isLoading}
           autoComplete="off"
+          register={register}
         ></Input>
 
         <h3>Billing Address</h3>
@@ -235,8 +246,9 @@ const Register: React.FC = () => {
           onChange={handleAddressChange}
           placeholder="Madrid"
           value={addressData.billingAddress.city}
-          required={true}
+          required={false}
           disabled={isLoading}
+          register={register}
         ></Input>
 
         <Input
@@ -248,6 +260,7 @@ const Register: React.FC = () => {
           value={addressData.billingAddress.street}
           required={true}
           disabled={isLoading}
+          register={register}
         ></Input>
 
         <Input
@@ -259,6 +272,7 @@ const Register: React.FC = () => {
           value={addressData.billingAddress.postalCode}
           required={true}
           disabled={isLoading}
+          register={register}
         ></Input>
 
         <Input
@@ -269,6 +283,7 @@ const Register: React.FC = () => {
           checked={addressData.billingAddress.isDefault}
           onChange={handleDefaultAddressChange}
           disabled={isLoading}
+          register={register}
         />
 
         <Input
@@ -279,6 +294,7 @@ const Register: React.FC = () => {
           checked={sameAsShipping}
           onChange={handleSameAddressChange}
           disabled={isLoading}
+          register={register}
         />
 
         {!sameAsShipping && (
@@ -304,6 +320,7 @@ const Register: React.FC = () => {
               value={addressData.shippingAddress.city}
               required={true}
               disabled={isLoading || sameAsShipping}
+              register={register}
             ></Input>
 
             <Input
@@ -315,6 +332,7 @@ const Register: React.FC = () => {
               value={addressData.shippingAddress.street}
               required={true}
               disabled={isLoading || sameAsShipping}
+              register={register}
             ></Input>
 
             <Input
@@ -326,6 +344,7 @@ const Register: React.FC = () => {
               value={addressData.shippingAddress.postalCode}
               required={true}
               disabled={isLoading || sameAsShipping}
+              register={register}
             ></Input>
 
             <Input
@@ -336,6 +355,7 @@ const Register: React.FC = () => {
               checked={addressData.shippingAddress.isDefault}
               onChange={handleDefaultAddressChange}
               disabled={isLoading || sameAsShipping}
+              register={register}
             />
           </>
         )}

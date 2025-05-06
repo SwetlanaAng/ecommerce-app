@@ -2,7 +2,25 @@ import { useState } from 'react';
 import view from '../../assets/view.png';
 import hide from '../../assets/hide.png';
 import './Input.css';
+import { UseFormRegister, useForm } from 'react-hook-form';
 
+export interface FormFields {
+  /* [key: string]: string; */
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  date: string;
+  billing_city: string;
+  billing_street: string;
+  billing_postalCode: string;
+  default_billing: string;
+  sameAsShipping: string;
+  shipping_city: string;
+  shipping_street: string;
+  shipping_postalCode: string;
+  default_shipping: string;
+}
 interface InputProps {
   labelText: string;
   className?: string;
@@ -11,15 +29,31 @@ interface InputProps {
   placeholder?: string;
   name: string;
   value?: string;
-  id: string;
+  id: /* string*/
+  | 'email'
+    | 'password'
+    | 'date'
+    | 'firstName'
+    | 'lastName'
+    | 'billing_city'
+    | 'billing_street'
+    | 'billing_postalCode'
+    | 'default_billing'
+    | 'sameAsShipping'
+    | 'shipping_city'
+    | 'shipping_street'
+    | 'shipping_postalCode'
+    | 'default_shipping';
   required?: boolean;
   disabled?: boolean;
   minLength?: number;
   autoComplete?: 'off' | 'on';
   checked?: boolean;
+  register: UseFormRegister<FormFields>;
 }
 
 const Input = ({
+  register,
   labelText,
   className,
   onChange,
@@ -34,6 +68,9 @@ const Input = ({
   id,
   checked,
 }: InputProps) => {
+  const {
+    /* register, */ formState: { errors },
+  } = useForm<FormFields>();
   const [showPassword, setShowPassword] = useState(false);
 
   const isPasswordField = type === 'password';
@@ -62,6 +99,14 @@ const Input = ({
         <p className="label-text">{labelText}</p>
         <div className="input-wrapper">
           <input
+            {...register(id, {
+              validate: value => {
+                if (!value.includes('@')) {
+                  return 'Huge mistake';
+                }
+                return true;
+              },
+            })}
             className={`${className ? className : ''} input`}
             id={id}
             name={name}
@@ -87,6 +132,7 @@ const Input = ({
         </div>
       </label>
       {}
+      {errors[id] && <div> {errors[id]?.message}</div>}
     </div>
   );
 };
