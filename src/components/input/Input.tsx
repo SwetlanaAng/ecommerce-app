@@ -31,7 +31,6 @@ interface InputProps {
     | 'shipping_isDefault';
   value?: string;
   id: string;
-
   required?: boolean;
   disabled?: boolean;
   minLength?: number;
@@ -87,17 +86,7 @@ const Input = ({
         <p className="label-text">{labelText}</p>
         <div className="input-wrapper">
           <input
-            {...register(
-              name /* , {
-                validate: value => {
-                    if (typeof value !== 'string') {
-                        console.log(errors)
-                  return false;
-                }
-                return true;
-              },
-            } */
-            )}
+            {...register(name)}
             className={`${className ? className : ''} input`}
             id={id}
             name={name}
@@ -123,8 +112,6 @@ const Input = ({
           )}
         </div>
       </label>
-
-      {errors[name] && <div> {errors[name]?.message}</div>}
     </div>
   );
 };

@@ -15,7 +15,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { formSchema } from '../../components/input/signInSchema';
 
 const Register: React.FC = () => {
-  const { handleSubmit, register } = useForm<FormFields>({ resolver: zodResolver(formSchema) });
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<FormFields>({ resolver: zodResolver(formSchema) });
 
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -169,14 +173,14 @@ const Register: React.FC = () => {
           name="email"
           id="email"
           onChange={handleChange}
-          type="email"
+          type="text"
           placeholder="user@example.com"
           value={formData.email}
           required={true}
           disabled={isLoading}
           register={register}
         ></Input>
-
+        {errors.email && <div>{errors.email?.message}</div>}
         <Input
           labelText="Password"
           name="password"
@@ -190,7 +194,7 @@ const Register: React.FC = () => {
           minLength={8}
           register={register}
         ></Input>
-
+        {errors.password && <div>{errors.password?.message}</div>}
         <Input
           labelText="First Name"
           name="firstName"
@@ -202,7 +206,7 @@ const Register: React.FC = () => {
           disabled={isLoading}
           register={register}
         ></Input>
-
+        {errors.firstName && <div>{errors.firstName?.message}</div>}
         <Input
           labelText="Last Name"
           name="lastName"
