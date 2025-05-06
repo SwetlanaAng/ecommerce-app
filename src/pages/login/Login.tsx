@@ -6,16 +6,21 @@ import handleLogin from '../../services/handleLogin';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import './Login.css';
+import { loginSchema, LoginInput } from '../../schemas/authSchemas';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LoginInput>({
     email: '',
     password: '',
   });
   const [error, setError] = useState<string>('');
+  const [fieldErrors, setFieldErrors] = useState<Partial<LoginInput>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const emailSchema = loginSchema.shape.email;
+  const passwordSchema = loginSchema.shape.password;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,10 +28,34 @@ const Login: React.FC = () => {
       ...prev,
       [name]: value,
     }));
+    setError('');
+
+    if (name === 'email') {
+      const result = emailSchema.safeParse(value);
+      setFieldErrors(prev => ({
+        ...prev,
+        email: result.success ? undefined : result.error.issues[0].message,
+      }));
+    }
+
+    if (name === 'password') {
+      const result = passwordSchema.safeParse(value);
+      setFieldErrors(prev => ({
+        ...prev,
+        password: result.success ? undefined : result.error.issues[0].message,
+      }));
+    }
   };
+
+  const isFormValid =
+    formData.email.trim() !== '' &&
+    formData.password.trim() !== '' &&
+    !fieldErrors.email &&
+    !fieldErrors.password;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isFormValid) return;
     setError('');
     setIsLoading(true);
 
@@ -56,7 +85,9 @@ const Login: React.FC = () => {
           value={formData.email}
           required={true}
           disabled={isLoading}
+          autoComplete="off"
         />
+        {fieldErrors.email && <div className="error-message">{fieldErrors.email}</div>}
 
         <Input
           labelText="Password"
@@ -69,10 +100,11 @@ const Login: React.FC = () => {
           disabled={isLoading}
           minLength={8}
         />
+        {fieldErrors.password && <div className="error-message">{fieldErrors.password}</div>}
 
         <Button
           className="submit-button"
-          disabled={isLoading}
+          disabled={!isFormValid || isLoading}
           type="submit"
           children={isLoading ? 'Entering...' : 'Log in'}
         />
