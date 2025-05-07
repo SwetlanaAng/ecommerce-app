@@ -176,7 +176,7 @@ const Register: React.FC = () => {
           type="text"
           placeholder="user@example.com"
           value={formData.email}
-          required={true}
+          //required={true}
           disabled={isLoading}
           register={register}
         ></Input>
@@ -189,9 +189,9 @@ const Register: React.FC = () => {
           type="password"
           placeholder="*************"
           value={formData.password}
-          required={true}
+          //required={true}
           disabled={isLoading}
-          minLength={8}
+          //minLength={8}
           register={register}
         ></Input>
         {errors.password && <div>{errors.password?.message}</div>}
@@ -202,7 +202,7 @@ const Register: React.FC = () => {
           onChange={handleChange}
           placeholder="John"
           value={formData.firstName}
-          required={true}
+          //required={true}
           disabled={isLoading}
           register={register}
         ></Input>
@@ -214,11 +214,11 @@ const Register: React.FC = () => {
           onChange={handleChange}
           placeholder="Doe"
           value={formData.lastName}
-          required={true}
+          //required={true}
           disabled={isLoading}
           register={register}
         ></Input>
-
+        {errors.lastName && <div>{errors.lastName?.message}</div>}
         <Input
           labelText="Birth date"
           name="dateOfBirth"
@@ -227,12 +227,12 @@ const Register: React.FC = () => {
           onChange={handleChange}
           placeholder="dd/mm/yyyy"
           value={formData.dateOfBirth}
-          required={true}
+          //required={true}
           disabled={isLoading}
           autoComplete="off"
           register={register}
         ></Input>
-
+        {errors.dateOfBirth && <div>{errors.dateOfBirth?.message}</div>}
         <h3>Billing Address</h3>
 
         <Select
@@ -253,11 +253,11 @@ const Register: React.FC = () => {
           onChange={handleAddressChange}
           placeholder="Madrid"
           value={addressData.billingAddress.city}
-          required={false}
+          //required={true}
           disabled={isLoading}
           register={register}
         ></Input>
-
+        {errors.billing_city && <div>{errors.billing_city?.message}</div>}
         <Input
           labelText="Street"
           name="billing_street"
@@ -265,11 +265,11 @@ const Register: React.FC = () => {
           onChange={handleAddressChange}
           placeholder="Calle de la Princesa"
           value={addressData.billingAddress.street}
-          required={true}
+          //required={true}
           disabled={isLoading}
           register={register}
         ></Input>
-
+        {errors.billing_street && <div>{errors.billing_street?.message}</div>}
         <Input
           labelText="Postal Code"
           name="billing_postalCode"
@@ -277,11 +277,11 @@ const Register: React.FC = () => {
           onChange={handleAddressChange}
           placeholder="28001"
           value={addressData.billingAddress.postalCode}
-          required={true}
+          //required={true}
           disabled={isLoading}
           register={register}
         ></Input>
-
+        {errors.billing_postalCode && <div>{errors.billing_postalCode?.message}</div>}
         <Input
           labelText="Set as default billing address for future orders"
           type="checkbox"
@@ -325,11 +325,11 @@ const Register: React.FC = () => {
               onChange={handleAddressChange}
               placeholder="Madrid"
               value={addressData.shippingAddress.city}
-              required={true}
+              //required={true}
               disabled={isLoading || sameAsShipping}
               register={register}
             ></Input>
-
+            {errors.shipping_city && <div>{errors.shipping_city?.message}</div>}
             <Input
               labelText="Street"
               name="shipping_street"
@@ -337,11 +337,11 @@ const Register: React.FC = () => {
               onChange={handleAddressChange}
               placeholder="Calle de la Princesa"
               value={addressData.shippingAddress.street}
-              required={true}
+              //required={true}
               disabled={isLoading || sameAsShipping}
               register={register}
             ></Input>
-
+            {errors.shipping_street && <div>{errors.shipping_street?.message}</div>}
             <Input
               labelText="Postal Code"
               name="shipping_postalCode"
@@ -349,7 +349,7 @@ const Register: React.FC = () => {
               onChange={handleAddressChange}
               placeholder="28001"
               value={addressData.shippingAddress.postalCode}
-              required={true}
+              //required={true}
               disabled={isLoading || sameAsShipping}
               register={register}
             ></Input>

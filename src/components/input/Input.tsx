@@ -112,6 +112,7 @@ const Input = ({
           )}
         </div>
       </label>
+      {/* {errors && <div>{ errors[name]?.message }</div>} */}
     </div>
   );
 };
