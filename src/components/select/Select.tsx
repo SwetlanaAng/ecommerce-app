@@ -8,7 +8,8 @@ interface SelectProps {
   value: string;
   required: boolean;
   disabled: boolean;
-  countryId: { [key: string]: string };
+  optionsList: { [key: string]: string };
+  autoComplete?: 'country' | 'country-name';
 }
 
 const Select = ({
@@ -19,7 +20,8 @@ const Select = ({
   value,
   required,
   disabled,
-  countryId,
+  optionsList,
+  autoComplete,
 }: SelectProps) => {
   return (
     <div className="form-group">
@@ -34,10 +36,11 @@ const Select = ({
             value={value}
             required={required}
             disabled={disabled}
+            autoComplete={autoComplete}
           >
-            {Object.keys(countryId).map(country => (
-              <option key={country} value={country}>
-                {country}
+            {Object.keys(optionsList).map(option => (
+              <option key={option} value={option}>
+                {option}
               </option>
             ))}
           </select>
