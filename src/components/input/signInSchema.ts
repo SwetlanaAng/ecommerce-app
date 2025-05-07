@@ -18,7 +18,9 @@ export const formSchema = z.object({
     .nonempty({ message: 'First name is required' })
     .refine(
       value =>
-        /[a-zA-Z]/.test(value) && !/\d/.test(value) && !/(?=.*\d)[^!<>?=+@{}_$%]+$/.test(value),
+        /[a-zA-Z]/.test(value) &&
+        !/\d/.test(value) &&
+        !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
       {
         message:
           'First name must contain at least one character and no special characters or numbers',
@@ -29,7 +31,9 @@ export const formSchema = z.object({
     .nonempty({ message: 'Last name is required' })
     .refine(
       value =>
-        /[a-zA-Z]/.test(value) && !/\d/.test(value) && !/(?=.*\d)[^!<>?=+@{}_$%]+$/.test(value),
+        /[a-zA-Z]/.test(value) &&
+        !/\d/.test(value) &&
+        !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
       {
         message:
           'Last name must contain at least one character and no special characters or numbers',
@@ -46,7 +50,9 @@ export const formSchema = z.object({
     .nonempty({ message: 'City is required' })
     .refine(
       value =>
-        /[a-zA-Z]/.test(value) && !/\d/.test(value) && !/(?=.*\d)[^!<>?=+@{}_$%]+$/.test(value),
+        /[a-zA-Z]/.test(value) &&
+        !/\d/.test(value) &&
+        !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
       {
         message: 'City must contain at least one character and no special characters or numbers',
       }
@@ -65,7 +71,9 @@ export const formSchema = z.object({
     .nonempty({ message: 'City is required' })
     .refine(
       value =>
-        /[a-zA-Z]/.test(value) && !/\d/.test(value) && !/(?=.*\d)[^!<>?=+@{}_$%]+$/.test(value),
+        /[a-zA-Z]/.test(value) &&
+        !/\d/.test(value) &&
+        !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
       {
         message: 'City must contain at least one character and no special characters or numbers',
       }
