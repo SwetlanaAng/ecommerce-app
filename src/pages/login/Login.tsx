@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import handleLogin from '../../services/handleLogin';
@@ -11,102 +13,74 @@ import { loginSchema, LoginInput } from '../../schemas/authSchemas';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [formData, setFormData] = useState<LoginInput>({
-    email: '',
-    password: '',
-  });
   const [error, setError] = useState<string>('');
-  const [fieldErrors, setFieldErrors] = useState<Partial<LoginInput>>({});
-  const [isLoading, setIsLoading] = useState(false);
 
-  const emailSchema = loginSchema.shape.email;
-  const passwordSchema = loginSchema.shape.password;
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+    defaultValues: { email: '', password: '' },
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
+  const onSubmit = async (formData: LoginInput) => {
     setError('');
-
-    if (name === 'email') {
-      const result = emailSchema.safeParse(value);
-      setFieldErrors(prev => ({
-        ...prev,
-        email: result.success ? undefined : result.error.issues[0].message,
-      }));
-    }
-
-    if (name === 'password') {
-      const result = passwordSchema.safeParse(value);
-      setFieldErrors(prev => ({
-        ...prev,
-        password: result.success ? undefined : result.error.issues[0].message,
-      }));
-    }
-  };
-
-  const isFormValid =
-    formData.email.trim() !== '' &&
-    formData.password.trim() !== '' &&
-    !fieldErrors.email &&
-    !fieldErrors.password;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isFormValid) return;
-    setError('');
-    setIsLoading(true);
-
     try {
       const userData = await handleLogin(formData.email, formData.password);
       login(userData);
       navigate(AppRouterPaths.HOME);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Incorrect email or password');
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
     <div className="login-page">
       <h1>Log in</h1>
-      <form onSubmit={handleSubmit} className="login-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
         {error && <div className="error-message">{error}</div>}
 
-        <Input
-          labelText="Email"
+        <Controller
           name="email"
-          onChange={handleChange}
-          type="email"
-          placeholder="user@example.com"
-          value={formData.email}
-          required={true}
-          disabled={isLoading}
-          autoComplete="off"
+          control={control}
+          render={({ field }) => (
+            <>
+              <Input
+                labelText="Email"
+                placeholder="user@example.com"
+                autoComplete="off"
+                disabled={isSubmitting}
+                {...field}
+              />
+              {errors.email && <div className="error-message">{errors.email.message}</div>}
+            </>
+          )}
         />
-        {fieldErrors.email && <div className="error-message">{fieldErrors.email}</div>}
 
-        <Input
-          labelText="Password"
+        <Controller
           name="password"
-          type="password"
-          onChange={handleChange}
-          placeholder="*************"
-          value={formData.password}
-          required={true}
-          disabled={isLoading}
-          minLength={8}
+          control={control}
+          render={({ field }) => (
+            <>
+              <Input
+                labelText="Password"
+                placeholder="••••••••"
+                type="password"
+                disabled={isSubmitting}
+                {...field}
+              />
+              {errors.password && <div className="error-message">{errors.password.message}</div>}
+            </>
+          )}
         />
-        {fieldErrors.password && <div className="error-message">{fieldErrors.password}</div>}
 
         <Button
           className="submit-button"
-          disabled={!isFormValid || isLoading}
+          disabled={!isValid || isSubmitting}
           type="submit"
-          children={isLoading ? 'Entering...' : 'Log in'}
+          children={isSubmitting ? 'Entering...' : 'Log in'}
         />
       </form>
 
