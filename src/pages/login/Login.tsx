@@ -1,80 +1,86 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import handleLogin from '../../services/handleLogin';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import './Login.css';
+import { loginSchema, LoginInput } from '../../schemas/authSchemas';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
   const [error, setError] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+    defaultValues: { email: '', password: '' },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (formData: LoginInput) => {
     setError('');
-    setIsLoading(true);
-
     try {
       const userData = await handleLogin(formData.email, formData.password);
       login(userData);
       navigate(AppRouterPaths.HOME);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Incorrect email or password');
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
     <div className="login-page">
       <h1>Log in</h1>
-      <form onSubmit={handleSubmit} className="login-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
         {error && <div className="error-message">{error}</div>}
 
-        <Input
-          labelText="Email"
+        <Controller
           name="email"
-          onChange={handleChange}
-          type="email"
-          placeholder="user@example.com"
-          value={formData.email}
-          required={true}
-          disabled={isLoading}
+          control={control}
+          render={({ field }) => (
+            <>
+              <Input
+                labelText="Email"
+                placeholder="user@example.com"
+                autoComplete="off"
+                disabled={isSubmitting}
+                {...field}
+              />
+              {errors.email && <div className="error-message">{errors.email.message}</div>}
+            </>
+          )}
         />
 
-        <Input
-          labelText="Password"
+        <Controller
           name="password"
-          type="password"
-          onChange={handleChange}
-          placeholder="*************"
-          value={formData.password}
-          required={true}
-          disabled={isLoading}
-          minLength={8}
+          control={control}
+          render={({ field }) => (
+            <>
+              <Input
+                labelText="Password"
+                placeholder="••••••••"
+                type="password"
+                disabled={isSubmitting}
+                {...field}
+              />
+              {errors.password && <div className="error-message">{errors.password.message}</div>}
+            </>
+          )}
         />
 
         <Button
           className="submit-button"
-          disabled={isLoading}
+          disabled={!isValid || isSubmitting}
           type="submit"
-          children={isLoading ? 'Entering...' : 'Log in'}
+          children={isSubmitting ? 'Entering...' : 'Log in'}
         />
       </form>
 

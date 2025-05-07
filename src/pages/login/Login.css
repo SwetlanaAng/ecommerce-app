@@ -11,6 +11,10 @@
     flex-wrap: wrap;
     gap: 20px;
     flex-direction: column;
+    .error-message {
+      color: #d8000c;
+      text-align: center;
+    }
     .form-group {
       text-align: start;
       .label {
@@ -30,7 +34,7 @@
 
 @media (max-width: 768px) {
   .login-page {
-    padding: 50px 100px;
+    padding: 50px 30px;
   }
 }
 
