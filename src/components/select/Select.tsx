@@ -9,6 +9,7 @@ interface SelectProps {
   required: boolean;
   disabled: boolean;
   optionsList: { [key: string]: string };
+  autoComplete?: 'country' | 'country-name';
 }
 
 const Select = ({
@@ -20,6 +21,7 @@ const Select = ({
   required,
   disabled,
   optionsList,
+  autoComplete,
 }: SelectProps) => {
   return (
     <div className="form-group">
@@ -34,6 +36,7 @@ const Select = ({
             value={value}
             required={required}
             disabled={disabled}
+            autoComplete={autoComplete}
           >
             {Object.keys(optionsList).map(option => (
               <option key={option} value={option}>

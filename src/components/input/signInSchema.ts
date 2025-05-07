@@ -53,14 +53,10 @@ export const formSchema = z.object({
   billing_street: z.string().nonempty({ message: 'Street is required' }),
   billing_postalCode: z
     .string()
-    .length(5, { message: 'Postal code must follow the format for the country' })
-    .refine(
-      value =>
-        /\d/.test(value) && /[a-zA-Z]/.test(value) && !/(?=.*\d)[^!<>?=+@{}_$%]+$/.test(value),
-      {
-        message: 'Postal code must follow the format for the country',
-      }
-    ),
+    .nonempty({ message: 'Postal code is required' })
+    .refine(value => /^\d{5}$/.test(value), {
+      message: 'Postal code must be 5 digits',
+    }),
   billing_isDefault: z.boolean(),
   sameAsShipping: z.boolean(),
   shipping_city: z
@@ -76,14 +72,10 @@ export const formSchema = z.object({
   shipping_street: z.string().nonempty({ message: 'Street is required' }),
   shipping_postalCode: z
     .string()
-    .length(5, { message: 'Postal code must follow the format for the country' })
-    .refine(
-      value =>
-        /\d/.test(value) && /[a-zA-Z]/.test(value) && !/(?=.*\d)[^!<>?=+@{}_$%]+$/.test(value),
-      {
-        message: 'Postal code must follow the format for the country',
-      }
-    ),
+    .nonempty({ message: 'Postal code is required' })
+    .refine(value => /^\d{5}$/.test(value), {
+      message: 'Postal code must be 5 digits',
+    }),
   shipping_isDefault: z.boolean(),
 });
 

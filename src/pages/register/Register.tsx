@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { handleRegistration } from '../../services/handleRegistration';
@@ -9,17 +9,42 @@ import { RegistrationData } from '../../types/interfaces';
 import { countryId } from '../../services/registration.service';
 import './Register.css';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import Select from '../../components/select/Select';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { formSchema } from '../../components/input/signInSchema';
+
+interface Address {
+  country: string;
+  city: string;
+  street: string;
+  postalCode: string;
+  isDefault: boolean;
+}
+
+interface AddressData {
+  billingAddress: Address;
+  shippingAddress: Address;
+}
+
+const initialAddress: Address = {
+  country: 'Spain',
+  city: '',
+  street: '',
+  postalCode: '',
+  isDefault: false,
+};
 
 const Register: React.FC = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors },
-  } = useForm<FormFields>({ resolver: zodResolver(formSchema) });
+    formState: { errors, isSubmitting },
+    setValue,
+  } = useForm<FormFields>({
+    resolver: zodResolver(formSchema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  });
 
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -30,104 +55,109 @@ const Register: React.FC = () => {
     lastName: '',
     dateOfBirth: '',
   });
-  const [addressData, setAddressData] = useState({
-    billingAddress: {
-      country: 'Spain',
-      city: '',
-      street: '',
-      postalCode: '',
-      isDefault: false,
-    },
-    shippingAddress: {
-      country: 'Spain',
-      city: '',
-      street: '',
-      postalCode: '',
-      isDefault: false,
-    },
+  const [addressData, setAddressData] = useState<AddressData>({
+    billingAddress: { ...initialAddress },
+    shippingAddress: { ...initialAddress },
   });
   const [sameAsShipping, setSameAsShipping] = useState(false);
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const handleChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+      }));
+      setValue(name as keyof FormFields, value, { shouldValidate: true });
+    },
+    [setValue]
+  );
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  const handleAddressChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      const [addressType, fieldName] = name.split('_');
 
-    const [addressType, fieldName] = name.split('_');
+      if (addressType === 'billing' || addressType === 'shipping') {
+        setAddressData(prev => {
+          const newData = {
+            ...prev,
+            [`${addressType}Address`]: {
+              ...prev[`${addressType}Address` as keyof typeof prev],
+              [fieldName]: value,
+            },
+          };
 
-    if (addressType === 'billing' || addressType === 'shipping') {
+          if (sameAsShipping && addressType === 'billing') {
+            newData.shippingAddress = {
+              ...newData.shippingAddress,
+              [fieldName]: value,
+            };
+          }
+
+          return newData;
+        });
+        setValue(name as keyof FormFields, value, { shouldValidate: true });
+      }
+    },
+    [sameAsShipping, setValue]
+  );
+
+  const handleSameAddressChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const checked = e.target.checked;
+      setSameAsShipping(checked);
+
+      if (checked) {
+        const billingAddress = addressData.billingAddress;
+        setAddressData(prev => ({
+          ...prev,
+          shippingAddress: {
+            ...billingAddress,
+          },
+        }));
+
+        setValue('shipping_city', billingAddress.city, { shouldValidate: true });
+        setValue('shipping_street', billingAddress.street, { shouldValidate: true });
+        setValue('shipping_postalCode', billingAddress.postalCode, { shouldValidate: true });
+        setValue('shipping_isDefault', billingAddress.isDefault, { shouldValidate: true });
+      }
+      setValue('sameAsShipping', checked, { shouldValidate: true });
+    },
+    [addressData.billingAddress, setValue]
+  );
+
+  const handleDefaultAddressChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name } = e.target;
+      const [addressType] = name.split('_');
+
       setAddressData(prev => {
         const newData = {
           ...prev,
           [`${addressType}Address`]: {
             ...prev[`${addressType}Address` as keyof typeof prev],
-            [fieldName]: value,
+            isDefault: e.target.checked,
           },
         };
 
         if (sameAsShipping && addressType === 'billing') {
           newData.shippingAddress = {
             ...newData.shippingAddress,
-            [fieldName]: value,
+            isDefault: e.target.checked,
           };
         }
 
         return newData;
       });
-    }
-  };
+      setValue(name as keyof FormFields, e.target.checked, { shouldValidate: true });
+    },
+    [sameAsShipping, setValue]
+  );
 
-  const handleSameAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
-    setSameAsShipping(checked);
-
-    if (checked) {
-      setAddressData(prev => ({
-        ...prev,
-        shippingAddress: {
-          ...prev.billingAddress,
-        },
-      }));
-    }
-  };
-
-  const handleDefaultAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name } = e.target;
-    const [addressType] = name.split('_');
-
-    setAddressData(prev => {
-      const newData = {
-        ...prev,
-        [`${addressType}Address`]: {
-          ...prev[`${addressType}Address` as keyof typeof prev],
-          isDefault: e.target.checked,
-        },
-      };
-
-      if (sameAsShipping && addressType === 'billing') {
-        newData.shippingAddress = {
-          ...newData.shippingAddress,
-          isDefault: e.target.checked,
-        };
-      }
-
-      return newData;
-    });
-  };
-
-  const submitData: SubmitHandler<FormFields> = async (
-    data: FormFields /* e: React.FormEvent */
-  ) => {
-    /* e.preventDefault(); */
-    console.log(data);
+  const submitData: SubmitHandler<FormFields> = async () => {
     setError('');
     setIsLoading(true);
 
@@ -162,10 +192,82 @@ const Register: React.FC = () => {
     }
   };
 
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onError = (errors: any) => {
+    console.log('Form validation errors:', errors);
+  };
+
+  const renderAddressFields = (type: 'billing' | 'shipping', isDisabled: boolean) => (
+    <>
+      <Select
+        labelText="Country"
+        className="select"
+        onChange={handleAddressChange}
+        name={`${type}_country`}
+        value={addressData[`${type}Address`].country}
+        required={true}
+        disabled={isDisabled}
+        optionsList={countryId}
+        autoComplete="country"
+      />
+
+      <Input
+        labelText="City"
+        name={`${type}_city`}
+        id={`${type}_city`}
+        onChange={handleAddressChange}
+        placeholder="Madrid"
+        value={addressData[`${type}Address`].city}
+        disabled={isDisabled}
+        register={register}
+        error={errors[`${type}_city`]}
+        autoComplete="address-level2"
+      />
+
+      <Input
+        labelText="Street"
+        name={`${type}_street`}
+        id={`${type}_street`}
+        onChange={handleAddressChange}
+        placeholder="Calle de la Princesa"
+        value={addressData[`${type}Address`].street}
+        disabled={isDisabled}
+        register={register}
+        error={errors[`${type}_street`]}
+        autoComplete="street-address"
+      />
+
+      <Input
+        labelText="Postal Code"
+        name={`${type}_postalCode`}
+        id={`${type}_postalCode`}
+        onChange={handleAddressChange}
+        placeholder="28001"
+        value={addressData[`${type}Address`].postalCode}
+        disabled={isDisabled}
+        register={register}
+        error={errors[`${type}_postalCode`]}
+        autoComplete="postal-code"
+      />
+
+      <Input
+        labelText={`Set as default ${type} address for future orders`}
+        type="checkbox"
+        id={`default_${type}`}
+        name={`${type}_isDefault`}
+        checked={addressData[`${type}Address`].isDefault}
+        onChange={handleDefaultAddressChange}
+        disabled={isDisabled}
+        register={register}
+        error={errors[`${type}_isDefault`]}
+      />
+    </>
+  );
+
   return (
     <div className="auth-page">
       <h1>Registration</h1>
-      <form onSubmit={handleSubmit(submitData)} className="auth-form">
+      <form onSubmit={handleSubmit(submitData, onError)} className="auth-form">
         {error && <div className="error-message">{error}</div>}
 
         <Input
@@ -176,11 +278,12 @@ const Register: React.FC = () => {
           type="text"
           placeholder="user@example.com"
           value={formData.email}
-          //required={true}
           disabled={isLoading}
           register={register}
-        ></Input>
-        {errors.email && <div>{errors.email?.message}</div>}
+          error={errors.email}
+          autoComplete="email"
+        />
+
         <Input
           labelText="Password"
           name="password"
@@ -189,12 +292,12 @@ const Register: React.FC = () => {
           type="password"
           placeholder="*************"
           value={formData.password}
-          //required={true}
           disabled={isLoading}
-          //minLength={8}
           register={register}
-        ></Input>
-        {errors.password && <div>{errors.password?.message}</div>}
+          error={errors.password}
+          autoComplete="new-password"
+        />
+
         <Input
           labelText="First Name"
           name="firstName"
@@ -202,11 +305,12 @@ const Register: React.FC = () => {
           onChange={handleChange}
           placeholder="John"
           value={formData.firstName}
-          //required={true}
           disabled={isLoading}
           register={register}
-        ></Input>
-        {errors.firstName && <div>{errors.firstName?.message}</div>}
+          error={errors.firstName}
+          autoComplete="given-name"
+        />
+
         <Input
           labelText="Last Name"
           name="lastName"
@@ -214,11 +318,12 @@ const Register: React.FC = () => {
           onChange={handleChange}
           placeholder="Doe"
           value={formData.lastName}
-          //required={true}
           disabled={isLoading}
           register={register}
-        ></Input>
-        {errors.lastName && <div>{errors.lastName?.message}</div>}
+          error={errors.lastName}
+          autoComplete="family-name"
+        />
+
         <Input
           labelText="Birth date"
           name="dateOfBirth"
@@ -227,71 +332,14 @@ const Register: React.FC = () => {
           onChange={handleChange}
           placeholder="dd/mm/yyyy"
           value={formData.dateOfBirth}
-          //required={true}
           disabled={isLoading}
-          autoComplete="off"
+          autoComplete="bday"
           register={register}
-        ></Input>
-        {errors.dateOfBirth && <div>{errors.dateOfBirth?.message}</div>}
+          error={errors.dateOfBirth}
+        />
+
         <h3>Billing Address</h3>
-
-        <Select
-          labelText="Country"
-          className="select"
-          onChange={handleAddressChange}
-          name="billing_country"
-          value={addressData.billingAddress.country}
-          required={true}
-          disabled={isLoading}
-          optionsList={countryId}
-        />
-
-        <Input
-          labelText="City"
-          name="billing_city"
-          id="billing_city"
-          onChange={handleAddressChange}
-          placeholder="Madrid"
-          value={addressData.billingAddress.city}
-          //required={true}
-          disabled={isLoading}
-          register={register}
-        ></Input>
-        {errors.billing_city && <div>{errors.billing_city?.message}</div>}
-        <Input
-          labelText="Street"
-          name="billing_street"
-          id="billing_street"
-          onChange={handleAddressChange}
-          placeholder="Calle de la Princesa"
-          value={addressData.billingAddress.street}
-          //required={true}
-          disabled={isLoading}
-          register={register}
-        ></Input>
-        {errors.billing_street && <div>{errors.billing_street?.message}</div>}
-        <Input
-          labelText="Postal Code"
-          name="billing_postalCode"
-          id="billing_postalCode"
-          onChange={handleAddressChange}
-          placeholder="28001"
-          value={addressData.billingAddress.postalCode}
-          //required={true}
-          disabled={isLoading}
-          register={register}
-        ></Input>
-        {errors.billing_postalCode && <div>{errors.billing_postalCode?.message}</div>}
-        <Input
-          labelText="Set as default billing address for future orders"
-          type="checkbox"
-          id="default_billing"
-          name="billing_isDefault"
-          checked={addressData.billingAddress.isDefault}
-          onChange={handleDefaultAddressChange}
-          disabled={isLoading}
-          register={register}
-        />
+        {renderAddressFields('billing', isLoading)}
 
         <Input
           labelText="Use same address for shipping"
@@ -302,77 +350,19 @@ const Register: React.FC = () => {
           onChange={handleSameAddressChange}
           disabled={isLoading}
           register={register}
+          error={errors.sameAsShipping}
         />
 
         {!sameAsShipping && (
           <>
             <h3>Shipping Address</h3>
-            <Select
-              labelText="Country"
-              className="select"
-              onChange={handleAddressChange}
-              name="shipping_country"
-              value={addressData.shippingAddress.country}
-              required={true}
-              disabled={isLoading || sameAsShipping}
-              optionsList={countryId}
-            />
-
-            <Input
-              labelText="City"
-              name="shipping_city"
-              id="shipping_city"
-              onChange={handleAddressChange}
-              placeholder="Madrid"
-              value={addressData.shippingAddress.city}
-              //required={true}
-              disabled={isLoading || sameAsShipping}
-              register={register}
-            ></Input>
-            {errors.shipping_city && <div>{errors.shipping_city?.message}</div>}
-            <Input
-              labelText="Street"
-              name="shipping_street"
-              id="shipping_street"
-              onChange={handleAddressChange}
-              placeholder="Calle de la Princesa"
-              value={addressData.shippingAddress.street}
-              //required={true}
-              disabled={isLoading || sameAsShipping}
-              register={register}
-            ></Input>
-            {errors.shipping_street && <div>{errors.shipping_street?.message}</div>}
-            <Input
-              labelText="Postal Code"
-              name="shipping_postalCode"
-              id="shipping_postalCode"
-              onChange={handleAddressChange}
-              placeholder="28001"
-              value={addressData.shippingAddress.postalCode}
-              //required={true}
-              disabled={isLoading || sameAsShipping}
-              register={register}
-            ></Input>
-
-            <Input
-              labelText="Set as default shipping address for future orders"
-              type="checkbox"
-              id="default_shipping"
-              name="shipping_isDefault"
-              checked={addressData.shippingAddress.isDefault}
-              onChange={handleDefaultAddressChange}
-              disabled={isLoading || sameAsShipping}
-              register={register}
-            />
+            {renderAddressFields('shipping', isLoading || sameAsShipping)}
           </>
         )}
 
-        <Button
-          className="submit-button"
-          disabled={isLoading}
-          type="submit"
-          children={isLoading ? 'Registering...' : 'Register'}
-        />
+        <Button className="submit-button" disabled={isLoading || isSubmitting} type="submit">
+          {isLoading ? 'Registering...' : 'Register'}
+        </Button>
       </form>
 
       <div className="auth-links">
