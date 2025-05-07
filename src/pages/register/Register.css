@@ -13,13 +13,16 @@
     justify-content: center;
     .form-group {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       text-align: start;
       width: calc((100% - 20px) / 2);
       .label {
         font-weight: 400;
         font-size: 14px;
         width: 100%;
+      }
+      &.checkbox-group {
+        flex-direction: row;
       }
     }
     h3 {
@@ -50,4 +53,21 @@
       }
     }
   }
+}
+
+.error-text {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  width: 100%;
 }
