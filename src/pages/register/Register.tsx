@@ -13,7 +13,7 @@ const Register: React.FC = () => {
     formData,
     addressData,
     sameAsShipping,
-    error,
+    /* error, */
     isLoading,
     errors,
     isSubmitting,
@@ -38,7 +38,7 @@ const Register: React.FC = () => {
     <div className="auth-page">
       <h1>Registration</h1>
       <form onSubmit={handleSubmit(submitData)} className="auth-form">
-        {error && <div className="error-message">{error}</div>}
+        {/* {error && <div className="error-message">{error}</div>} */}
 
         <PersonalInfoForm
           formData={formData}
