@@ -1,20 +1,29 @@
 import { getToken, login } from './login.service';
 import { Customer } from '../types/interfaces';
 
+interface LoginResponse {
+  customer: Customer;
+  [key: string]: unknown;
+}
+
 export default function handleLogin(email: string, password: string): Promise<Customer> {
   return getToken(email, password)
     .then(authData => {
       localStorage.setItem('token', JSON.stringify(authData));
       return login(email, password);
     })
-    .then(userData => {
-      localStorage.setItem('user', JSON.stringify(userData));
+    .then((loginResponse: LoginResponse) => {
+      if (loginResponse.customer) {
+        localStorage.setItem('login', JSON.stringify(loginResponse.customer));
+      } else {
+        localStorage.setItem('login', JSON.stringify(loginResponse));
+      }
 
       return {
-        id: userData.id || email,
+        id: loginResponse.customer?.id || email,
         email: email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
+        firstName: loginResponse.customer?.firstName,
+        lastName: loginResponse.customer?.lastName,
       };
     })
     .catch(err => {

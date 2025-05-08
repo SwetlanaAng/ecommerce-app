@@ -2,33 +2,31 @@ import { useState } from 'react';
 import view from '../../assets/view.png';
 import hide from '../../assets/hide.png';
 import './Input.css';
-import { z } from 'zod';
-import { UseFormRegister, FieldError } from 'react-hook-form';
-import { formSchema } from './signInSchema';
+import { UseFormRegister, FieldError, Path } from 'react-hook-form';
 
-export type FormFields = z.infer<typeof formSchema>;
+export type InputName =
+  | 'email'
+  | 'password'
+  | 'dateOfBirth'
+  | 'firstName'
+  | 'lastName'
+  | 'billing_city'
+  | 'billing_street'
+  | 'billing_postalCode'
+  | 'billing_isDefault'
+  | 'sameAsShipping'
+  | 'shipping_city'
+  | 'shipping_street'
+  | 'shipping_postalCode'
+  | 'shipping_isDefault';
 
-interface InputProps {
+interface InputProps<T extends Record<string, unknown>> {
   labelText: string;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: 'text' | 'email' | 'password' | 'date' | 'checkbox';
   placeholder?: string;
-  name:
-    | 'email'
-    | 'password'
-    | 'dateOfBirth'
-    | 'firstName'
-    | 'lastName'
-    | 'billing_city'
-    | 'billing_street'
-    | 'billing_postalCode'
-    | 'billing_isDefault'
-    | 'sameAsShipping'
-    | 'shipping_city'
-    | 'shipping_street'
-    | 'shipping_postalCode'
-    | 'shipping_isDefault';
+  name: Path<T>;
   value?: string;
   id: string;
   required?: boolean;
@@ -51,11 +49,11 @@ interface InputProps {
     | 'family-name'
     | 'bday';
   checked?: boolean;
-  register: UseFormRegister<FormFields>;
+  register: UseFormRegister<T>;
   error?: FieldError;
 }
 
-const Input = ({
+const Input = <T extends Record<string, unknown>>({
   register,
   labelText,
   className,
@@ -71,7 +69,7 @@ const Input = ({
   id,
   checked,
   error,
-}: InputProps) => {
+}: InputProps<T>) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const isPasswordField = type === 'password';

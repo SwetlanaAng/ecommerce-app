@@ -7,8 +7,8 @@ import { useAuth } from '../../features/auth/hooks/useAuth';
 import handleLogin from '../../services/handleLogin';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
-import './Login.css';
 import { loginSchema, LoginInput } from '../../schemas/authSchemas';
+import './Login.css';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ const Login: React.FC = () => {
   const {
     control,
     handleSubmit,
+    register,
     formState: { errors, isValid, isSubmitting },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -46,16 +47,16 @@ const Login: React.FC = () => {
           name="email"
           control={control}
           render={({ field }) => (
-            <>
-              <Input
-                labelText="Email"
-                placeholder="user@example.com"
-                autoComplete="off"
-                disabled={isSubmitting}
-                {...field}
-              />
-              {errors.email && <div className="error-message">{errors.email.message}</div>}
-            </>
+            <Input<LoginInput>
+              id="email"
+              register={register}
+              labelText="Email"
+              placeholder="user@example.com"
+              autoComplete="on"
+              disabled={isSubmitting}
+              {...field}
+              error={errors.email}
+            />
           )}
         />
 
@@ -63,16 +64,16 @@ const Login: React.FC = () => {
           name="password"
           control={control}
           render={({ field }) => (
-            <>
-              <Input
-                labelText="Password"
-                placeholder="••••••••"
-                type="password"
-                disabled={isSubmitting}
-                {...field}
-              />
-              {errors.password && <div className="error-message">{errors.password.message}</div>}
-            </>
+            <Input<LoginInput>
+              id="password"
+              register={register}
+              labelText="Password"
+              placeholder="••••••••"
+              type="password"
+              disabled={isSubmitting}
+              {...field}
+              error={errors.password}
+            />
           )}
         />
 

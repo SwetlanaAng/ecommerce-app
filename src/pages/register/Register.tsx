@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { handleRegistration } from '../../services/handleRegistration';
-import Input, { FormFields } from '../../components/input/Input';
+import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import { RegistrationData } from '../../types/interfaces';
@@ -11,7 +11,7 @@ import './Register.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Select from '../../components/select/Select';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { formSchema } from '../../components/input/signInSchema';
+import { formSchema, FormFields } from '../../components/input/signInSchema';
 
 interface Address {
   country: string;
@@ -290,7 +290,7 @@ const Register: React.FC = () => {
           id="password"
           onChange={handleChange}
           type="password"
-          placeholder="*************"
+          placeholder="••••••••"
           value={formData.password}
           disabled={isLoading}
           register={register}

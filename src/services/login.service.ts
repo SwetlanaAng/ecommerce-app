@@ -12,6 +12,11 @@ const HEADERS = {
   'Content-Type': 'application/x-www-form-urlencoded',
 };
 
+interface LoginResponse {
+  customer: Customer;
+  [key: string]: unknown;
+}
+
 export function getToken(username: string, password: string): Promise<TokenResponse> {
   const params = new URLSearchParams();
   params.append('grant_type', 'password');
@@ -30,7 +35,7 @@ export function getToken(username: string, password: string): Promise<TokenRespo
   });
 }
 
-export function login(email: string, password: string): Promise<Customer> {
+export function login(email: string, password: string): Promise<LoginResponse> {
   const tokenData = JSON.parse(localStorage.getItem('token') || '{}') as TokenResponse;
   const token = tokenData.access_token;
 
