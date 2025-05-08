@@ -12,7 +12,7 @@ const NotFound: React.FC = () => {
     <div className="not-found-page">
       <h1>Sorry, page not found.</h1>
       <img src={notFound} alt="notFound" />
-      <Button onClick={() => navigate(AppRouterPaths.HOME)}>Buck to the home page</Button>
+      <Button onClick={() => navigate(AppRouterPaths.MAIN)}>Back to the home page</Button>
     </div>
   );
 };

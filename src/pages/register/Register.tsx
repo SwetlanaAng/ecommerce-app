@@ -181,7 +181,7 @@ const Register: React.FC = () => {
           firstName: formData.firstName,
           lastName: formData.lastName,
         });
-        navigate(AppRouterPaths.HOME);
+        navigate(AppRouterPaths.MAIN);
       } else {
         setError(result.message);
       }

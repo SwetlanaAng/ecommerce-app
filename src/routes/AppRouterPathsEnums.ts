@@ -1,5 +1,5 @@
 export enum AppRouterPaths {
-  HOME = '/',
+  MAIN = '/',
   LOGIN = '/login',
   REGISTER = '/register',
 }

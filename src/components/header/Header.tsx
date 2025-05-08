@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   const handleLogout = () => {
     logout();
-    navigate(AppRouterPaths.HOME);
+    navigate(AppRouterPaths.MAIN);
     closeMobileMenu();
   };
 
@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = () => {
   const getNavLinks = (): NavLink[] => {
     const navLinks: NavLink[] = [
       {
-        path: AppRouterPaths.HOME,
+        path: AppRouterPaths.MAIN,
         text: 'Main',
       },
     ];
@@ -94,7 +94,7 @@ const Header: React.FC<HeaderProps> = () => {
       <div className="container">
         <div className="header-content">
           <div className="logo">
-            <Link to={AppRouterPaths.HOME}>
+            <Link to={AppRouterPaths.MAIN}>
               <img src={logo} alt="logo" />
             </Link>
           </div>

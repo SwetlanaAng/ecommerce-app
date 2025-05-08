@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Home: React.FC = () => {
+const Main: React.FC = () => {
   return (
-    <div className="home-page">
+    <div className="main-page">
       <h1>Main Page</h1>
       <Link to="/login">Login</Link>
       <br />
@@ -12,4 +12,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Main;

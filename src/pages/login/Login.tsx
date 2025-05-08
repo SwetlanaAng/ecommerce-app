@@ -47,7 +47,7 @@ const Login: React.FC = () => {
     try {
       const userData = await handleLogin(formData.email, formData.password);
       login(userData);
-      navigate(AppRouterPaths.HOME);
+      navigate(AppRouterPaths.MAIN);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Incorrect email or password');
     }

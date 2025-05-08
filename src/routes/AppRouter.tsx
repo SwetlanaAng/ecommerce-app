@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from '../pages/home/Home';
+import Main from '../pages/main/Main';
 import Login from '../pages/login/Login';
 import Register from '../pages/register/Register';
 import Header from '../components/header/Header';
@@ -23,7 +23,7 @@ const AppRouter: React.FC = () => {
           <main className="main-content">
             <div className="container">
               <Routes>
-                <Route path={AppRouterPaths.HOME} element={<Home />} />
+                <Route path={AppRouterPaths.MAIN} element={<Main />} />
                 <Route
                   path={AppRouterPaths.LOGIN}
                   element={
