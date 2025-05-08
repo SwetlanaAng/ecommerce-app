@@ -85,9 +85,7 @@ const Login: React.FC = () => {
       </form>
 
       <div className="auth-links">
-        <p>
-          Don't you have an account? <Link to={AppRouterPaths.REGISTER}>Register</Link>
-        </p>
+        Don't you have an account? <Link to={AppRouterPaths.REGISTER}>Register</Link>
       </div>
     </div>
   );
