@@ -52,8 +52,8 @@ export const useRegistrationSubmit = ({
           `You have successfully registered.
           Have a nice shopping experience`,
           {
-            position: 'top-left',
-            autoClose: 2000,
+            position: 'top-right',
+            autoClose: 4000,
             hideProgressBar: false,
             closeOnClick: false,
             pauseOnHover: true,

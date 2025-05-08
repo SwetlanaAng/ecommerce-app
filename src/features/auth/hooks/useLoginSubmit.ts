@@ -26,8 +26,8 @@ export const useLoginSubmit = ({ formData, setError }: UseLoginSubmitProps) => {
         `You have successfully logged in.
         Happy shopping`,
         {
-          position: 'top-left',
-          autoClose: 2000,
+          position: 'top-right',
+          autoClose: 4000,
           hideProgressBar: false,
           closeOnClick: false,
           pauseOnHover: true,
