@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../../routes/AppRouterPathsEnums';
 import { useAuth } from './useAuth';
 import handleLogin from '../../../services/handleLogin';
+import { toast } from 'react-toastify';
 
 interface UseLoginSubmitProps {
   formData: {
@@ -21,6 +22,20 @@ export const useLoginSubmit = ({ formData, setError }: UseLoginSubmitProps) => {
     try {
       const userData = await handleLogin(formData.email, formData.password);
       login(userData);
+      toast.success(
+        `You have successfully logged in.
+        Happy shopping`,
+        {
+          position: 'top-left',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
       navigate(AppRouterPaths.MAIN);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Incorrect email or password');

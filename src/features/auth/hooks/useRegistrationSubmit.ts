@@ -6,6 +6,7 @@ import { handleRegistration } from '../../../services/handleRegistration';
 import { useAuth } from './useAuth';
 import { FormFields } from '../../../schemas/signInSchema';
 import { AddressData } from '../../../types/address.types';
+import { toast } from 'react-toastify';
 
 interface UseRegistrationSubmitProps {
   formData: {
@@ -47,6 +48,20 @@ export const useRegistrationSubmit = ({
       const result = await handleRegistration(registrationData);
 
       if (result.isSuccess) {
+        toast.success(
+          `You have successfully registered.
+          Have a nice shopping experience`,
+          {
+            position: 'top-left',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          }
+        );
         login({
           id: result.message,
           email: formData.email,
