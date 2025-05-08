@@ -11,7 +11,7 @@ import './Register.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Select from '../../components/select/Select';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { formSchema, FormFields } from '../../components/input/signInSchema';
+import { formSchema, FormFields } from '../../schemas/signInSchema';
 
 interface Address {
   country: string;
