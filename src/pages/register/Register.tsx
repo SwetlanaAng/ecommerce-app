@@ -192,11 +192,6 @@ const Register: React.FC = () => {
     }
   };
 
-  //eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onError = (errors: any) => {
-    console.log('Form validation errors:', errors);
-  };
-
   const renderAddressFields = (type: 'billing' | 'shipping', isDisabled: boolean) => (
     <>
       <Select
@@ -267,7 +262,7 @@ const Register: React.FC = () => {
   return (
     <div className="auth-page">
       <h1>Registration</h1>
-      <form onSubmit={handleSubmit(submitData, onError)} className="auth-form">
+      <form onSubmit={handleSubmit(submitData)} className="auth-form">
         {error && <div className="error-message">{error}</div>}
 
         <Input
