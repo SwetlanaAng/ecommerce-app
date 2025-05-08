@@ -6,11 +6,6 @@ export const countryId = {
   France: 'FR',
   Italy: 'IT',
   Germany: 'DE',
-  Poland: 'PL',
-  Portugal: 'PT',
-  Netherlands: 'NL',
-  Belgium: 'BE',
-  Luxembourg: 'LU',
 };
 
 export async function getBasicToken(): Promise<string> {
