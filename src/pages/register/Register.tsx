@@ -333,7 +333,7 @@ const Register: React.FC = () => {
           error={errors.dateOfBirth}
         />
 
-        <h3>Billing Address</h3>
+        <h2>Billing Address</h2>
         {renderAddressFields('billing', isLoading)}
 
         <Input
@@ -350,7 +350,7 @@ const Register: React.FC = () => {
 
         {!sameAsShipping && (
           <>
-            <h3>Shipping Address</h3>
+            <h2>Shipping Address</h2>
             {renderAddressFields('shipping', isLoading || sameAsShipping)}
           </>
         )}
