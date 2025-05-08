@@ -1,95 +1,38 @@
-import React, { useState, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
-import { useAuth } from '../../features/auth/hooks/useAuth';
-import handleLogin from '../../services/handleLogin';
-import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
-import { loginSchema, LoginInput } from '../../schemas/authSchemas';
 import './Login.css';
+import { useLoginForm } from '../../features/auth/hooks/useLoginForm';
+import { useLoginSubmit } from '../../features/auth/hooks/useLoginSubmit';
+import LoginForm from '../../components/login/LoginForm';
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  const [error, setError] = useState<string>('');
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+  const { formData, error, errors, isSubmitting, register, handleSubmit, handleChange, setError } =
+    useLoginForm();
+
+  const onSubmit = useLoginSubmit({
+    formData,
+    setError,
   });
-
-  const {
-    handleSubmit,
-    register,
-    formState: { errors, isSubmitting },
-    setValue,
-  } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
-    mode: 'onChange',
-    defaultValues: { email: '', password: '' },
-  });
-
-  const handleChange = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setFormData(prev => ({
-        ...prev,
-        [name]: value,
-      }));
-      setValue(name as keyof LoginInput, value, { shouldValidate: true });
-    },
-    [setValue]
-  );
-
-  const onSubmit = async () => {
-    setError('');
-    try {
-      const userData = await handleLogin(formData.email, formData.password);
-      login(userData);
-      navigate(AppRouterPaths.MAIN);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Incorrect email or password');
-    }
-  };
 
   return (
     <div className="login-page">
       <h1>Log in</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
         {error && <div className="error-message">{error}</div>}
-        <Input<LoginInput>
-          id="email"
-          register={register}
-          labelText="Email"
-          placeholder="user@example.com"
-          autoComplete="on"
-          disabled={isSubmitting}
-          name="email"
-          value={formData.email}
+
+        <LoginForm
+          formData={formData}
+          isDisabled={isSubmitting}
           onChange={handleChange}
-          error={errors.email}
+          register={register}
+          errors={errors}
         />
 
-        <Input<LoginInput>
-          id="password"
-          register={register}
-          labelText="Password"
-          placeholder="••••••••"
-          type="password"
-          disabled={isSubmitting}
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          error={errors.password}
-        />
-
-        <Button
-          className="submit-button"
-          disabled={isSubmitting}
-          type="submit"
-          children={isSubmitting ? 'Entering...' : 'Log in'}
-        />
+        <Button className="submit-button" disabled={isSubmitting} type="submit">
+          {isSubmitting ? 'Entering...' : 'Log in'}
+        </Button>
       </form>
 
       <div className="auth-links">
