@@ -8,27 +8,16 @@ import { useLoginSubmit } from '../../features/auth/hooks/useLoginSubmit';
 import LoginForm from '../../components/login/LoginForm';
 
 const Login: React.FC = () => {
-  const {
-    formData /* , error */,
-    errors,
-    isSubmitting,
-    register,
-    handleSubmit,
-    handleChange,
-    setError,
-  } = useLoginForm();
+  const { formData, errors, isSubmitting, register, handleSubmit, handleChange } = useLoginForm();
 
   const onSubmit = useLoginSubmit({
     formData,
-    setError,
   });
 
   return (
     <div className="login-page">
       <h1>Log in</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
-        {/* {error && <div className="error-message">{error}</div>} */}
-
         <LoginForm
           formData={formData}
           isDisabled={isSubmitting}

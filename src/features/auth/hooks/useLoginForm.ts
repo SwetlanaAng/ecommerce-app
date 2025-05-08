@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, LoginInput } from '../../../schemas/authSchemas';
 
 export const useLoginForm = () => {
-  const [error, setError] = useState<string>('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -35,12 +34,10 @@ export const useLoginForm = () => {
 
   return {
     formData,
-    error,
     errors,
     isSubmitting,
     register,
     handleSubmit,
     handleChange,
-    setError,
   };
 };

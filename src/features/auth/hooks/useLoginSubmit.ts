@@ -10,15 +10,13 @@ interface UseLoginSubmitProps {
     email: string;
     password: string;
   };
-  setError: (error: string) => void;
 }
 
-export const useLoginSubmit = ({ formData, setError }: UseLoginSubmitProps) => {
+export const useLoginSubmit = ({ formData }: UseLoginSubmitProps) => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const onSubmit = useCallback(async () => {
-    setError('');
     try {
       const userData = await handleLogin(formData.email, formData.password);
       login(userData);
@@ -48,9 +46,8 @@ export const useLoginSubmit = ({ formData, setError }: UseLoginSubmitProps) => {
         progress: undefined,
         theme: 'light',
       });
-      setError(err instanceof Error ? err.message : 'Incorrect email or password');
     }
-  }, [formData, setError, login, navigate]);
+  }, [formData, login, navigate]);
 
   return onSubmit;
 };

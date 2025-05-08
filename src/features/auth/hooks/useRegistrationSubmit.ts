@@ -17,21 +17,18 @@ interface UseRegistrationSubmitProps {
     dateOfBirth: string;
   };
   addressData: AddressData;
-  setError: (error: string) => void;
   setIsLoading: (isLoading: boolean) => void;
 }
 
 export const useRegistrationSubmit = ({
   formData,
   addressData,
-  setError,
   setIsLoading,
 }: UseRegistrationSubmitProps) => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const submitData: SubmitHandler<FormFields> = useCallback(async () => {
-    setError('');
     setIsLoading(true);
 
     try {
@@ -72,7 +69,7 @@ export const useRegistrationSubmit = ({
       } else {
         toast.error(result.message, {
           position: 'top-right',
-          autoClose: 2400,
+          autoClose: 4000,
           hideProgressBar: false,
           closeOnClick: false,
           pauseOnHover: true,
@@ -80,7 +77,6 @@ export const useRegistrationSubmit = ({
           progress: undefined,
           theme: 'light',
         });
-        setError(result.message);
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'An error occurred during registration', {
@@ -93,11 +89,10 @@ export const useRegistrationSubmit = ({
         progress: undefined,
         theme: 'light',
       });
-      setError(err instanceof Error ? err.message : 'An error occurred during registration');
     } finally {
       setIsLoading(false);
     }
-  }, [formData, addressData, setError, setIsLoading, login, navigate]);
+  }, [formData, addressData, setIsLoading, login, navigate]);
 
   return submitData;
 };
