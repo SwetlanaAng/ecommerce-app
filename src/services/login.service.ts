@@ -29,7 +29,7 @@ export function getToken(username: string, password: string): Promise<TokenRespo
     body: params,
   }).then(response => {
     if (!response.ok) {
-      throw new Error('Authentication failed');
+      throw new Error('Account with this email or password does not exist');
     }
     return response.json();
   });
