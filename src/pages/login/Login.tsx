@@ -19,7 +19,7 @@ const Login: React.FC = () => {
     control,
     handleSubmit,
     register,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     mode: 'onChange',
@@ -42,7 +42,6 @@ const Login: React.FC = () => {
       <h1>Log in</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
         {error && <div className="error-message">{error}</div>}
-
         <Controller
           name="email"
           control={control}
@@ -79,7 +78,7 @@ const Login: React.FC = () => {
 
         <Button
           className="submit-button"
-          disabled={!isValid || isSubmitting}
+          disabled={isSubmitting}
           type="submit"
           children={isSubmitting ? 'Entering...' : 'Log in'}
         />
