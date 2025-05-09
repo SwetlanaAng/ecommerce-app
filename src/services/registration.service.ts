@@ -3,7 +3,6 @@ import { RegistrationData, ResultProps } from '../types/interfaces';
 
 export const countryId = {
   'United States': 'US',
-  'United Kingdom': 'GB',
   Germany: 'DE',
 };
 
