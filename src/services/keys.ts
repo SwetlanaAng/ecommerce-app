@@ -1,10 +1,10 @@
 const KEYS = {
-  API_URL: 'https://api.us-east-2.aws.commercetools.com',
-  AUTH_URL: 'https://auth.us-east-2.aws.commercetools.com',
-  PROJECT_KEY: 'gitinitshop',
-  CLIENT_ID: 'xretPewcCVqHa-D-478PaIQ3',
-  CLIENT_SECRET: 'Z-bbHsxBGYarShxah3q7deHpa4zZeM0x',
-  SCOPES: ['manage_customers:gitinitshop'],
+  API_URL: import.meta.env.VITE_API_URL,
+  AUTH_URL: import.meta.env.VITE_AUTH_URL,
+  PROJECT_KEY: import.meta.env.VITE_PROJECT_KEY,
+  CLIENT_ID: import.meta.env.VITE_CLIENT_ID,
+  CLIENT_SECRET: import.meta.env.VITE_CLIENT_SECRET,
+  SCOPES: [import.meta.env.VITE_SCOPES],
 };
 
 export { KEYS };
