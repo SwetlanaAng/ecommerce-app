@@ -30,7 +30,6 @@ export const useRegistrationForm = () => {
   });
 
   const [sameAsShipping, setSameAsShipping] = useState(false);
-  const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = useCallback(
@@ -131,7 +130,6 @@ export const useRegistrationForm = () => {
     formData,
     addressData,
     sameAsShipping,
-    error,
     isLoading,
     errors,
     isSubmitting,
@@ -141,7 +139,6 @@ export const useRegistrationForm = () => {
     handleAddressChange,
     handleSameAddressChange,
     handleDefaultAddressChange,
-    setError,
     setIsLoading,
   };
 };

@@ -3,29 +3,32 @@ import { useNavigate } from 'react-router-dom';
 import { AppRouterPaths } from '../../../routes/AppRouterPathsEnums';
 import { useAuth } from './useAuth';
 import handleLogin from '../../../services/handleLogin';
+import { toast } from 'react-toastify';
 
 interface UseLoginSubmitProps {
   formData: {
     email: string;
     password: string;
   };
-  setError: (error: string) => void;
 }
 
-export const useLoginSubmit = ({ formData, setError }: UseLoginSubmitProps) => {
+export const useLoginSubmit = ({ formData }: UseLoginSubmitProps) => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const onSubmit = useCallback(async () => {
-    setError('');
     try {
       const userData = await handleLogin(formData.email, formData.password);
       login(userData);
+      toast.success(
+        `You have successfully logged in.
+        Happy shopping`
+      );
       navigate(AppRouterPaths.MAIN);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Incorrect email or password');
+      toast.error(err instanceof Error ? err.message : 'Incorrect email or password');
     }
-  }, [formData, setError, login, navigate]);
+  }, [formData, login, navigate]);
 
   return onSubmit;
 };

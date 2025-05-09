@@ -13,7 +13,6 @@ const Register: React.FC = () => {
     formData,
     addressData,
     sameAsShipping,
-    error,
     isLoading,
     errors,
     isSubmitting,
@@ -23,14 +22,12 @@ const Register: React.FC = () => {
     handleAddressChange,
     handleSameAddressChange,
     handleDefaultAddressChange,
-    setError,
     setIsLoading,
   } = useRegistrationForm();
 
   const submitData = useRegistrationSubmit({
     formData,
     addressData,
-    setError,
     setIsLoading,
   });
 
@@ -38,8 +35,6 @@ const Register: React.FC = () => {
     <div className="auth-page">
       <h1>Registration</h1>
       <form onSubmit={handleSubmit(submitData)} className="auth-form">
-        {error && <div className="error-message">{error}</div>}
-
         <PersonalInfoForm
           formData={formData}
           isDisabled={isLoading}

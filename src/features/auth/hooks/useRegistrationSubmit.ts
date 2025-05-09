@@ -6,6 +6,7 @@ import { handleRegistration } from '../../../services/handleRegistration';
 import { useAuth } from './useAuth';
 import { FormFields } from '../../../schemas/signInSchema';
 import { AddressData } from '../../../types/address.types';
+import { toast } from 'react-toastify';
 
 interface UseRegistrationSubmitProps {
   formData: {
@@ -16,21 +17,18 @@ interface UseRegistrationSubmitProps {
     dateOfBirth: string;
   };
   addressData: AddressData;
-  setError: (error: string) => void;
   setIsLoading: (isLoading: boolean) => void;
 }
 
 export const useRegistrationSubmit = ({
   formData,
   addressData,
-  setError,
   setIsLoading,
 }: UseRegistrationSubmitProps) => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const submitData: SubmitHandler<FormFields> = useCallback(async () => {
-    setError('');
     setIsLoading(true);
 
     try {
@@ -47,6 +45,10 @@ export const useRegistrationSubmit = ({
       const result = await handleRegistration(registrationData);
 
       if (result.isSuccess) {
+        toast.success(
+          `You have successfully registered.
+          Have a nice shopping experience`
+        );
         login({
           id: result.message,
           email: formData.email,
@@ -55,14 +57,14 @@ export const useRegistrationSubmit = ({
         });
         navigate(AppRouterPaths.MAIN);
       } else {
-        setError(result.message);
+        toast.error(result.message);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred during registration');
+      toast.error(err instanceof Error ? err.message : 'An error occurred during registration');
     } finally {
       setIsLoading(false);
     }
-  }, [formData, addressData, setError, setIsLoading, login, navigate]);
+  }, [formData, addressData, setIsLoading, login, navigate]);
 
   return submitData;
 };
