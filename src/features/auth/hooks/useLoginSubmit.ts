@@ -22,30 +22,11 @@ export const useLoginSubmit = ({ formData }: UseLoginSubmitProps) => {
       login(userData);
       toast.success(
         `You have successfully logged in.
-        Happy shopping`,
-        {
-          position: 'top-right',
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        }
+        Happy shopping`
       );
       navigate(AppRouterPaths.MAIN);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Incorrect email or password', {
-        position: 'top-right',
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
+      toast.error(err instanceof Error ? err.message : 'Incorrect email or password');
     }
   }, [formData, login, navigate]);
 

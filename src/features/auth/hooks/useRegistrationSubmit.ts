@@ -47,17 +47,7 @@ export const useRegistrationSubmit = ({
       if (result.isSuccess) {
         toast.success(
           `You have successfully registered.
-          Have a nice shopping experience`,
-          {
-            position: 'top-right',
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          }
+          Have a nice shopping experience`
         );
         login({
           id: result.message,
@@ -67,28 +57,10 @@ export const useRegistrationSubmit = ({
         });
         navigate(AppRouterPaths.MAIN);
       } else {
-        toast.error(result.message, {
-          position: 'top-right',
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
+        toast.error(result.message);
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'An error occurred during registration', {
-        position: 'top-right',
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
+      toast.error(err instanceof Error ? err.message : 'An error occurred during registration');
     } finally {
       setIsLoading(false);
     }
