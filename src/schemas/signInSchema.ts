@@ -33,8 +33,10 @@ export const formSchema = z.object({
     ),
   dateOfBirth: z
     .string()
-    .date('Please, enter date of your birth')
-    .refine(value => getAge(value) >= 18, {
+    .refine(val => !isNaN(Date.parse(val)), {
+      message: 'Please, enter a valid date of birth',
+    })
+    .refine(val => getAge(new Date(val)) >= 18, {
       message: 'You must be at least 18 years old',
     }),
   billing_city: z
