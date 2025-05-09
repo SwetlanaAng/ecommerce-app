@@ -12,7 +12,7 @@ export interface AddressData {
 }
 
 export const initialAddress: Address = {
-  country: 'Spain',
+  country: 'United States',
   city: '',
   street: '',
   postalCode: '',

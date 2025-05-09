@@ -2,9 +2,8 @@ import { KEYS } from './keys';
 import { RegistrationData, ResultProps } from '../types/interfaces';
 
 export const countryId = {
-  Spain: 'ES',
-  France: 'FR',
-  Italy: 'IT',
+  'United States': 'US',
+  'United Kingdom': 'GB',
   Germany: 'DE',
 };
 

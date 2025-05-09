@@ -53,9 +53,17 @@ export const formSchema = z.object({
   billing_postalCode: z
     .string()
     .nonempty({ message: 'Postal code is required' })
-    .refine(value => /^\d{5}$/.test(value), {
-      message: 'Postal code must be 5 digits',
-    }),
+    .refine(
+      value => {
+        if (value.length === 0) return false;
+        if (/^\d{5}$/.test(value)) return true;
+        if (/^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/.test(value.toUpperCase())) return true;
+        return false;
+      },
+      {
+        message: 'Postal code must be either 5 digits (US/Germany) or UK format (e.g., SW1A 1AA)',
+      }
+    ),
   billing_isDefault: z.boolean(),
   sameAsShipping: z.boolean(),
   shipping_city: z
@@ -74,9 +82,17 @@ export const formSchema = z.object({
   shipping_postalCode: z
     .string()
     .nonempty({ message: 'Postal code is required' })
-    .refine(value => /^\d{5}$/.test(value), {
-      message: 'Postal code must be 5 digits',
-    }),
+    .refine(
+      value => {
+        if (value.length === 0) return false;
+        if (/^\d{5}$/.test(value)) return true;
+        if (/^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/.test(value.toUpperCase())) return true;
+        return false;
+      },
+      {
+        message: 'Postal code must be either 5 digits (US/Germany) or UK format (e.g., SW1A 1AA)',
+      }
+    ),
   shipping_isDefault: z.boolean(),
 });
 
