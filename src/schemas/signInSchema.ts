@@ -7,7 +7,7 @@ export const formSchema = z.object({
   password: passwordSchema,
   firstName: z
     .string()
-    .nonempty({ message: 'First name is required' })
+    .nonempty({ message: 'First name must contain at least one character' })
     .refine(
       value =>
         /[a-zA-Z]/.test(value) &&
@@ -15,12 +15,12 @@ export const formSchema = z.object({
         !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
       {
         message:
-          'First name must contain at least one character and no special characters or numbers',
+          'First name must contain only Latin characters and no special characters or numbers',
       }
     ),
   lastName: z
     .string()
-    .nonempty({ message: 'Last name is required' })
+    .nonempty({ message: 'Last name must contain at least one character' })
     .refine(
       value =>
         /[a-zA-Z]/.test(value) &&
@@ -28,7 +28,7 @@ export const formSchema = z.object({
         !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
       {
         message:
-          'Last name must contain at least one character and no special characters or numbers',
+          'Last name must contain only Latin characters and no special characters or numbers',
       }
     ),
   dateOfBirth: z
@@ -41,39 +41,48 @@ export const formSchema = z.object({
     }),
   billing_city: z
     .string()
-    .nonempty({ message: 'City is required' })
+    .nonempty({ message: 'City must contain at least one character' })
     .refine(
       value =>
         /[a-zA-Z]/.test(value) &&
         !/\d/.test(value) &&
         !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
       {
-        message: 'City must contain at least one character and no special characters or numbers',
+        message: 'City must contain only Latin characters and no special characters or numbers',
       }
     ),
-  billing_street: z.string().nonempty({ message: 'Street is required' }),
+  billing_street: z
+    .string()
+    .nonempty({ message: 'Street must contain at least one character' })
+    .refine(value => /^[a-zA-Z0-9\s.,'-]+$/.test(value), {
+      message: 'Street must contain only Latin characters, numbers, and spaces',
+    }),
   billing_postalCode: z
     .string()
     .nonempty({ message: 'Postal code is required' })
     .refine(value => /^\d{5}$/.test(value), {
       message: 'Postal code must be 5 digits',
     }),
-
   billing_isDefault: z.boolean(),
   sameAsShipping: z.boolean(),
   shipping_city: z
     .string()
-    .nonempty({ message: 'City is required' })
+    .nonempty({ message: 'City must contain at least one character' })
     .refine(
       value =>
         /[a-zA-Z]/.test(value) &&
         !/\d/.test(value) &&
         !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
       {
-        message: 'City must contain at least one character and no special characters or numbers',
+        message: 'City must contain only Latin characters and no special characters or numbers',
       }
     ),
-  shipping_street: z.string().nonempty({ message: 'Street is required' }),
+  shipping_street: z
+    .string()
+    .nonempty({ message: 'Street must contain at least one character' })
+    .refine(value => /^[a-zA-Z0-9\s.,'-]+$/.test(value), {
+      message: 'Street must contain only Latin characters, numbers, and spaces',
+    }),
   shipping_postalCode: z
     .string()
     .nonempty({ message: 'Postal code is required' })
