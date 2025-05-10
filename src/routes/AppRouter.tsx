@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Main from '../pages/main/Main';
 import Login from '../pages/login/Login';
 import Register from '../pages/register/Register';
+import Catalog from '../pages/catalog/Catalog';
+import Profile from '../pages/profile/Profile';
+import ProductDetails from '../pages/product/ProductDetails';
 import Header from '../components/header/Header';
 import { AppRouterPaths } from './AppRouterPathsEnums';
 import NotFound from '../pages/notFound/NotFound';
@@ -24,6 +27,8 @@ const AppRouter: React.FC = () => {
             <div className="container">
               <Routes>
                 <Route path={AppRouterPaths.MAIN} element={<Main />} />
+                <Route path={AppRouterPaths.CATALOG} element={<Catalog />} />
+                <Route path={AppRouterPaths.PRODUCT_DETAILS} element={<ProductDetails />} />
                 <Route
                   path={AppRouterPaths.LOGIN}
                   element={
@@ -37,6 +42,14 @@ const AppRouter: React.FC = () => {
                   element={
                     <AuthGuard requireAuth={false}>
                       <Register />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path={AppRouterPaths.PROFILE}
+                  element={
+                    <AuthGuard requireAuth={true}>
+                      <Profile />
                     </AuthGuard>
                   }
                 />

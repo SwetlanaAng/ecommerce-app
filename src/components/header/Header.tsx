@@ -63,14 +63,24 @@ const Header: React.FC<HeaderProps> = () => {
         path: AppRouterPaths.MAIN,
         text: 'Main',
       },
+      {
+        path: AppRouterPaths.CATALOG,
+        text: 'Catalog',
+      },
     ];
 
     if (isAuthenticated) {
-      navLinks.push({
-        path: '#',
-        text: 'Log out',
-        isLogout: true,
-      });
+      navLinks.push(
+        {
+          path: AppRouterPaths.PROFILE,
+          text: 'Profile',
+        },
+        {
+          path: '#',
+          text: 'Log out',
+          isLogout: true,
+        }
+      );
     } else {
       navLinks.push(
         {
