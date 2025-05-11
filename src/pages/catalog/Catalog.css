@@ -1,7 +1,38 @@
 .catalog-page {
+  .search-container {
+    margin: 40px 0 30px;
+    width: 100%;
+    max-width: 600px;
+    .search-input {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      outline: none;
+
+      &:focus,
+      &:hover {
+        border-color: #4e9dd3;
+      }
+
+      &::placeholder {
+        color: #ada7ab;
+      }
+    }
+  }
+
   .catalog-flex {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    .no-products-found {
+      display: flex;
+      align-items: center;
+      img {
+        width: 80px;
+      }
+    }
   }
 }
