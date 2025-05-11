@@ -113,6 +113,8 @@ export interface ProductCardProps {
   name: string;
   description?: string;
   price: number;
+  originalPrice?: number;
+  isOnSale?: boolean;
   imageUrl: string;
   category?: string;
 }
