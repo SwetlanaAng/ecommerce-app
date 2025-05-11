@@ -35,17 +35,31 @@ const Catalog: React.FC = () => {
     updateProducts();
   }, []);
 
-  return (
-    <div className="catalog-page">
-      <h1>Product Catalog</h1>
-      {error && <p>Error: {error}</p>}
-      {loading && (
+  if (error) {
+    return (
+      <div className="catalog-page">
+        <h1>Product Catalog</h1>
+        <p>Error loading products, please try again later.</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="catalog-page">
+        <h1>Product Catalog</h1>
         <div className="catalog-flex">
           {[...Array(8)].map((_, index) => (
             <SkeletonCard key={index} count={1} />
           ))}
         </div>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="catalog-page">
+      <h1>Product Catalog</h1>
       <div className="catalog-flex">
         {products.length === 0 ? (
           <p>No products to show...</p>
