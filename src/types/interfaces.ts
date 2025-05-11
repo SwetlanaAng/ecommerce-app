@@ -40,9 +40,79 @@ export interface RegistrationData {
 
 export interface Product {
   id: string;
+  version: number;
+  productType: {
+    typeId: string;
+    id: string;
+  };
+  name: {
+    'en-US': string;
+  };
+  description?: {
+    'en-US': string;
+  };
+  categories: Array<{
+    id: string;
+    typeId: string;
+  }>;
+  masterVariant: {
+    id: number;
+    prices: Array<{
+      id: string;
+      value: {
+        type: string;
+        currencyCode: string;
+        centAmount: number;
+        fractionDigits: number;
+      };
+      discounted?: {
+        value: {
+          type: string;
+          currencyCode: string;
+          centAmount: number;
+          fractionDigits: number;
+        };
+      };
+    }>;
+    images: Array<{
+      url: string;
+      dimensions: {
+        w: number;
+        h: number;
+      };
+    }>;
+  };
+  searchKeywords?: {
+    en: Array<{
+      text: string;
+    }>;
+  };
+  slug: {
+    en: string;
+  };
+  metaTitle?: {
+    en: string;
+  };
+  metaDescription?: {
+    en: string;
+  };
+  hasStagedChanges: boolean;
+  published: boolean;
+  key: string;
+  taxCategory: {
+    typeId: string;
+    id: string;
+  };
+  priceMode: string;
+  createdAt: string;
+  lastModifiedAt: string;
+}
+
+export interface ProductCardProps {
+  id: string;
   name: string;
-  description: string;
+  description?: string;
   price: number;
   imageUrl: string;
-  category: string;
+  category?: string;
 }
