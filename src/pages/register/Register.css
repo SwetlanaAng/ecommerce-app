@@ -5,7 +5,7 @@
   margin: 0 auto;
   background-color: var(--bg-color-light);
   padding: 50px 100px;
-  border-radius: 4px;
+  border-radius: 8px;
   .auth-form {
     display: flex;
     flex-wrap: wrap;

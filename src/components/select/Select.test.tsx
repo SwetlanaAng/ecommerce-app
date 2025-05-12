@@ -41,7 +41,7 @@ describe('Select Component', () => {
     const select = screen.getByLabelText('Test Select');
     expect(select).toHaveValue('option1');
 
-    Object.keys(mockOptions).forEach(option => {
+    Object.values(mockOptions).forEach(option => {
       expect(screen.getByText(option)).toBeInTheDocument();
     });
   });

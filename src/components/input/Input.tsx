@@ -21,7 +21,7 @@ export type InputName =
   | 'shipping_isDefault';
 
 interface InputProps<T extends Record<string, unknown>> {
-  labelText: string;
+  labelText?: string;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: 'text' | 'email' | 'password' | 'date' | 'checkbox';
@@ -49,7 +49,7 @@ interface InputProps<T extends Record<string, unknown>> {
     | 'family-name'
     | 'bday';
   checked?: boolean;
-  register: UseFormRegister<T>;
+  register?: UseFormRegister<T>;
   error?: FieldError;
 }
 
@@ -82,7 +82,7 @@ const Input = <T extends Record<string, unknown>>({
           type={type}
           className={className}
           id={id}
-          {...register(name)}
+          {...register?.(name)}
           onChange={onChange}
           disabled={disabled}
           checked={checked}
@@ -100,7 +100,7 @@ const Input = <T extends Record<string, unknown>>({
         <p className="label-text">{labelText}</p>
         <div className="input-wrapper">
           <input
-            {...register(name)}
+            {...register?.(name)}
             className={`${className ? className : ''} input ${error ? 'error' : ''}`}
             id={id}
             name={name}

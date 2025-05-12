@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from '../../components/product/ProductCard';
 import { Product, ProductCardProps } from '../../types/interfaces';
-import { getProductsList } from '../../services/products.service';
+import { getProductsList, SortOption } from '../../services/products.service';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
 import SkeletonCard from '../../components/skeleton/SkeletonCard';
+import Select from '../../components/select/Select';
 import sadMacaron from '../../assets/sadMacaron.png';
+import Input from '../../components/input/Input';
 import './Catalog.css';
 
 const Catalog: React.FC = () => {
@@ -13,18 +15,39 @@ const Catalog: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortOption, setSortOption] = useState<SortOption>('');
+
+  const sortOptions = {
+    '': 'Choose sort option',
+    'name.en-US asc': 'Name (A-Z)',
+    'name.en-US desc': 'Name (Z-A)',
+    'price asc': 'Price (Low to High)',
+    'price desc': 'Price (High to Low)',
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProducts = async (sort: SortOption) => {
       setLoading(true);
       try {
-        const productsList: Product[] | undefined = await getProductsList(200);
+        const productsList: Product[] | undefined = await getProductsList(200, undefined, sort);
         if (productsList) {
           const adaptedProducts = await Promise.all(
             productsList.map(product => toCardAdapter(product))
           );
           setAllProducts(adaptedProducts);
-          setProducts(adaptedProducts);
+
+          if (searchQuery) {
+            const lowerQuery = searchQuery.toLowerCase();
+            setProducts(
+              adaptedProducts.filter(
+                product =>
+                  product.name.toLowerCase().includes(lowerQuery) ||
+                  (product.description && product.description.toLowerCase().includes(lowerQuery))
+              )
+            );
+          } else {
+            setProducts(adaptedProducts);
+          }
         } else {
           setError('Failed to load products');
         }
@@ -34,8 +57,9 @@ const Catalog: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchProducts();
-  }, []);
+
+    fetchProducts(sortOption);
+  }, [sortOption, searchQuery]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -54,6 +78,10 @@ const Catalog: React.FC = () => {
     );
   };
 
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(e.target.value as SortOption);
+  };
+
   if (error) {
     return (
       <div className="catalog-page">
@@ -66,13 +94,26 @@ const Catalog: React.FC = () => {
   return (
     <div className="catalog-page">
       <h1>Product Catalog</h1>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={searchQuery}
-          onChange={handleSearch}
-          className="search-input"
+      <div className="catalog-controls">
+        <div className="search-container">
+          <Input
+            placeholder="Search products"
+            name="search"
+            id="search"
+            onChange={handleSearch}
+            value={searchQuery}
+            required={false}
+            disabled={false}
+            autoComplete="off"
+          />
+        </div>
+        <Select
+          name="sort-select"
+          value={sortOption}
+          onChange={handleSortChange}
+          required={false}
+          disabled={false}
+          optionsList={sortOptions}
         />
       </div>
       {loading ? (
