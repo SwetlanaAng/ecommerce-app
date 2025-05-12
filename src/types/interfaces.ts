@@ -118,3 +118,14 @@ export interface ProductCardProps {
   imageUrl: string;
   category?: string;
 }
+export interface CustomerInfo {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  addresses: [];
+  shippingAddressIds: [];
+  billingAddressIds: [];
+  dateOfBirth: string;
+}

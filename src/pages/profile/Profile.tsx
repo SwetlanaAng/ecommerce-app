@@ -1,6 +1,29 @@
+import { useEffect, useState } from 'react';
+import { getCustomer } from '../../services/profile.service';
+import { CustomerInfo } from '../../types/interfaces';
 import './Profile.css';
 
 const Profile: React.FC = () => {
+  const [customer, setCustomer] = useState<CustomerInfo>({
+    id: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    password: '',
+    addresses: [],
+    shippingAddressIds: [],
+    billingAddressIds: [],
+
+    dateOfBirth: '',
+  });
+
+  useEffect(() => {
+    const getInfo = async () => {
+      const data = await getCustomer();
+      setCustomer(data);
+    };
+    getInfo();
+  }, []);
   return (
     <div className="profile-page">
       <h1>Profile information</h1>
@@ -8,13 +31,16 @@ const Profile: React.FC = () => {
       <h2>Personal information</h2>
 
       <div className="info-box first-name">
-        <span>First name: </span>John
+        <span>First name: </span>
+        {customer.firstName}
       </div>
       <div className="info-box last-name">
-        <span>Last name: </span>Doe
+        <span>Last name: </span>
+        {customer.lastName}
       </div>
       <div className="info-box birth-date">
-        <span>Date of birth: </span>09.05.2000
+        <span>Date of birth: </span>
+        {customer.dateOfBirth}
       </div>
 
       <h2>Addresses</h2>
