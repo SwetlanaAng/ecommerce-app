@@ -6,7 +6,9 @@ export enum cardsPerPage {
   catalog = 21,
 }
 
-export async function getProductsList(limit?: number, searchQuery?: string) {
+export type SortOption = 'name.en-US asc' | 'name.en-US desc' | 'price asc' | 'price desc' | '';
+
+export async function getProductsList(limit?: number, searchQuery?: string, sort?: SortOption) {
   const accessToken = await getBasicToken();
   const params = new URLSearchParams();
 
@@ -16,6 +18,10 @@ export async function getProductsList(limit?: number, searchQuery?: string) {
 
   if (searchQuery) {
     params.append('text.en-US', searchQuery);
+  }
+
+  if (sort) {
+    params.append('sort', sort);
   }
 
   try {

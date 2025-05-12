@@ -1,7 +1,7 @@
 import './Select.css';
 
 interface SelectProps {
-  labelText: string;
+  labelText?: string;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   name: string;
@@ -29,7 +29,7 @@ const Select = ({
         <p className="label-text">{labelText}</p>
         <div className="select-wrapper">
           <select
-            className={className}
+            className={`select ${className}`}
             id={name}
             name={name}
             onChange={onChange}
@@ -38,9 +38,9 @@ const Select = ({
             disabled={disabled}
             autoComplete={autoComplete}
           >
-            {Object.keys(optionsList).map(option => (
-              <option key={option} value={option}>
-                {option}
+            {Object.entries(optionsList).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value}
               </option>
             ))}
           </select>
