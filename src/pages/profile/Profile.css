@@ -1,0 +1,23 @@
+.profile-page{
+    width: 100%;
+  max-width: 850px;
+  text-align: start;
+  margin: 0 auto;
+  background-color: var(--bg-color-light);
+  padding: 50px 100px;
+  border-radius: 8px;
+  h1, h2, h3{
+    text-align: center;
+    padding: 20px 0;
+  }
+  .info-box{
+    font-size: 16px;
+    margin: 10px 0;
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+}
