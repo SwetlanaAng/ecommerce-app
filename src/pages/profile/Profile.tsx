@@ -3,6 +3,7 @@ import { getCustomer } from '../../services/profile.service';
 import { CustomerInfo } from '../../types/interfaces';
 import './Profile.css';
 import { InfoBox } from '../../components/profile-info-box/InfoBox';
+import Button from '../../components/button/Button';
 
 const Profile: React.FC = () => {
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -118,6 +119,8 @@ const Profile: React.FC = () => {
       {defaultShippingId === shippingAddress?.id && (
         <div className="default">This address is set as default shipping address </div>
       )}
+
+      <Button className="edit">Edit information</Button>
     </div>
   );
 };

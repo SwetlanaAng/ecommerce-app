@@ -26,4 +26,7 @@
       color: var(--accent-color);
     }
   }
+  .edit{
+    margin-top: 30px;
+  }
 }
