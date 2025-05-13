@@ -29,6 +29,8 @@ export async function getCustomer(): Promise<CustomerInfo> {
       shippingAddressIds: data.shippingAddressIds,
       billingAddressIds: data.billingAddressIds,
       dateOfBirth: data.dateOfBirth,
+      defaultBillingAddressId: data.defaultBillingAddressId,
+      defaultShippingAddressId: data.defaultShippingAddressId,
     };
   } catch (error) {
     throw new Error('Error fetching customer data:' + error);

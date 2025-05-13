@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { getCustomer } from '../../services/profile.service';
 import { CustomerInfo } from '../../types/interfaces';
 import './Profile.css';
-import { LoginResponse } from '../../services/handleLogin';
 import { InfoBox } from '../../components/profile-info-box/InfoBox';
 
 const Profile: React.FC = () => {
@@ -18,28 +17,19 @@ const Profile: React.FC = () => {
 
     dateOfBirth: '',
   });
-  const [defaultBillingId, setDefaultBilling] = useState('');
-  const [defaultShippingId, setDefaultShipping] = useState('');
+  const [defaultBillingId, setDefaultBillingId] = useState('');
+  const [defaultShippingId, setDefaultShippingId] = useState('');
 
   useEffect(() => {
     const getInfo = async () => {
       const data = await getCustomer();
       setCustomer(data);
-      console.log(data);
-      const loginInfo: LoginResponse = JSON.parse(
-        localStorage.getItem('login') || '{}'
-      ) as LoginResponse;
-      if (
-        loginInfo.defaultBillingAddressId &&
-        typeof loginInfo.defaultBillingAddressId === 'string'
-      ) {
-        setDefaultBilling(loginInfo.defaultBillingAddressId);
+
+      if (data.defaultBillingAddressId) {
+        setDefaultBillingId(data.defaultBillingAddressId);
       }
-      if (
-        loginInfo.defaultShippingAddressId &&
-        typeof loginInfo.defaultShippingAddressId === 'string'
-      ) {
-        setDefaultShipping(loginInfo.defaultShippingAddressId);
+      if (data.defaultShippingAddressId) {
+        setDefaultShippingId(data.defaultShippingAddressId);
       }
     };
     getInfo();
