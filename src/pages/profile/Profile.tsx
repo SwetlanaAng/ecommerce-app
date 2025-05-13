@@ -25,6 +25,7 @@ const Profile: React.FC = () => {
     const getInfo = async () => {
       const data = await getCustomer();
       setCustomer(data);
+      console.log(data);
       const loginInfo: LoginResponse = JSON.parse(
         localStorage.getItem('login') || '{}'
       ) as LoginResponse;
@@ -43,7 +44,6 @@ const Profile: React.FC = () => {
     };
     getInfo();
   }, []);
-  console.log(customer);
 
   const billingAddress = customer.addresses.find(
     address => address.id === customer.billingAddressIds[0]
