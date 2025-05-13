@@ -4,6 +4,7 @@ import { CustomerInfo } from '../../types/interfaces';
 import './Profile.css';
 import { InfoBox } from '../../components/profile-info-box/InfoBox';
 import Button from '../../components/button/Button';
+import { AddressBox } from '../../components/address-profile-box/AddressBox';
 
 const Profile: React.FC = () => {
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -20,20 +21,29 @@ const Profile: React.FC = () => {
   });
   const [defaultBillingId, setDefaultBillingId] = useState('');
   const [defaultShippingId, setDefaultShippingId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getInfo = async () => {
-      const data = await getCustomer();
-      setCustomer(data);
+    const fetchCustomerData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getCustomer();
+        setCustomer(data);
 
-      if (data.defaultBillingAddressId) {
-        setDefaultBillingId(data.defaultBillingAddressId);
-      }
-      if (data.defaultShippingAddressId) {
-        setDefaultShippingId(data.defaultShippingAddressId);
+        if (data.defaultBillingAddressId) {
+          setDefaultBillingId(data.defaultBillingAddressId);
+        }
+        if (data.defaultShippingAddressId) {
+          setDefaultShippingId(data.defaultShippingAddressId);
+        }
+      } catch (err) {
+        setError('Error loading profile information.' + err);
+      } finally {
+        setIsLoading(false);
       }
     };
-    getInfo();
+    fetchCustomerData();
   }, []);
 
   const billingAddress = customer.addresses.find(
@@ -42,6 +52,14 @@ const Profile: React.FC = () => {
   const shippingAddress = customer.addresses.find(
     address => address.id === customer.shippingAddressIds[0]
   );
+  if (error) {
+    return (
+      <div className="profile-page">
+        <h1>Profile information</h1>
+        <p>{error}</p>
+      </div>
+    );
+  }
   return (
     <div className="profile-page">
       <h1>Profile information</h1>
@@ -64,63 +82,29 @@ const Profile: React.FC = () => {
 
       <h2>Addresses</h2>
 
-      <h3>Billing Address</h3>
+      <AddressBox
+        headingText="Billing Address"
+        addressType="billing"
+        country={billingAddress?.country}
+        city={billingAddress?.city}
+        street={billingAddress?.streetName}
+        postalCode={billingAddress?.postalCode}
+        defaultId={defaultBillingId}
+        addressId={billingAddress?.id}
+      ></AddressBox>
 
-      <InfoBox
-        className="billing-country"
-        spanText="Country: "
-        infoText={billingAddress?.country}
-      ></InfoBox>
+      <AddressBox
+        headingText="Shipping Address"
+        addressType="shipping"
+        country={shippingAddress?.country}
+        city={shippingAddress?.city}
+        street={shippingAddress?.streetName}
+        postalCode={shippingAddress?.postalCode}
+        defaultId={defaultShippingId}
+        addressId={shippingAddress?.id}
+      ></AddressBox>
 
-      <InfoBox className="billing-city" spanText="City: " infoText={billingAddress?.city}></InfoBox>
-
-      <InfoBox
-        className="billing-street"
-        spanText="Street : "
-        infoText={billingAddress?.streetName}
-      ></InfoBox>
-
-      <InfoBox
-        className="billing-postal-code"
-        spanText="Postal code: "
-        infoText={billingAddress?.postalCode}
-      ></InfoBox>
-
-      {defaultBillingId === billingAddress?.id && (
-        <div className="default">This address is set as default billing address </div>
-      )}
-
-      <h3>Shipping Address</h3>
-
-      <InfoBox
-        className="shipping-country"
-        spanText="Country: "
-        infoText={shippingAddress?.country}
-      ></InfoBox>
-
-      <InfoBox
-        className="shipping-city"
-        spanText="City: "
-        infoText={shippingAddress?.city}
-      ></InfoBox>
-
-      <InfoBox
-        className="shipping-street"
-        spanText="Street : "
-        infoText={shippingAddress?.streetName}
-      ></InfoBox>
-
-      <InfoBox
-        className="shipping-postal-code"
-        spanText="Postal code: "
-        infoText={shippingAddress?.postalCode}
-      ></InfoBox>
-
-      {defaultShippingId === shippingAddress?.id && (
-        <div className="default">This address is set as default shipping address </div>
-      )}
-
-      <Button className="edit">Edit information</Button>
+      <Button className="edit">{isLoading ? '...Loading' : 'Edit information'}</Button>
     </div>
   );
 };

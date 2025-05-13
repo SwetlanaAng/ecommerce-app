@@ -6,6 +6,9 @@ export async function getCustomer(): Promise<CustomerInfo> {
   const accessToken = tokenData.access_token;
   const user = JSON.parse(localStorage.getItem('user') || '{}') as Customer;
   const id = user.id;
+  if (!accessToken || !id) {
+    throw new Error('Authentication data is missing');
+  }
   const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers/${id}`;
   try {
     const response = await fetch(url, {

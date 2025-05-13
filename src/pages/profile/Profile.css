@@ -12,21 +12,7 @@
     text-align: center;
     padding: 20px 0;
   }
-  .info-box {
-    font-size: 16px;
-    margin: 10px 0;
-    width: 100%;
-    padding: 15px;
-    border-radius: 8px;
-    border: none;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    span {
-      font-weight: 600;
-      color: var(--accent-color);
-    }
-  }
-  .edit{
+  .edit {
     margin-top: 30px;
   }
 }
