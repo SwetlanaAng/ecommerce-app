@@ -1,6 +1,5 @@
 import { Customer, CustomerInfo, TokenResponse } from '../types/interfaces';
 import { KEYS } from './keys';
-//import { getBasicToken } from './registration.service';
 
 export async function getCustomer(): Promise<CustomerInfo> {
   const tokenData = JSON.parse(localStorage.getItem('token') || '{}') as TokenResponse;

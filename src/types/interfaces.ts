@@ -124,8 +124,17 @@ export interface CustomerInfo {
   firstName: string;
   lastName: string;
   password: string;
-  addresses: [];
-  shippingAddressIds: [];
-  billingAddressIds: [];
+  addresses: ProfileAddressData[];
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
   dateOfBirth: string;
+  defaultBillingAddressId?: string;
+  defaultShippingAddressId?: string;
+}
+export interface ProfileAddressData {
+  country: string;
+  city: string;
+  streetName: string;
+  id: string;
+  postalCode: string;
 }
