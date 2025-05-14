@@ -18,7 +18,7 @@ const Catalog: React.FC = () => {
   const [sortOption, setSortOption] = useState<SortOption>('');
 
   const sortOptions = {
-    '': 'Choose sort option',
+    '': 'Default',
     'name.en-US asc': 'Name (A-Z)',
     'name.en-US desc': 'Name (Z-A)',
     'price asc': 'Price (Low to High)',
