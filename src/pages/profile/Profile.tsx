@@ -21,24 +21,21 @@ const Profile: React.FC = () => {
   });
   const [defaultBillingId, setDefaultBillingId] = useState('');
   const [defaultShippingId, setDefaultShippingId] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCustomerData = async () => {
-      setIsLoading(true);
       try {
         const data = await getCustomer();
         setCustomer(data);
 
-        if (data.defaultBillingAddressId) {
-          setDefaultBillingId(data.defaultBillingAddressId);
-        }
-        if (data.defaultShippingAddressId) {
-          setDefaultShippingId(data.defaultShippingAddressId);
-        }
+        setDefaultBillingId(data.defaultBillingAddressId || '');
+        setDefaultShippingId(data.defaultShippingAddressId || '');
       } catch (err) {
-        setError('Error loading profile information.' + err);
+        setError(
+          `Error loading profile information. ${err instanceof Error ? err.message : String(err)}`
+        );
       } finally {
         setIsLoading(false);
       }
@@ -60,6 +57,15 @@ const Profile: React.FC = () => {
       </div>
     );
   }
+  if (isLoading) {
+    return (
+      <div className="profile-page">
+        <h1>Profile information</h1>
+        <p>Loading profile...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="profile-page">
       <h1>Profile information</h1>
@@ -104,7 +110,7 @@ const Profile: React.FC = () => {
         addressId={shippingAddress?.id}
       ></AddressBox>
 
-      <Button className="edit">{isLoading ? '...Loading' : 'Edit information'}</Button>
+      <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit profile information</Button>
     </div>
   );
 };
