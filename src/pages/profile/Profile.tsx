@@ -85,6 +85,7 @@ const Profile: React.FC = () => {
         spanText="Date of birth: "
         infoText={customer.dateOfBirth}
       ></InfoBox>
+      <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit personal information</Button>
 
       <h2>Addresses</h2>
 
@@ -98,6 +99,7 @@ const Profile: React.FC = () => {
         defaultId={defaultBillingId}
         addressId={billingAddress?.id}
       ></AddressBox>
+      <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit billing addresses</Button>
 
       <AddressBox
         headingText="Shipping Address"
@@ -110,7 +112,9 @@ const Profile: React.FC = () => {
         addressId={shippingAddress?.id}
       ></AddressBox>
 
-      <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit profile information</Button>
+      <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit shipping addresses</Button>
+      <br />
+      <Button className={isLoading ? 'disabled edit' : 'edit'}>Change password</Button>
     </div>
   );
 };
