@@ -42,8 +42,7 @@ export async function getProductById(id: string): Promise<Product[]> {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    console.log('API Response:', data);
-    return data.results;
+    return data;
   } catch (error) {
     console.error('Error fetching products:', error);
     throw error;
