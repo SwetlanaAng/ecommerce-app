@@ -118,3 +118,19 @@ export interface ProductCardProps {
   imageUrl: string;
   category?: string;
 }
+
+export interface CategoryData {
+  name: {
+    en: string;
+  };
+}
+
+export interface ProductFilters {
+  flavors?: string[];
+  packaging?: string[];
+  special?: string[];
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+}
