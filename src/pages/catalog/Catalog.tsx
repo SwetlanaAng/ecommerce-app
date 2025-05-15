@@ -1,21 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from '../../components/product/ProductCard';
-import { Product, ProductCardProps } from '../../types/interfaces';
+import { Product, ProductCardProps, ProductFilters } from '../../types/interfaces';
 import { getProductsList, SortOption } from '../../services/products.service';
+import { getCategoriesNamesWithParent } from '../../services/category.service';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
 import SkeletonCard from '../../components/skeleton/SkeletonCard';
 import Select from '../../components/select/Select';
 import sadMacaron from '../../assets/sadMacaron.png';
 import Input from '../../components/input/Input';
+import FilterSidebar from '../../components/filters/FilterSidebar';
 import './Catalog.css';
 
+interface CategoryStructure {
+  name: string;
+  parentName: string | null;
+}
+
+interface GroupedCategories {
+  [key: string]: string[];
+}
+
 const Catalog: React.FC = () => {
-  const [allProducts, setAllProducts] = useState<ProductCardProps[]>([]);
   const [products, setProducts] = useState<ProductCardProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('');
+  const [filters, setFilters] = useState<ProductFilters>({});
+  const [categoryStructure, setCategoryStructure] = useState<GroupedCategories>({});
 
   const sortOptions = {
     '': 'Default',
@@ -26,28 +38,45 @@ const Catalog: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchProducts = async (sort: SortOption) => {
+    const fetchCategories = async () => {
+      try {
+        const categories = await getCategoriesNamesWithParent();
+
+        const grouped: GroupedCategories = {};
+        categories.forEach((category: CategoryStructure) => {
+          if (!category.parentName) return;
+
+          if (!grouped[category.parentName]) {
+            grouped[category.parentName] = [];
+          }
+
+          grouped[category.parentName].push(category.name);
+        });
+
+        setCategoryStructure(grouped);
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchProducts = async (sort: SortOption, productFilters: ProductFilters) => {
       setLoading(true);
       try {
-        const productsList: Product[] | undefined = await getProductsList(200, undefined, sort);
+        const productsList: Product[] | undefined = await getProductsList(
+          200,
+          searchQuery,
+          sort,
+          productFilters
+        );
         if (productsList) {
           const adaptedProducts = await Promise.all(
             productsList.map(product => toCardAdapter(product))
           );
-          setAllProducts(adaptedProducts);
-
-          if (searchQuery) {
-            const lowerQuery = searchQuery.toLowerCase();
-            setProducts(
-              adaptedProducts.filter(
-                product =>
-                  product.name.toLowerCase().includes(lowerQuery) ||
-                  (product.description && product.description.toLowerCase().includes(lowerQuery))
-              )
-            );
-          } else {
-            setProducts(adaptedProducts);
-          }
+          setProducts(adaptedProducts);
         } else {
           setError('Failed to load products');
         }
@@ -58,28 +87,20 @@ const Catalog: React.FC = () => {
       }
     };
 
-    fetchProducts(sortOption);
-  }, [sortOption, searchQuery]);
+    fetchProducts(sortOption, filters);
+  }, [sortOption, searchQuery, filters]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setSearchQuery(query);
-    if (!query) {
-      setProducts(allProducts);
-      return;
-    }
-    const lowerQuery = query.toLowerCase();
-    setProducts(
-      allProducts.filter(
-        product =>
-          product.name.toLowerCase().includes(lowerQuery) ||
-          (product.description && product.description.toLowerCase().includes(lowerQuery))
-      )
-    );
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(e.target.value as SortOption);
+  };
+
+  const handleFilterChange = (newFilters: ProductFilters) => {
+    setFilters(newFilters);
   };
 
   if (error) {
@@ -116,24 +137,33 @@ const Catalog: React.FC = () => {
           optionsList={sortOptions}
         />
       </div>
-      {loading ? (
-        <div className="catalog-flex">
-          {[...Array(8)].map((_, index) => (
-            <SkeletonCard key={index} count={1} />
-          ))}
-        </div>
-      ) : (
-        <div className="catalog-flex">
-          {products.length === 0 ? (
-            <div className="no-products-found">
-              <img src={sadMacaron} alt="sad macaron" />
-              <p>No products found</p>
-            </div>
-          ) : (
-            products.map((product, index) => <ProductCard {...product} key={index} />)
-          )}
-        </div>
-      )}
+
+      <div className="catalog-layout">
+        <FilterSidebar
+          onFilterChange={handleFilterChange}
+          categoryStructure={categoryStructure}
+          initialFilters={filters}
+        />
+
+        {loading ? (
+          <div className="catalog-flex">
+            {[...Array(8)].map((_, index) => (
+              <SkeletonCard key={index} count={1} />
+            ))}
+          </div>
+        ) : (
+          <div className="catalog-flex">
+            {products.length === 0 ? (
+              <div className="no-products-found">
+                <img src={sadMacaron} alt="sad macaron" />
+                <p>No products found</p>
+              </div>
+            ) : (
+              products.map((product, index) => <ProductCard {...product} key={index} />)
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

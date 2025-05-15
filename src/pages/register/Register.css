@@ -23,6 +23,7 @@
       }
       &.checkbox-group {
         flex-direction: row;
+        width: 100%;
       }
     }
     h2 {

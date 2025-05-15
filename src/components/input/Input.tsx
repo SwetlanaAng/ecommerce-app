@@ -24,7 +24,7 @@ interface InputProps<T extends Record<string, unknown>> {
   labelText?: string;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: 'text' | 'email' | 'password' | 'date' | 'checkbox';
+  type?: 'text' | 'email' | 'password' | 'date' | 'number' | 'checkbox';
   placeholder?: string;
   name: Path<T>;
   value?: string;
@@ -97,7 +97,7 @@ const Input = <T extends Record<string, unknown>>({
   return (
     <div className="form-group">
       <label htmlFor={id} className="label">
-        <p className="label-text">{labelText}</p>
+        {labelText && <p className="label-text">{labelText}</p>}
         <div className="input-wrapper">
           <input
             {...register?.(name)}

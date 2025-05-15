@@ -120,8 +120,12 @@ export interface ProductCardProps {
 }
 
 export interface CategoryData {
+  id: string;
   name: {
-    en: string;
+    'en-US': string;
+  };
+  parent?: {
+    id: string;
   };
 }
 
