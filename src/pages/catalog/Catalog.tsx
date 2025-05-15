@@ -9,6 +9,7 @@ import Select from '../../components/select/Select';
 import sadMacaron from '../../assets/sadMacaron.png';
 import Input from '../../components/input/Input';
 import FilterSidebar from '../../components/filters/FilterSidebar';
+import Button from '../../components/button/Button';
 import './Catalog.css';
 
 interface CategoryStructure {
@@ -22,8 +23,8 @@ interface GroupedCategories {
 
 const Catalog: React.FC = () => {
   const [products, setProducts] = useState<ProductCardProps[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('');
   const [filters, setFilters] = useState<ProductFilters>({});
@@ -54,8 +55,9 @@ const Catalog: React.FC = () => {
         });
 
         setCategoryStructure(grouped);
-      } catch (err) {
-        console.error('Error fetching categories:', err);
+      } catch (error) {
+        setError('Error fetching categories, please try again later');
+        console.error('Error fetching categories:', error);
       }
     };
 
@@ -78,10 +80,11 @@ const Catalog: React.FC = () => {
           );
           setProducts(adaptedProducts);
         } else {
-          setError('Failed to load products');
+          setError('Failed to load products, please try again later');
         }
       } catch (err) {
-        setError('Error loading products.' + err);
+        setError('Error loading products, please try again later');
+        console.error('Error loading products:', err);
       } finally {
         setLoading(false);
       }
@@ -107,7 +110,8 @@ const Catalog: React.FC = () => {
     return (
       <div className="catalog-page">
         <h1>Product Catalog</h1>
-        <p>Error loading products, please try again later.</p>
+        <h4>{error}</h4>
+        <Button onClick={() => window.location.reload()}>Try again</Button>
       </div>
     );
   }

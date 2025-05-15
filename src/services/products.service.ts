@@ -27,8 +27,9 @@ async function buildCategoryNameToIdMap() {
     categoryNameToIdMap = map;
     return map;
   } catch (error) {
-    console.error('Error building category map:', error);
-    return new Map<string, string>();
+    throw new Error(
+      `Failed to build category mapping: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 }
 
@@ -54,53 +55,60 @@ export async function getProductsList(
   }
 
   if (filters) {
-    const categoryMap = await buildCategoryNameToIdMap();
+    try {
+      const categoryMap = await buildCategoryNameToIdMap();
+      const categoryFilters = [];
 
-    for (const [category, values] of Object.entries(filters)) {
-      if (category === 'priceRange') continue;
+      for (const [category, values] of Object.entries(filters)) {
+        if (category === 'priceRange') continue;
 
-      if (Array.isArray(values) && values.length > 0) {
-        const filterQueries = values
-          .map(value => {
-            const categoryId = categoryMap.get(value.toLowerCase());
-            if (categoryId) {
-              return `categories.id:"${categoryId}"`;
-            }
-            return null;
-          })
-          .filter(Boolean);
+        if (Array.isArray(values) && values.length > 0) {
+          const categoryIds = values
+            .map(value => {
+              const categoryId = categoryMap.get(value.toLowerCase());
+              return categoryId ? `"${categoryId}"` : null;
+            })
+            .filter(Boolean);
 
-        if (filterQueries.length > 0) {
-          params.append('filter', filterQueries.join(' or '));
+          if (categoryIds.length > 0) {
+            categoryFilters.push(`categories.id:${categoryIds.join(',')}`);
+          }
         }
       }
-    }
 
-    if (filters.priceRange) {
-      if (filters.priceRange.min !== undefined) {
-        params.append(
-          'filter',
-          `variants.price.centAmount:range (${filters.priceRange.min * 100} to *)`
-        );
+      categoryFilters.forEach(filter => {
+        params.append('filter', filter);
+      });
+
+      if (filters.priceRange) {
+        if (filters.priceRange.min !== undefined) {
+          params.append(
+            'filter',
+            `variants.price.centAmount:range (${filters.priceRange.min * 100} to *)`
+          );
+        }
+        if (filters.priceRange.max !== undefined) {
+          params.append(
+            'filter',
+            `variants.price.centAmount:range (* to ${filters.priceRange.max * 100})`
+          );
+        }
       }
-      if (filters.priceRange.max !== undefined) {
-        params.append(
-          'filter',
-          `variants.price.centAmount:range (* to ${filters.priceRange.max * 100})`
-        );
-      }
+    } catch (error) {
+      throw new Error(
+        `Error applying filters: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
+  const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections/search?${params.toString()}`;
+
   try {
-    const response = await fetch(
-      `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections/search?${params.toString()}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -109,6 +117,8 @@ export async function getProductsList(
     const data = await response.json();
     return data.results;
   } catch (error) {
-    throw new Error('Error fetching products:' + error);
+    throw new Error(
+      `Error fetching products: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 }
