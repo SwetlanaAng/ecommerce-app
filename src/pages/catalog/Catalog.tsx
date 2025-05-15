@@ -128,6 +128,7 @@ const Catalog: React.FC = () => {
             onChange={handleSearch}
             value={searchQuery}
             autoComplete="off"
+            isSearchField={true}
           />
         </div>
         <Select
