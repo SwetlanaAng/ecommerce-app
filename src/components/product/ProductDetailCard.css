@@ -33,9 +33,30 @@
   }
   .detail-images {
     order: 1;
-    .detail-images-main img {
+    .slider {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+    .slider-image {
       width: 100%;
       object-fit: cover;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      font-size: 2rem;
+      background: none;
+      cursor: pointer;
+      padding: 4px 12px;
+    }
+    .slider-btn.prev {
+      left: 10px;
+    }
+    .slider-btn.next {
+      right: 10px;
     }
     .detail-images-thumbs {
       display: flex;
@@ -50,6 +71,9 @@
         &:hover {
           transform: translateY(-4px);
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        &.active {
+          outline: 2px solid var(--accent-color);
         }
       }
     }

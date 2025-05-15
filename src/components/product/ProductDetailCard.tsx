@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '../../types/interfaces';
 import './ProductDetailCard.css';
 
@@ -17,6 +17,16 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const sale = p.discounted
     ? p.discounted.value.centAmount / 10 ** p.discounted.value.fractionDigits
     : null;
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handlePrev = () => {
+    setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
+  };
 
   return (
     <div className="detail-card">
@@ -43,19 +53,34 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
       </div>
 
       <div className="detail-images">
-        {images[0] && (
-          <div className="detail-images-main">
-            <img src={images[0].url} alt={title} />
+        {images.length > 0 && (
+          <div className="slider">
+            <img
+              src={images[currentIndex].url}
+              alt={`${title} image ${currentIndex + 1}`}
+              className="slider-image"
+            />
+            {images.length > 1 && (
+              <>
+                <button className="slider-btn prev" onClick={handlePrev}>
+                  ‹
+                </button>
+                <button className="slider-btn next" onClick={handleNext}>
+                  ›
+                </button>
+              </>
+            )}
           </div>
         )}
         {images.length > 1 && (
           <div className="detail-images-thumbs">
-            {images.slice(1).map((img, idx) => (
+            {images.map((img, idx) => (
               <img
                 key={idx}
                 src={img.url}
-                alt={`${title} thumbnail ${idx + 2}`}
-                className="thumb-image"
+                alt={`${title} thumbnail ${idx + 1}`}
+                className={`thumb-image ${currentIndex === idx ? 'active' : ''}`}
+                onClick={() => setCurrentIndex(idx)}
               />
             ))}
           </div>
