@@ -5,6 +5,8 @@ import './Profile.css';
 import { InfoBox } from '../../components/profile-info-box/InfoBox';
 import Button from '../../components/button/Button';
 import { AddressBox } from '../../components/address-profile-box/AddressBox';
+import { Modal } from '../../components/modal/Modal';
+import { EditModeModal } from '../../components/modal/edit-mode-modal/EditModeModal';
 
 const Profile: React.FC = () => {
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -23,6 +25,7 @@ const Profile: React.FC = () => {
   const [defaultShippingId, setDefaultShippingId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [modalIsOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchCustomerData = async () => {
@@ -85,7 +88,6 @@ const Profile: React.FC = () => {
         spanText="Date of birth: "
         infoText={customer.dateOfBirth}
       ></InfoBox>
-      <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit personal information</Button>
 
       <h2>Addresses</h2>
 
@@ -109,8 +111,6 @@ const Profile: React.FC = () => {
         ))
       )}
 
-      <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit billing addresses</Button>
-
       <h3>Shipping Addresses</h3>
       {shippingAddresses.length === 0 ? (
         <p>No shipping addresses found</p>
@@ -130,9 +130,14 @@ const Profile: React.FC = () => {
         ))
       )}
 
-      <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit shipping addresses</Button>
-      <br />
-      <Button className={isLoading ? 'disabled edit' : 'edit'}>Change password</Button>
+      <Button className={isLoading ? 'disabled edit' : 'edit'} onClick={() => setModalOpen(true)}>
+        Edit profile information
+      </Button>
+      <Modal
+        isOpen={modalIsOpen}
+        onClose={() => setModalOpen(false)}
+        children={<EditModeModal></EditModeModal>}
+      ></Modal>
     </div>
   );
 };
