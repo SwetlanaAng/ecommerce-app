@@ -1,7 +1,7 @@
 import { InfoBox } from '../profile-info-box/InfoBox';
 
 interface AddressBoxProps {
-  headingText: string;
+  addressNumber: number;
   addressType: string;
   country: string | undefined;
   city: string | undefined;
@@ -12,7 +12,7 @@ interface AddressBoxProps {
 }
 
 export const AddressBox = ({
-  headingText,
+  addressNumber,
   addressType,
   country,
   city,
@@ -22,7 +22,7 @@ export const AddressBox = ({
   addressId,
 }: AddressBoxProps) => (
   <>
-    <h3>{headingText}</h3>
+    <p>{`Address #${addressNumber + 1}`}</p>
 
     <InfoBox className={`${addressType}-country`} spanText="Country: " infoText={country}></InfoBox>
 

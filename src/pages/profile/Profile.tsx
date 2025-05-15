@@ -42,12 +42,12 @@ const Profile: React.FC = () => {
     };
     fetchCustomerData();
   }, []);
-
-  const billingAddress = customer.addresses.find(
-    address => address.id === customer.billingAddressIds[0]
+  console.log(customer);
+  const billingAddresses = customer.addresses.filter(address =>
+    customer.billingAddressIds.includes(address.id)
   );
-  const shippingAddress = customer.addresses.find(
-    address => address.id === customer.shippingAddressIds[0]
+  const shippingAddresses = customer.addresses.filter(address =>
+    customer.shippingAddressIds.includes(address.id)
   );
   if (error) {
     return (
@@ -89,28 +89,46 @@ const Profile: React.FC = () => {
 
       <h2>Addresses</h2>
 
-      <AddressBox
-        headingText="Billing Address"
-        addressType="billing"
-        country={billingAddress?.country}
-        city={billingAddress?.city}
-        street={billingAddress?.streetName}
-        postalCode={billingAddress?.postalCode}
-        defaultId={defaultBillingId}
-        addressId={billingAddress?.id}
-      ></AddressBox>
+      <h3>Billing Addresses</h3>
+
+      {billingAddresses.length === 0 ? (
+        <p>No billing addresses found</p>
+      ) : (
+        billingAddresses.map((billingAddress, index) => (
+          <AddressBox
+            key={index}
+            addressNumber={index}
+            addressType="billing"
+            country={billingAddress?.country}
+            city={billingAddress?.city}
+            street={billingAddress?.streetName}
+            postalCode={billingAddress?.postalCode}
+            defaultId={defaultBillingId}
+            addressId={billingAddress?.id}
+          ></AddressBox>
+        ))
+      )}
+
       <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit billing addresses</Button>
 
-      <AddressBox
-        headingText="Shipping Address"
-        addressType="shipping"
-        country={shippingAddress?.country}
-        city={shippingAddress?.city}
-        street={shippingAddress?.streetName}
-        postalCode={shippingAddress?.postalCode}
-        defaultId={defaultShippingId}
-        addressId={shippingAddress?.id}
-      ></AddressBox>
+      <h3>Shipping Addresses</h3>
+      {shippingAddresses.length === 0 ? (
+        <p>No shipping addresses found</p>
+      ) : (
+        shippingAddresses.map((shippingAddress, index) => (
+          <AddressBox
+            key={index}
+            addressNumber={index}
+            addressType="shipping"
+            country={shippingAddress?.country}
+            city={shippingAddress?.city}
+            street={shippingAddress?.streetName}
+            postalCode={shippingAddress?.postalCode}
+            defaultId={defaultShippingId}
+            addressId={shippingAddress?.id}
+          ></AddressBox>
+        ))
+      )}
 
       <Button className={isLoading ? 'disabled edit' : 'edit'}>Edit shipping addresses</Button>
       <br />
