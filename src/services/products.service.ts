@@ -122,3 +122,47 @@ export async function getProductsList(
     );
   }
 }
+
+export async function searchProducts(inputProductName: string) {
+  if (inputProductName === '') {
+    return await getProductsList();
+  }
+
+  const accessToken = await getBasicToken();
+  try {
+    const params = new URLSearchParams();
+
+    params.append('fuzzy', 'true');
+    params.append('text.en-US', inputProductName);
+
+    const searchLength = inputProductName.length;
+    let fuzzyLevel = '0';
+
+    if (searchLength >= 3 && searchLength <= 5) {
+      fuzzyLevel = '1';
+    } else if (searchLength > 5) {
+      fuzzyLevel = '2';
+    }
+
+    params.append('fuzzyLevel', fuzzyLevel);
+
+    const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections/search?${params.toString()}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('API Error:', errorData);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error('Error in searchProducts:', error);
+    return undefined;
+  }
+}

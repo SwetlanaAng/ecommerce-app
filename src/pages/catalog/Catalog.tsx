@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from '../../components/product/ProductCard';
 import { Product, ProductCardProps, ProductFilters } from '../../types/interfaces';
-import { getProductsList, SortOption } from '../../services/products.service';
+import { getProductsList, SortOption, searchProducts } from '../../services/products.service';
 import { getCategoriesNamesWithParent } from '../../services/category.service';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
 import SkeletonCard from '../../components/skeleton/SkeletonCard';
@@ -68,12 +68,14 @@ const Catalog: React.FC = () => {
     const fetchProducts = async (sort: SortOption, productFilters: ProductFilters) => {
       setLoading(true);
       try {
-        const productsList: Product[] | undefined = await getProductsList(
-          200,
-          searchQuery,
-          sort,
-          productFilters
-        );
+        let productsList: Product[] | undefined;
+
+        if (searchQuery) {
+          productsList = await searchProducts(searchQuery);
+        } else {
+          productsList = await getProductsList(200, '', sort, productFilters);
+        }
+
         if (productsList) {
           const adaptedProducts = await Promise.all(
             productsList.map(product => toCardAdapter(product))
