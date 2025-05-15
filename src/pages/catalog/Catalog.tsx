@@ -123,8 +123,6 @@ const Catalog: React.FC = () => {
             id="search"
             onChange={handleSearch}
             value={searchQuery}
-            required={false}
-            disabled={false}
             autoComplete="off"
           />
         </div>
@@ -132,8 +130,6 @@ const Catalog: React.FC = () => {
           name="sort-select"
           value={sortOption}
           onChange={handleSortChange}
-          required={false}
-          disabled={false}
           optionsList={sortOptions}
         />
       </div>
