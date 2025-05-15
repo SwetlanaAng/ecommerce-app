@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Product } from '../../types/interfaces';
 import { useParams } from 'react-router-dom';
 import { getProductById } from '../../services/product.service';
+import ProductDetailCard from '../../components/product/ProductDetailCard';
 import './ProductDetails.css';
 
 const ProductDetails: React.FC = () => {
@@ -49,9 +50,7 @@ const ProductDetails: React.FC = () => {
 
   return (
     <div className="product-details">
-      <h1>Product Details</h1>
-      <p>Product ID: {id}</p>
-      {/* Здесь будет детальная информация о товаре */}
+      <ProductDetailCard product={product} />
     </div>
   );
 };
