@@ -5,7 +5,7 @@ import './EditPersonalInformationContent.css';
 export const EditPersonalInformationContent = () => {
   return (
     <div className="edit-personal">
-      <form className="edit-password-form">
+      <form className="edit-personal-form">
         <Input labelText="First Name" name="firstName" id="firstName"></Input>
         <Input labelText="Last Name" name="lastName" id="lastName"></Input>
         <Input labelText="Email" name="email" id="email"></Input>
