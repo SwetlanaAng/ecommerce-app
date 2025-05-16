@@ -51,6 +51,7 @@ interface InputProps<T extends Record<string, unknown>> {
   checked?: boolean;
   register?: UseFormRegister<T>;
   error?: FieldError;
+  defaultValue?: string;
 }
 
 const Input = <T extends Record<string, unknown>>({
