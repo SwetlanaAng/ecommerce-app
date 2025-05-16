@@ -1,7 +1,7 @@
 import { getToken, login } from './login.service';
 import { Customer } from '../types/interfaces';
 
-interface LoginResponse {
+export interface LoginResponse {
   customer: Customer;
   [key: string]: unknown;
 }
