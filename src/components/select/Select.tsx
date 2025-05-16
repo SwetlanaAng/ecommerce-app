@@ -6,8 +6,8 @@ interface SelectProps {
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   name: string;
   value: string;
-  required: boolean;
-  disabled: boolean;
+  required?: boolean;
+  disabled?: boolean;
   optionsList: { [key: string]: string };
   autoComplete?: 'country' | 'country-name';
 }
@@ -26,7 +26,7 @@ const Select = ({
   return (
     <div className="form-group">
       <label htmlFor={name} className="label">
-        <p className="label-text">{labelText}</p>
+        {labelText && <p className="label-text">{labelText}</p>}
         <div className="select-wrapper">
           <select
             className={`select ${className}`}

@@ -118,6 +118,27 @@ export interface ProductCardProps {
   imageUrl: string;
   category?: string;
 }
+
+export interface CategoryData {
+  id: string;
+  name: {
+    'en-US': string;
+  };
+  parent?: {
+    id: string;
+  };
+}
+
+export interface ProductFilters {
+  flavors?: string[];
+  packaging?: string[];
+  special?: string[];
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+}
+
 export interface CustomerInfo {
   id: string;
   email: string;
@@ -131,6 +152,7 @@ export interface CustomerInfo {
   defaultBillingAddressId?: string;
   defaultShippingAddressId?: string;
 }
+
 export interface ProfileAddressData {
   country: string;
   city: string;

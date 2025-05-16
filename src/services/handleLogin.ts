@@ -27,7 +27,6 @@ export default function handleLogin(email: string, password: string): Promise<Cu
       };
     })
     .catch(err => {
-      console.error('Login failed:', err);
       throw err;
     });
 }
