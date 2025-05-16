@@ -31,7 +31,7 @@
   border-radius: 20px;
   background-color: var(--bg-color-light);
   padding: 40px 40px 20px 40px;
-  transform: translateY(-50px);
+  /* transform: translateY(-50px); */
   transition:
     opacity 0.3s,
     transform 0.3s;

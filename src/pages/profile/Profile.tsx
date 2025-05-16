@@ -6,7 +6,9 @@ import { InfoBox } from '../../components/profile-info-box/InfoBox';
 import Button from '../../components/button/Button';
 import { AddressBox } from '../../components/address-profile-box/AddressBox';
 import { Modal } from '../../components/modal/Modal';
-import { EditModeModal } from '../../components/modal/edit-mode-modal/EditModeModal';
+import { ChangePasswordContent } from '../../components/modal/modal-content/change-password/ChangePasswordContent';
+import { EditPersonalInformationContent } from '../../components/modal/modal-content/edit-personal-info/EditPersonalInformationContent';
+//import { EditBillingAddressesContent } from '../../components/modal/modal-content/edit-billing-addresses/EditBillingContent';
 
 const Profile: React.FC = () => {
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -26,6 +28,7 @@ const Profile: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [modalIsOpen, setModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState('');
 
   useEffect(() => {
     const fetchCustomerData = async () => {
@@ -45,6 +48,17 @@ const Profile: React.FC = () => {
     };
     fetchCustomerData();
   }, []);
+  function getModalChild() {
+    if (modalContent === 'changePassword') {
+      return <ChangePasswordContent></ChangePasswordContent>;
+    }
+    if (modalContent === 'changePersonalInfo') {
+      return <EditPersonalInformationContent></EditPersonalInformationContent>;
+    }
+    /* if (modalContent === 'changeBillingAddress') {
+    return <EditBillingAddressesContent></EditBillingAddressesContent>;
+  } */
+  }
   console.log(customer);
   const billingAddresses = customer.addresses.filter(address =>
     customer.billingAddressIds.includes(address.id)
@@ -72,22 +86,35 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-page">
       <h1>Profile information</h1>
+      <div className="personal-information-container">
+        <h2>Personal information</h2>
+        <Button
+          className="edit-pen"
+          onClick={() => {
+            setModalContent('changePersonalInfo');
+            setModalOpen(true);
+          }}
+        >
+          Edit
+        </Button>
+        <InfoBox
+          className="first-name"
+          spanText="First name: "
+          infoText={customer.firstName}
+        ></InfoBox>
 
-      <h2>Personal information</h2>
-
-      <InfoBox
-        className="first-name"
-        spanText="First name: "
-        infoText={customer.firstName}
-      ></InfoBox>
-
-      <InfoBox className="last-name" spanText="Last name: " infoText={customer.lastName}></InfoBox>
-
-      <InfoBox
-        className="birth-date"
-        spanText="Date of birth: "
-        infoText={customer.dateOfBirth}
-      ></InfoBox>
+        <InfoBox
+          className="last-name"
+          spanText="Last name: "
+          infoText={customer.lastName}
+        ></InfoBox>
+        <InfoBox className="email" spanText="Email: " infoText={customer.email}></InfoBox>
+        <InfoBox
+          className="birth-date"
+          spanText="Date of birth: "
+          infoText={customer.dateOfBirth}
+        ></InfoBox>
+      </div>
 
       <h2>Addresses</h2>
 
@@ -130,13 +157,19 @@ const Profile: React.FC = () => {
         ))
       )}
 
-      <Button className={isLoading ? 'disabled edit' : 'edit'} onClick={() => setModalOpen(true)}>
-        Edit profile information
+      <Button
+        className={isLoading ? 'disabled edit' : 'edit'}
+        onClick={() => {
+          setModalContent('changePassword');
+          setModalOpen(true);
+        }}
+      >
+        Change password
       </Button>
       <Modal
         isOpen={modalIsOpen}
         onClose={() => setModalOpen(false)}
-        children={<EditModeModal></EditModeModal>}
+        children={getModalChild()}
       ></Modal>
     </div>
   );

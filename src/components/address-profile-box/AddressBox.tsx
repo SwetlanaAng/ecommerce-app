@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import Button from '../button/Button';
+import { Modal } from '../modal/Modal';
+import { EditBillingAddressesContent } from '../modal/modal-content/edit-billing-addresses/EditBillingContent';
 import { InfoBox } from '../profile-info-box/InfoBox';
 
 interface AddressBoxProps {
@@ -20,24 +24,44 @@ export const AddressBox = ({
   postalCode,
   defaultId,
   addressId,
-}: AddressBoxProps) => (
-  <>
-    <p>{`Address #${addressNumber + 1}`}</p>
+}: AddressBoxProps) => {
+  const [modalIsOpen, setModalOpen] = useState(false);
+  return (
+    <>
+      <div className="address-information-container">
+        <p>{`Address #${addressNumber + 1}`}</p>
+        <Button className="edit-pen" onClick={() => setModalOpen(true)}>
+          Edit
+        </Button>
 
-    <InfoBox className={`${addressType}-country`} spanText="Country: " infoText={country}></InfoBox>
+        <InfoBox
+          className={`${addressType}-country`}
+          spanText="Country: "
+          infoText={country}
+        ></InfoBox>
 
-    <InfoBox className={`${addressType}-city`} spanText="City: " infoText={city}></InfoBox>
+        <InfoBox className={`${addressType}-city`} spanText="City: " infoText={city}></InfoBox>
 
-    <InfoBox className={`${addressType}-street`} spanText="Street : " infoText={street}></InfoBox>
+        <InfoBox
+          className={`${addressType}-street`}
+          spanText="Street : "
+          infoText={street}
+        ></InfoBox>
 
-    <InfoBox
-      className={`${addressType}-postal-code`}
-      spanText="Postal code: "
-      infoText={postalCode}
-    ></InfoBox>
-
-    {defaultId === addressId && (
-      <div className="default">{`This address is set as default ${addressType} address`} </div>
-    )}
-  </>
-);
+        <InfoBox
+          className={`${addressType}-postal-code`}
+          spanText="Postal code: "
+          infoText={postalCode}
+        ></InfoBox>
+        <Modal
+          isOpen={modalIsOpen}
+          onClose={() => setModalOpen(false)}
+          children=<EditBillingAddressesContent id={addressNumber}></EditBillingAddressesContent>
+        ></Modal>
+        {defaultId === addressId && (
+          <div className="default">{`This address is set as default ${addressType} address`} </div>
+        )}
+      </div>
+    </>
+  );
+};

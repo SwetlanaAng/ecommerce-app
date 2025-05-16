@@ -1,0 +1,6 @@
+.edit-billing-form,
+.edit-billing {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

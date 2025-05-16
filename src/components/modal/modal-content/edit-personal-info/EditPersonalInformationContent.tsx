@@ -57,10 +57,7 @@ export const EditPersonalInformationContent = () => {
         <p>Loading personal information...</p>
       </div>
     );
-  } /* else {
-      setFirstName(customer.firstName)
-    } */
-  //
+  }
   return (
     <div className="edit-personal">
       <form className="edit-personal-form">

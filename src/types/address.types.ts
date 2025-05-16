@@ -2,6 +2,7 @@ export interface Address {
   country: string;
   city: string;
   street: string;
+  streetName?: string;
   postalCode: string;
   isDefault: boolean;
 }
