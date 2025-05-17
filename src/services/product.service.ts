@@ -28,7 +28,7 @@ export async function getProducts(): Promise<Product[]> {
   }
 }
 
-export async function getProductById(id: string): Promise<Product[]> {
+export async function getProductById(id: string): Promise<Product> {
   const accessToken = await getBasicToken();
 
   try {
