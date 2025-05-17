@@ -32,7 +32,7 @@ const ProductDetails: React.FC = () => {
   if (loading)
     return (
       <div>
-        <p>Загрузка…</p>
+        <p>Loading…</p>
       </div>
     );
   if (error)
@@ -44,7 +44,7 @@ const ProductDetails: React.FC = () => {
   if (!product)
     return (
       <div>
-        <p>Товар не найден.</p>
+        <p>Product not found.</p>
       </div>
     );
 
