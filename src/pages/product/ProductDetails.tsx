@@ -19,7 +19,7 @@ const ProductDetails: React.FC = () => {
         const fetchedProduct = Array.isArray(data) ? data[0] : data;
         setProduct(fetchedProduct);
       } catch (err) {
-        setError('Error loading products.' + err);
+        setError(`Error loading products. ${err instanceof Error ? err.message : String(err)}`);
       } finally {
         setLoading(false);
       }
