@@ -5,8 +5,7 @@
   .detail-info {
     order: 0;
     .detail-title {
-      font-size: 2rem;
-      margin-bottom: 16px;
+      margin-bottom: 30px;
     }
     .detail-description {
       margin-bottom: 20px;
@@ -18,7 +17,7 @@
       font-size: 1.25rem;
       padding: 20px;
       background: white;
-      border-radius: 5px;
+      border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       .detail-price-original {
         font-size: 1rem;
@@ -45,6 +44,7 @@
     .slider-image {
       width: 100%;
       object-fit: cover;
+      border-radius: 8px;
     }
     .slider-btn {
       position: absolute;
@@ -52,9 +52,20 @@
       transform: translateY(-50%);
       border: none;
       font-size: 2rem;
-      background: none;
       cursor: pointer;
-      padding: 4px 12px;
+      background-color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      &:hover {
+        background-color: var(--accent-color);
+        color: white;
+      }
     }
     .slider-btn.prev {
       left: 10px;
@@ -71,7 +82,8 @@
         height: 70px;
         object-fit: cover;
         cursor: pointer;
-        transition: transform 0.2s;
+        transition: all 0.3s;
+        border-radius: 8px;
         &:hover {
           transform: translateY(-4px);
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -87,11 +99,11 @@
     gap: 40px;
     .detail-images {
       order: 0;
-      flex: 0 0 50%;
+      width: calc((100% - 40px) / 2);
     }
     .detail-info {
       order: 1;
-      flex: 0 0 45%;
+      width: calc((100% - 40px) / 2);
     }
   }
 }
