@@ -60,6 +60,7 @@ export const EditPersonalInformationContent = () => {
   }
   return (
     <div className="edit-personal">
+      <h3>Edit personal information</h3>
       <form className="edit-personal-form">
         <Input
           labelText="First Name"

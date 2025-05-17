@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from '../button/Button';
 import { Modal } from '../modal/Modal';
-import { EditBillingAddressesContent } from '../modal/modal-content/edit-billing-addresses/EditBillingContent';
+import { EditAddressesContent } from '../modal/modal-content/edit-addresses/EditAddressesContent';
 import { InfoBox } from '../profile-info-box/InfoBox';
 
 interface AddressBoxProps {
@@ -56,7 +56,10 @@ export const AddressBox = ({
         <Modal
           isOpen={modalIsOpen}
           onClose={() => setModalOpen(false)}
-          children=<EditBillingAddressesContent id={addressNumber}></EditBillingAddressesContent>
+          children=<EditAddressesContent
+            addressType={addressType}
+            id={addressNumber}
+          ></EditAddressesContent>
         ></Modal>
         {defaultId === addressId && (
           <div className="default">{`This address is set as default ${addressType} address`} </div>

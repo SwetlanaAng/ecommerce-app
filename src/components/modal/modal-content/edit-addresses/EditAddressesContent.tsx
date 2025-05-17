@@ -1,6 +1,6 @@
 import Button from '../../../button/Button';
 import { useEffect, useState } from 'react';
-import './EditBillingContent.css';
+import './EditAddressesContent.css';
 import { getCustomer } from '../../../../services/profile.service';
 
 import Select from '../../../select/Select';
@@ -10,11 +10,12 @@ import { ProfileAddressData } from '../../../../types/interfaces';
 
 type EditBillingProps = {
   id: number;
+  addressType: string;
 };
-export const EditBillingAddressesContent = ({ id }: EditBillingProps) => {
+export const EditAddressesContent = ({ id, addressType }: EditBillingProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [billingAddresses, setBillingAddresses] = useState<ProfileAddressData[]>([]);
+  const [addressesArray, setAddressesArray] = useState<ProfileAddressData[]>([]);
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
@@ -23,17 +24,26 @@ export const EditBillingAddressesContent = ({ id }: EditBillingProps) => {
   useEffect(() => {
     const fetchCustomerData = async () => {
       try {
-        const { addresses, billingAddressIds, defaultBillingAddressId } = await getCustomer();
-
-        addresses.filter(address => {
-          billingAddressIds.includes(address.id);
-        });
-        setCountry(addresses[id].country);
-        setCity(addresses[id].city);
-        setStreet(addresses[id].streetName);
-        setPostalCode(addresses[id].postalCode);
-        setDefaultId(defaultBillingAddressId);
-        setBillingAddresses(addresses);
+        const {
+          addresses,
+          billingAddressIds,
+          defaultBillingAddressId,
+          shippingAddressIds,
+          defaultShippingAddressId,
+        } = await getCustomer();
+        let addressList = [];
+        if (addressType === 'billing') {
+          addressList = addresses.filter(address => billingAddressIds.includes(address.id));
+          setDefaultId(defaultBillingAddressId);
+        } else {
+          addressList = addresses.filter(address => shippingAddressIds.includes(address.id));
+          setDefaultId(defaultShippingAddressId);
+        }
+        setCountry(addressList[id].country);
+        setCity(addressList[id].city);
+        setStreet(addressList[id].streetName);
+        setPostalCode(addressList[id].postalCode);
+        setAddressesArray(addressList);
       } catch (err) {
         setError(
           `Error loading profile information. ${err instanceof Error ? err.message : String(err)}`
@@ -43,28 +53,28 @@ export const EditBillingAddressesContent = ({ id }: EditBillingProps) => {
       }
     };
     fetchCustomerData();
-  }, [id]);
+  }, [id, addressType]);
 
   if (error) {
     return (
-      <div className="edit-personal">
+      <div className={`edit-${addressType}`}>
         <p>{error}</p>
       </div>
     );
   }
   if (isLoading) {
     return (
-      <div className="edit-personal">
+      <div className={`edit-${addressType}`}>
         <p>Loading personal information...</p>
       </div>
     );
   }
 
   return (
-    <div className="edit-billing">
-      <h3>Edit billing address</h3>
-      <form className="edit-billing-form">
-        {billingAddresses.length === 0 ? (
+    <div className={`edit-${addressType}`}>
+      <h3>{`Edit ${addressType} address`}</h3>
+      <form className={`edit-${addressType}-form`}>
+        {addressesArray.length === 0 ? (
           <p>No existing billing addresses found</p>
         ) : (
           <>
@@ -108,9 +118,9 @@ export const EditBillingAddressesContent = ({ id }: EditBillingProps) => {
               onChange={() => {
                 if (defaultId) {
                   setDefaultId(undefined);
-                } else setDefaultId(billingAddresses[id].id);
+                } else setDefaultId(addressesArray[id].id);
               }}
-              checked={defaultId && billingAddresses[id].id === defaultId ? true : false}
+              checked={defaultId && addressesArray[id].id === defaultId ? true : false}
             ></Input>
           </>
         )}
