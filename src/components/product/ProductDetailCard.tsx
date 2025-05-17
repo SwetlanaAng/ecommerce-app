@@ -11,11 +11,11 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const title = name['en-US'];
   const desc = description?.['en-US'] || 'No description.';
   const images = masterVariant.images;
-  const p = masterVariant.prices[0];
-  const base = p.value.centAmount / 10 ** p.value.fractionDigits;
-  const curr = p.value.currencyCode;
-  const sale = p.discounted
-    ? p.discounted.value.centAmount / 10 ** p.discounted.value.fractionDigits
+  const priceInfo = masterVariant.prices[0];
+  const base = priceInfo.value.centAmount / 10 ** priceInfo.value.fractionDigits;
+  const curr = priceInfo.value.currencyCode;
+  const sale = priceInfo.discounted
+    ? priceInfo.discounted.value.centAmount / 10 ** priceInfo.discounted.value.fractionDigits
     : null;
 
   const [currentIndex, setCurrentIndex] = useState(0);
