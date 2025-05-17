@@ -15,8 +15,7 @@ const ProductDetails: React.FC = () => {
     const fetchProduct = async (productId: string) => {
       setLoading(true);
       try {
-        const data = await getProductById(productId);
-        const fetchedProduct = Array.isArray(data) ? data[0] : data;
+        const fetchedProduct = await getProductById(productId);
         setProduct(fetchedProduct);
       } catch (err) {
         setError(`Error loading products. ${err instanceof Error ? err.message : String(err)}`);
