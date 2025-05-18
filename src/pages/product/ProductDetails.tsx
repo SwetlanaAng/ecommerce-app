@@ -3,6 +3,7 @@ import { Product } from '../../types/interfaces';
 import { useParams } from 'react-router-dom';
 import { getProductById } from '../../services/product.service';
 import ProductDetailCard from '../../components/product/ProductDetailCard';
+import Loader from '../../components/loader/Loader';
 import './ProductDetails.css';
 
 const ProductDetails: React.FC = () => {
@@ -28,12 +29,7 @@ const ProductDetails: React.FC = () => {
     }
   }, [id]);
 
-  if (loading)
-    return (
-      <div>
-        <p>Loading…</p>
-      </div>
-    );
+  if (loading) return <Loader />;
   if (error)
     return (
       <div>
