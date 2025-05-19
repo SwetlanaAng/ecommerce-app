@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Product } from '../../types/interfaces';
 import ImageModal from '../image/ImageModal';
 import './ProductDetailCard.css';
@@ -22,6 +22,15 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalIndex, setModalIndex] = useState(0);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
 
   const handlePrev = () => {
     setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
