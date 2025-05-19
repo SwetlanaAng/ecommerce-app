@@ -8,6 +8,8 @@ import { AddressBox } from '../../components/address-profile-box/AddressBox';
 import { Modal } from '../../components/modal/Modal';
 import { ChangePasswordContent } from '../../components/modal/modal-content/change-password/ChangePasswordContent';
 import { EditPersonalInformationContent } from '../../components/modal/modal-content/edit-personal-info/EditPersonalInformationContent';
+import { useChangePasswordForm } from '../../features/auth/hooks/useChangePasswordForm';
+import { useEditPersonalInfoForm } from '../../features/auth/hooks/useEditPersonalInfoForm';
 //import { EditBillingAddressesContent } from '../../components/modal/modal-content/edit-billing-addresses/EditBillingContent';
 
 const Profile: React.FC = () => {
@@ -29,6 +31,7 @@ const Profile: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [modalIsOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
+  const { formData, errors, isSubmitting, register, handleChange } = useChangePasswordForm();
 
   useEffect(() => {
     const fetchCustomerData = async () => {
@@ -48,18 +51,44 @@ const Profile: React.FC = () => {
     };
     fetchCustomerData();
   }, []);
+
+  const {
+    formDataPersonal,
+    errorsPersonal,
+    isSubmittingPersonal,
+    registerPersonal,
+    handleChangePersonal,
+  } = useEditPersonalInfoForm({
+    firstName: customer.firstName,
+    lastName: customer.lastName,
+    email: customer.email,
+    dateOfBirth: customer.dateOfBirth,
+  });
   function getModalChild() {
     if (modalContent === 'changePassword') {
-      return <ChangePasswordContent></ChangePasswordContent>;
+      return (
+        <ChangePasswordContent
+          formData={formData}
+          isDisabled={isSubmitting}
+          onChange={handleChange}
+          register={register}
+          errors={errors}
+        ></ChangePasswordContent>
+      );
     }
     if (modalContent === 'changePersonalInfo') {
-      return <EditPersonalInformationContent></EditPersonalInformationContent>;
+      console.log(formDataPersonal);
+      return (
+        <EditPersonalInformationContent
+          formData={formDataPersonal}
+          isDisabled={isSubmittingPersonal}
+          onChange={handleChangePersonal}
+          register={registerPersonal}
+          errors={errorsPersonal}
+        ></EditPersonalInformationContent>
+      );
     }
-    /* if (modalContent === 'changeBillingAddress') {
-    return <EditBillingAddressesContent></EditBillingAddressesContent>;
-  } */
   }
-  console.log(customer);
   const billingAddresses = customer.addresses.filter(address =>
     customer.billingAddressIds.includes(address.id)
   );

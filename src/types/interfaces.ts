@@ -138,3 +138,9 @@ export interface ProfileAddressData {
   id: string;
   postalCode: string;
 }
+export interface PersonalInfo {
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+}

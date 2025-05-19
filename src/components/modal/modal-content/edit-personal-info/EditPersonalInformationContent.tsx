@@ -4,8 +4,29 @@ import Input from '../../../input/Input';
 import './EditPersonalInformationContent.css';
 import { getCustomer } from '../../../../services/profile.service';
 import { CustomerInfo } from '../../../../types/interfaces';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { editPersonalInfoModal } from '../../../../schemas/editPersonalInfoSchema';
+import { useEditPersonalInfoForm } from '../../../../features/auth/hooks/useEditPersonalInfoForm';
 
-export const EditPersonalInformationContent = () => {
+type EditPersonalInfoProps = {
+  formData: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+  };
+  isDisabled: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  register: UseFormRegister<editPersonalInfoModal>;
+  errors: FieldErrors<editPersonalInfoModal>;
+};
+export const EditPersonalInformationContent = ({
+  formData,
+  isDisabled,
+  onChange,
+  register,
+  errors,
+}: EditPersonalInfoProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -17,7 +38,6 @@ export const EditPersonalInformationContent = () => {
     addresses: [],
     shippingAddressIds: [],
     billingAddressIds: [],
-
     dateOfBirth: '',
   });
   const [firstName, setFirstName] = useState('');
@@ -43,7 +63,13 @@ export const EditPersonalInformationContent = () => {
     };
     fetchCustomerData();
   }, [customer.firstName, customer.lastName, customer.email, customer.dateOfBirth]);
-
+  const { handleSubmit } = useEditPersonalInfoForm({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    dateOfBirth: dateOfBirth,
+  });
+  const onSubmit = () => {};
   if (error) {
     return (
       <div className="edit-personal">
@@ -61,35 +87,47 @@ export const EditPersonalInformationContent = () => {
   return (
     <div className="edit-personal">
       <h3>Edit personal information</h3>
-      <form className="edit-personal-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="edit-personal-form">
         <Input
           labelText="First Name"
           name="firstName"
           id="firstName"
-          value={firstName}
-          onChange={e => setFirstName(e.target.value)}
+          value={formData.firstName}
+          register={register}
+          onChange={onChange}
+          disabled={isDisabled}
+          error={errors.firstName}
         ></Input>
         <Input
           labelText="Last Name"
           name="lastName"
           id="lastName"
-          value={lastName}
-          onChange={e => setLastName(e.target.value)}
+          value={formData.lastName}
+          onChange={onChange}
+          register={register}
+          disabled={isDisabled}
+          error={errors.lastName}
         ></Input>
         <Input
           labelText="Email"
           name="email"
           id="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={onChange}
+          register={register}
+          disabled={isDisabled}
+          error={errors.email}
         ></Input>
         <Input
           labelText="Date of birth"
           type="date"
           name="dateOfBirth"
           id="dateOfBirth"
-          value={dateOfBirth}
-          onChange={e => setDateOfBirth(e.target.value)}
+          value={formData.dateOfBirth}
+          onChange={onChange}
+          disabled={isDisabled}
+          register={register}
+          error={errors.dateOfBirth}
         ></Input>
         <Button className="submit-button " type="submit">
           Save changes

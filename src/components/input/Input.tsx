@@ -7,6 +7,8 @@ import { UseFormRegister, FieldError, Path } from 'react-hook-form';
 export type InputName =
   | 'email'
   | 'password'
+  | 'currentPassword'
+  | 'newPassword'
   | 'dateOfBirth'
   | 'firstName'
   | 'lastName'

@@ -3,16 +3,17 @@ import Button from '../button/Button';
 import { Modal } from '../modal/Modal';
 import { EditAddressesContent } from '../modal/modal-content/edit-addresses/EditAddressesContent';
 import { InfoBox } from '../profile-info-box/InfoBox';
+import { useEditAddressForm } from '../../features/auth/hooks/useEditAddressForm';
 
 interface AddressBoxProps {
   addressNumber: number;
-  addressType: string;
-  country: string | undefined;
-  city: string | undefined;
-  street: string | undefined;
-  postalCode: string | undefined;
+  addressType: 'billing' | 'shipping';
+  country: string;
+  city: string;
+  street: string;
+  postalCode: string;
   defaultId: string;
-  addressId: string | undefined;
+  addressId: string;
 }
 
 export const AddressBox = ({
@@ -26,6 +27,14 @@ export const AddressBox = ({
   addressId,
 }: AddressBoxProps) => {
   const [modalIsOpen, setModalOpen] = useState(false);
+  const addressData = {
+    country: country,
+    city: city,
+    street: street,
+    postalCode: postalCode,
+    isDefault: defaultId === addressId,
+  };
+  const { errors, isSubmitting, register, handleChange } = useEditAddressForm(addressData);
   return (
     <>
       <div className="address-information-container">
@@ -57,8 +66,13 @@ export const AddressBox = ({
           isOpen={modalIsOpen}
           onClose={() => setModalOpen(false)}
           children=<EditAddressesContent
+            //сюда передать функцию которая будет закрывать окгно
             addressType={addressType}
             id={addressNumber}
+            isDisabled={isSubmitting}
+            onChange={handleChange}
+            register={register}
+            errors={errors}
           ></EditAddressesContent>
         ></Modal>
         {defaultId === addressId && (

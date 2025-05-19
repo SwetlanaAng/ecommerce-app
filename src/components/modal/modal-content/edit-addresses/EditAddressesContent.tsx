@@ -2,25 +2,44 @@ import Button from '../../../button/Button';
 import { useEffect, useState } from 'react';
 import './EditAddressesContent.css';
 import { getCustomer } from '../../../../services/profile.service';
-
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import Select from '../../../select/Select';
 import { countryId } from '../../../../services/registration.service';
 import Input from '../../../input/Input';
 import { ProfileAddressData } from '../../../../types/interfaces';
+import { editAddressModal } from '../../../../schemas/editAddressSchema';
+import { useEditAddressForm } from '../../../../features/auth/hooks/useEditAddressForm';
+import { Address } from '../../../../types/address.types';
 
-type EditBillingProps = {
+type EditAddressProps = {
   id: number;
-  addressType: string;
+  addressType: 'billing' | 'shipping';
+  isDisabled: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  register: UseFormRegister<editAddressModal>;
+  errors: FieldErrors<editAddressModal>;
 };
-export const EditAddressesContent = ({ id, addressType }: EditBillingProps) => {
+export const EditAddressesContent = ({
+  id,
+  addressType,
+  isDisabled,
+  onChange,
+  register,
+  errors,
+}: EditAddressProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [form, setForm] = useState<Address>({
+    country: '',
+    city: '',
+    street: '',
+    postalCode: '',
+    isDefault: false,
+  });
   const [addressesArray, setAddressesArray] = useState<ProfileAddressData[]>([]);
-  const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
-  const [street, setStreet] = useState('');
-  const [postalCode, setPostalCode] = useState('');
   const [defaultId, setDefaultId] = useState<string | undefined>(undefined);
+
+  const onSubmit = () => {};
   useEffect(() => {
     const fetchCustomerData = async () => {
       try {
@@ -39,10 +58,14 @@ export const EditAddressesContent = ({ id, addressType }: EditBillingProps) => {
           addressList = addresses.filter(address => shippingAddressIds.includes(address.id));
           setDefaultId(defaultShippingAddressId);
         }
-        setCountry(addressList[id].country);
-        setCity(addressList[id].city);
-        setStreet(addressList[id].streetName);
-        setPostalCode(addressList[id].postalCode);
+        const isDefault = addressList[id].id === defaultId ? true : false;
+        setForm({
+          country: addressList[id].country,
+          city: addressList[id].city,
+          street: addressList[id].streetName,
+          postalCode: addressList[id].postalCode,
+          isDefault: isDefault,
+        });
         setAddressesArray(addressList);
       } catch (err) {
         setError(
@@ -53,8 +76,9 @@ export const EditAddressesContent = ({ id, addressType }: EditBillingProps) => {
       }
     };
     fetchCustomerData();
-  }, [id, addressType]);
-
+  }, [id, addressType, defaultId]);
+  console.log(form);
+  const { handleSubmit, formData } = useEditAddressForm(form);
   if (error) {
     return (
       <div className={`edit-${addressType}`}>
@@ -73,53 +97,64 @@ export const EditAddressesContent = ({ id, addressType }: EditBillingProps) => {
   return (
     <div className={`edit-${addressType}`}>
       <h3>{`Edit ${addressType} address`}</h3>
-      <form className={`edit-${addressType}-form`}>
+      <form className={`edit-${addressType}-form`} onSubmit={handleSubmit(onSubmit)}>
         {addressesArray.length === 0 ? (
-          <p>No existing billing addresses found</p>
+          <p>{`No existing ${addressType} addresses found`}</p>
         ) : (
           <>
             <Select
               labelText="Country"
               className="select"
-              name="billing_country"
-              value={country}
-              onChange={e => setCountry(e.target.value)}
+              name={`${addressType}_country`}
+              value={formData.country}
+              onChange={onChange}
               required={true}
-              disabled={false}
+              disabled={isDisabled}
               optionsList={countryId}
               autoComplete="country"
             />
             <Input
               labelText="City"
-              name="billing_city"
-              id="billing_city"
-              value={city}
-              onChange={e => setCity(e.target.value)}
+              name={`city`}
+              id={`${addressType}_city`}
+              value={formData.city}
+              onChange={onChange}
+              disabled={isDisabled}
+              register={register}
+              error={errors[`city`]}
+              autoComplete="address-level2"
             ></Input>
             <Input
               labelText="Street"
-              name="billing_street"
-              id="billing_street"
-              value={street}
-              onChange={e => setStreet(e.target.value)}
+              name={`street`}
+              id={`${addressType}_street`}
+              value={formData.street}
+              onChange={onChange}
+              disabled={isDisabled}
+              register={register}
+              error={errors[`street`]}
+              autoComplete="street-address"
             ></Input>
             <Input
               labelText="Postal Code"
-              name="billing_postalCode"
-              value={postalCode}
-              onChange={e => setPostalCode(e.target.value)}
-              id="billing_postalCode"
+              name={`postalCode`}
+              value={formData.postalCode}
+              onChange={onChange}
+              id={`${addressType}_postalCode`}
+              disabled={isDisabled}
+              register={register}
+              error={errors[`postalCode`]}
+              autoComplete="postal-code"
             ></Input>
             <Input
-              labelText="Set as default billing address for future orders"
+              labelText={`Set as default ${addressType} address for future orders`}
               type="checkbox"
-              name="billing_isDefault"
-              id="billing_isDefault"
-              onChange={() => {
-                if (defaultId) {
-                  setDefaultId(undefined);
-                } else setDefaultId(addressesArray[id].id);
-              }}
+              name={`isDefault`}
+              id={`${addressType}_isDefault`}
+              onChange={onChange}
+              disabled={isDisabled}
+              register={register}
+              error={errors[`isDefault`]}
               checked={defaultId && addressesArray[id].id === defaultId ? true : false}
             ></Input>
           </>
