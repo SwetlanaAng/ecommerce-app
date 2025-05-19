@@ -131,8 +131,6 @@ export interface CategoryData {
 
 export interface ProductFilters {
   flavors?: string[];
-  packaging?: string[];
-  special?: string[];
   priceRange?: {
     min?: number;
     max?: number;

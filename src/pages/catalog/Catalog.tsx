@@ -9,6 +9,7 @@ import Select from '../../components/select/Select';
 import sadMacaron from '../../assets/sadMacaron.png';
 import Input from '../../components/input/Input';
 import FilterSidebar from '../../components/filters/FilterSidebar';
+import Breadcrumbs from '../../components/breadcrumbs/Breadcrumbs';
 import Button from '../../components/button/Button';
 import './Catalog.css';
 
@@ -29,6 +30,7 @@ const Catalog: React.FC = () => {
   const [sortOption, setSortOption] = useState<SortOption>('');
   const [filters, setFilters] = useState<ProductFilters>({});
   const [categoryStructure, setCategoryStructure] = useState<GroupedCategories>({});
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const sortOptions = {
     '': 'Default',
@@ -73,7 +75,15 @@ const Catalog: React.FC = () => {
         if (searchQuery) {
           productsList = await searchProducts(searchQuery);
         } else {
-          productsList = await getProductsList(200, '', sort, productFilters);
+          const filtersWithCategory =
+            selectedCategories.length > 0
+              ? {
+                  ...productFilters,
+                  categories: selectedCategories,
+                }
+              : productFilters;
+
+          productsList = await getProductsList(200, '', sort, filtersWithCategory);
         }
 
         if (productsList) {
@@ -93,7 +103,7 @@ const Catalog: React.FC = () => {
     };
 
     fetchProducts(sortOption, filters);
-  }, [sortOption, searchQuery, filters]);
+  }, [sortOption, searchQuery, filters, selectedCategories]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -106,6 +116,15 @@ const Catalog: React.FC = () => {
 
   const handleFilterChange = (newFilters: ProductFilters) => {
     setFilters(newFilters);
+  };
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategories(prev => {
+      if (prev.includes(category)) {
+        return [];
+      }
+      return [category];
+    });
   };
 
   if (error) {
@@ -141,11 +160,15 @@ const Catalog: React.FC = () => {
         />
       </div>
 
+      <Breadcrumbs categories={selectedCategories} />
+
       <div className="catalog-layout">
         <FilterSidebar
           onFilterChange={handleFilterChange}
           categoryStructure={categoryStructure}
           initialFilters={filters}
+          onCategorySelect={handleCategorySelect}
+          selectedCategories={selectedCategories}
         />
 
         {loading ? (
