@@ -84,6 +84,8 @@
 
 .checkbox-group {
   width: 100%;
+  display: flex;
+  align-items: center;
   input[type='checkbox'] {
     -webkit-appearance: none;
     appearance: none;

@@ -2,25 +2,15 @@ import React, { useEffect, useState } from 'react';
 import ProductCard from '../../components/product/ProductCard';
 import { Product, ProductCardProps, ProductFilters } from '../../types/interfaces';
 import { getProductsList, SortOption, searchProducts } from '../../services/products.service';
-import { getCategoriesNamesWithParent } from '../../services/category.service';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
 import SkeletonCard from '../../components/skeleton/SkeletonCard';
 import Select from '../../components/select/Select';
 import sadMacaron from '../../assets/sadMacaron.png';
 import Input from '../../components/input/Input';
-import FilterSidebar from '../../components/filters/FilterSidebar';
-import Breadcrumbs from '../../components/breadcrumbs/Breadcrumbs';
 import Button from '../../components/button/Button';
+import FilterPanel from '../../components/filters/FilterPanel';
+import ActiveFilters from '../../components/filters/ActiveFilters';
 import './Catalog.css';
-
-interface CategoryStructure {
-  name: string;
-  parentName: string | null;
-}
-
-interface GroupedCategories {
-  [key: string]: string[];
-}
 
 const Catalog: React.FC = () => {
   const [products, setProducts] = useState<ProductCardProps[]>([]);
@@ -28,9 +18,11 @@ const Catalog: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('');
-  const [filters, setFilters] = useState<ProductFilters>({});
-  const [categoryStructure, setCategoryStructure] = useState<GroupedCategories>({});
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [filters, setFilters] = useState<ProductFilters>({
+    flavors: [],
+    priceRange: undefined,
+    isBestSeller: undefined,
+  });
 
   const sortOptions = {
     '': 'Default',
@@ -41,49 +33,15 @@ const Catalog: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categories = await getCategoriesNamesWithParent();
-
-        const grouped: GroupedCategories = {};
-        categories.forEach((category: CategoryStructure) => {
-          if (!category.parentName) return;
-
-          if (!grouped[category.parentName]) {
-            grouped[category.parentName] = [];
-          }
-
-          grouped[category.parentName].push(category.name);
-        });
-
-        setCategoryStructure(grouped);
-      } catch (error) {
-        setError('Error fetching categories, please try again later');
-        console.error('Error fetching categories:', error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    const fetchProducts = async (sort: SortOption, productFilters: ProductFilters) => {
+    const fetchProducts = async (sort: SortOption) => {
       setLoading(true);
       try {
         let productsList: Product[] | undefined;
 
         if (searchQuery) {
-          productsList = await searchProducts(searchQuery);
+          productsList = await searchProducts(searchQuery, filters, sort);
         } else {
-          const filtersWithCategory =
-            selectedCategories.length > 0
-              ? {
-                  ...productFilters,
-                  categories: selectedCategories,
-                }
-              : productFilters;
-
-          productsList = await getProductsList(200, '', sort, filtersWithCategory);
+          productsList = await getProductsList(200, '', sort, filters);
         }
 
         if (productsList) {
@@ -102,8 +60,8 @@ const Catalog: React.FC = () => {
       }
     };
 
-    fetchProducts(sortOption, filters);
-  }, [sortOption, searchQuery, filters, selectedCategories]);
+    fetchProducts(sortOption);
+  }, [sortOption, searchQuery, filters]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -118,13 +76,52 @@ const Catalog: React.FC = () => {
     setFilters(newFilters);
   };
 
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategories(prev => {
-      if (prev.includes(category)) {
-        return [];
-      }
-      return [category];
+  const handleResetFilters = () => {
+    setFilters({
+      flavors: [],
+      priceRange: undefined,
+      isBestSeller: undefined,
     });
+  };
+
+  const handleRemoveFilter = (filterType: string) => {
+    switch (filterType) {
+      case 'minPrice':
+        setFilters({
+          ...filters,
+          priceRange: {
+            ...filters.priceRange,
+            min: undefined,
+          },
+        });
+        break;
+      case 'maxPrice':
+        setFilters({
+          ...filters,
+          priceRange: {
+            ...filters.priceRange,
+            max: undefined,
+          },
+        });
+        break;
+      case 'flavor':
+        setFilters({
+          ...filters,
+          flavors: [],
+        });
+        break;
+      case 'isBestSeller':
+        setFilters({
+          ...filters,
+          isBestSeller: undefined,
+        });
+        break;
+      case 'all':
+        handleResetFilters();
+        break;
+      default:
+        break;
+    }
   };
 
   if (error) {
@@ -152,43 +149,47 @@ const Catalog: React.FC = () => {
             isSearchField={true}
           />
         </div>
-        <Select
-          name="sort-select"
-          value={sortOption}
-          onChange={handleSortChange}
-          optionsList={sortOptions}
-        />
+        <div className="filter-sort-controls">
+          <Select
+            name="sort-select"
+            value={sortOption}
+            onChange={handleSortChange}
+            optionsList={sortOptions}
+          />
+        </div>
       </div>
 
-      <Breadcrumbs categories={selectedCategories} />
+      <ActiveFilters filters={filters} onRemoveFilter={handleRemoveFilter} />
 
       <div className="catalog-layout">
-        <FilterSidebar
-          onFilterChange={handleFilterChange}
-          categoryStructure={categoryStructure}
-          initialFilters={filters}
-          onCategorySelect={handleCategorySelect}
-          selectedCategories={selectedCategories}
-        />
+        <div className="catalog-filters">
+          <FilterPanel
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            onResetFilters={handleResetFilters}
+          />
+        </div>
 
-        {loading ? (
-          <div className="catalog-flex">
-            {[...Array(8)].map((_, index) => (
-              <SkeletonCard key={index} count={1} />
-            ))}
-          </div>
-        ) : (
-          <div className="catalog-flex">
-            {products.length === 0 ? (
-              <div className="no-products-found">
-                <img src={sadMacaron} alt="sad macaron" />
-                <p>No products found</p>
-              </div>
-            ) : (
-              products.map((product, index) => <ProductCard {...product} key={index} />)
-            )}
-          </div>
-        )}
+        <div className="catalog-products">
+          {loading ? (
+            <div className="catalog-flex">
+              {[...Array(8)].map((_, index) => (
+                <SkeletonCard key={index} count={1} />
+              ))}
+            </div>
+          ) : (
+            <div className="catalog-flex">
+              {products.length === 0 ? (
+                <div className="no-products-found">
+                  <img src={sadMacaron} alt="sad macaron" />
+                  <p>No products found</p>
+                </div>
+              ) : (
+                products.map((product, index) => <ProductCard {...product} key={index} />)
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

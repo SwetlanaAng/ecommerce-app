@@ -81,6 +81,15 @@ export interface Product {
         h: number;
       };
     }>;
+    attributes: Array<{
+      name: string;
+      value:
+        | string
+        | {
+            key: string;
+            label: string;
+          };
+    }>;
   };
   searchKeywords?: {
     en: Array<{
@@ -135,6 +144,7 @@ export interface ProductFilters {
     min?: number;
     max?: number;
   };
+  isBestSeller?: boolean;
 }
 
 export interface CustomerInfo {
