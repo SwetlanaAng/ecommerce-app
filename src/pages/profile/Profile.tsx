@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { getCustomer } from '../../services/profile.service';
 import { CustomerInfo } from '../../types/interfaces';
 import './Profile.css';
@@ -22,8 +22,8 @@ const Profile: React.FC = () => {
     addresses: [],
     shippingAddressIds: [],
     billingAddressIds: [],
-
     dateOfBirth: '',
+    version: 0,
   });
   const [defaultBillingId, setDefaultBillingId] = useState('');
   const [defaultShippingId, setDefaultShippingId] = useState('');
@@ -33,24 +33,26 @@ const Profile: React.FC = () => {
   const [modalContent, setModalContent] = useState('');
   const { formData, errors, isSubmitting, register, handleChange } = useChangePasswordForm();
 
-  useEffect(() => {
-    const fetchCustomerData = async () => {
-      try {
-        const data = await getCustomer();
-        setCustomer(data);
+  const refreshProfileData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const data = await getCustomer();
+      setCustomer(data);
 
-        setDefaultBillingId(data.defaultBillingAddressId || '');
-        setDefaultShippingId(data.defaultShippingAddressId || '');
-      } catch (err) {
-        setError(
-          `Error loading profile information. ${err instanceof Error ? err.message : String(err)}`
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCustomerData();
+      setDefaultBillingId(data.defaultBillingAddressId || '');
+      setDefaultShippingId(data.defaultShippingAddressId || '');
+    } catch (err) {
+      setError(
+        `Error loading profile information. ${err instanceof Error ? err.message : String(err)}`
+      );
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    refreshProfileData();
+  }, [refreshProfileData]);
 
   const {
     formDataPersonal,
@@ -58,6 +60,7 @@ const Profile: React.FC = () => {
     isSubmittingPersonal,
     registerPersonal,
     handleChangePersonal,
+    handleSubmit: handleSubmitPersonal,
   } = useEditPersonalInfoForm({
     firstName: customer.firstName,
     lastName: customer.lastName,
@@ -85,6 +88,11 @@ const Profile: React.FC = () => {
           onChange={handleChangePersonal}
           register={registerPersonal}
           errors={errorsPersonal}
+          handleSubmit={handleSubmitPersonal}
+          onSuccess={() => {
+            setModalOpen(false); // Закрыть модальное окно
+            refreshProfileData(); // Обновить данные профиля
+          }}
         ></EditPersonalInformationContent>
       );
     }
