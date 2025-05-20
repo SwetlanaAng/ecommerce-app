@@ -10,7 +10,8 @@ import { ChangePasswordContent } from '../../components/modal/modal-content/chan
 import { EditPersonalInformationContent } from '../../components/modal/modal-content/edit-personal-info/EditPersonalInformationContent';
 import { useChangePasswordForm } from '../../features/auth/hooks/useChangePasswordForm';
 import { useEditPersonalInfoForm } from '../../features/auth/hooks/useEditPersonalInfoForm';
-//import { AddNewAddressContent } from '../../components/modal/modal-content/add-address/AddNewAddressContent';
+import { AddNewAddressContent } from '../../components/modal/modal-content/add-address/AddNewAddressContent';
+import { useNewAddressForm } from '../../features/auth/hooks/useNewAddressForm';
 
 const Profile: React.FC = () => {
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -67,6 +68,13 @@ const Profile: React.FC = () => {
     email: customer.email,
     dateOfBirth: customer.dateOfBirth,
   });
+  const {
+    formDataAddAddress,
+    errorsAddAddress,
+    registerAddAddress,
+    handleAddressChangeAddAddress,
+    isSubmittingAddAddress,
+  } = useNewAddressForm();
   function getModalChild() {
     if (modalContent === 'changePassword') {
       return (
@@ -96,17 +104,18 @@ const Profile: React.FC = () => {
         ></EditPersonalInformationContent>
       );
     }
-    /* if (modalContent === 'newBilling' || modalContent === 'newShipping') {
+    if (modalContent === 'billing' || modalContent === 'shipping') {
       return (
-        {<AddNewAddressContent
-          formData={formData}
-          isDisabled={isSubmitting}
-          onChange={handleChange}
-          
-          errors={errors}
-        ></AddNewAddressContent> }
+        <AddNewAddressContent
+          formData={formDataAddAddress}
+          isDisabled={isSubmittingAddAddress}
+          type={modalContent}
+          onChange={handleAddressChangeAddAddress}
+          errors={errorsAddAddress}
+          register={registerAddAddress}
+        ></AddNewAddressContent>
       );
-    }*/
+    }
   }
   const billingAddresses = customer.addresses.filter(address =>
     customer.billingAddressIds.includes(address.id)
@@ -189,7 +198,7 @@ const Profile: React.FC = () => {
       <Button
         className={isLoading ? 'disabled edit' : 'edit'}
         onClick={() => {
-          setModalContent('newBilling');
+          setModalContent('billing');
           setModalOpen(true);
         }}
       >
@@ -217,7 +226,7 @@ const Profile: React.FC = () => {
       <Button
         className={isLoading ? 'disabled edit' : 'edit'}
         onClick={() => {
-          setModalContent('newShipping');
+          setModalContent('shipping');
           setModalOpen(true);
         }}
       >

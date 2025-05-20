@@ -1,0 +1,39 @@
+.add-address {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.add-address-form {
+  input[type='checkbox'] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid rgb(213, 213, 213);
+    background-color: #fff;
+    cursor: pointer;
+    transition:
+      color 0.15s ease-in-out,
+      background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    margin: 0;
+    &:hover {
+      border: 1px solid rgb(178, 178, 178);
+      background-color: rgb(231, 231, 231);
+    }
+    &:checked {
+      background-color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      background-image: url('../../../../assets/tick.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 11px;
+    }
+  }
+  .label {
+    padding-left: 10px;
+    width: fit-content;
+    line-height: 130%;
+  }
+}

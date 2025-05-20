@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { editAddressModal, editAddressSchema } from '../../../schemas/editAddressSchema';
+import { EditAddressModal, EditAddressSchema } from '../../../schemas/editAddressSchema';
 
 export const useNewAddressForm = () => {
   const {
@@ -9,10 +9,16 @@ export const useNewAddressForm = () => {
     register,
     formState: { errors, isSubmitting },
     setValue,
-  } = useForm<editAddressModal>({
-    resolver: zodResolver(editAddressSchema),
+  } = useForm<EditAddressModal>({
+    resolver: zodResolver(EditAddressSchema),
     mode: 'onChange',
-    reValidateMode: 'onChange',
+    defaultValues: {
+      city: '',
+      street: '',
+      postalCode: '',
+      isDefault: false,
+    } /* ,
+    reValidateMode: 'onChange', */,
   });
 
   const [formData, setFormData] = useState({
@@ -23,6 +29,7 @@ export const useNewAddressForm = () => {
     isDefault: false,
   });
   const [isLoading, setIsLoading] = useState(false);
+
   const handleAddressChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
@@ -30,7 +37,7 @@ export const useNewAddressForm = () => {
         ...prev,
         [name]: value,
       }));
-      setValue(name as keyof editAddressModal, value, { shouldValidate: true });
+      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
     },
     [setValue]
   );
@@ -42,20 +49,20 @@ export const useNewAddressForm = () => {
         ...prev,
         [name]: value,
       }));
-      setValue(name as keyof editAddressModal, value, { shouldValidate: true });
+      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
     },
     [setValue]
   );
 
   return {
-    formData,
+    formDataAddAddress: formData,
     isLoading,
-    errors,
-    isSubmitting,
-    register,
+    errorsAddAddress: errors,
+    isSubmittingAddAddress: isSubmitting,
+    registerAddAddress: register,
     handleSubmit,
     handleChange,
-    handleAddressChange,
+    handleAddressChangeAddAddress: handleAddressChange,
     setIsLoading,
   };
 };

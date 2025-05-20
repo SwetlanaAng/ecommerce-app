@@ -7,7 +7,7 @@ import Select from '../../../select/Select';
 import { countryId } from '../../../../services/registration.service';
 import Input from '../../../input/Input';
 import { ProfileAddressData } from '../../../../types/interfaces';
-import { editAddressModal } from '../../../../schemas/editAddressSchema';
+import { EditAddressModal } from '../../../../schemas/editAddressSchema';
 import { useEditAddressForm } from '../../../../features/auth/hooks/useEditAddressForm';
 import { Address } from '../../../../types/address.types';
 
@@ -16,8 +16,8 @@ type EditAddressProps = {
   addressType: 'billing' | 'shipping';
   isDisabled: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  register: UseFormRegister<editAddressModal>;
-  errors: FieldErrors<editAddressModal>;
+  register: UseFormRegister<EditAddressModal>;
+  errors: FieldErrors<EditAddressModal>;
 };
 export const EditAddressesContent = ({
   id,

@@ -6,10 +6,7 @@ import { ChangePasswordModal } from '../../../../schemas/changePasswordSchemas';
 import { useChangePasswordForm } from '../../../../features/auth/hooks/useChangePasswordForm';
 
 interface ChangePasswordFormProps {
-  formData: {
-    currentPassword: string;
-    newPassword: string;
-  };
+  formData: ChangePasswordModal;
   isDisabled: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   register: UseFormRegister<ChangePasswordModal>;

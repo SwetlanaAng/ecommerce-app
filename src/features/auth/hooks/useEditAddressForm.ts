@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { editAddressModal, editAddressSchema } from '../../../schemas/editAddressSchema';
+import { EditAddressModal, EditAddressSchema } from '../../../schemas/editAddressSchema';
 
 import { Address } from '../../../types/address.types';
 
@@ -19,8 +19,8 @@ export const useEditAddressForm = (data: Address) => {
     register,
     formState: { errors, isSubmitting },
     setValue,
-  } = useForm<editAddressModal>({
-    resolver: zodResolver(editAddressSchema),
+  } = useForm<EditAddressModal>({
+    resolver: zodResolver(EditAddressSchema),
     mode: 'onChange',
     defaultValues: {
       city: data.city,
@@ -37,7 +37,7 @@ export const useEditAddressForm = (data: Address) => {
         ...prev,
         [name]: value,
       }));
-      setValue(name as keyof editAddressModal, value, { shouldValidate: true });
+      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
     },
     [setValue]
   );
