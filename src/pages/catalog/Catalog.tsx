@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ProductCard from '../../components/product/ProductCard';
 import { Product, ProductCardProps, ProductFilters } from '../../types/interfaces';
 import { getProductsList, SortOption, searchProducts } from '../../services/products.service';
@@ -10,18 +11,27 @@ import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import FilterPanel from '../../components/filters/FilterPanel';
 import ActiveFilters from '../../components/filters/ActiveFilters';
+import CategoryNav from '../../components/category-nav/CategoryNav';
+import Breadcrumbs from '../../components/breadcrumbs/Breadcrumbs';
+import { getCategoryById, getCategoryPath, CategoryPath } from '../../services/category.service';
 import './Catalog.css';
 
 const Catalog: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<ProductCardProps[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined);
+  const [categoryPath, setCategoryPath] = useState<CategoryPath[]>([]);
+  const [currentCategoryName, setCurrentCategoryName] = useState<string | undefined>(undefined);
   const [filters, setFilters] = useState<ProductFilters>({
     flavors: [],
     priceRange: undefined,
     isBestSeller: undefined,
+    categoryId: undefined,
   });
 
   const sortOptions = {
@@ -30,6 +40,42 @@ const Catalog: React.FC = () => {
     'name.en-US desc': 'Name (Z-A)',
     'price asc': 'Price (Low to High)',
     'price desc': 'Price (High to Low)',
+  };
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const categoryParam = queryParams.get('category');
+
+    if (categoryParam) {
+      setSelectedCategoryId(categoryParam);
+      setFilters(prev => ({
+        ...prev,
+        categoryId: categoryParam,
+      }));
+      fetchCategoryPath(categoryParam);
+    } else {
+      setSelectedCategoryId(undefined);
+      setCategoryPath([]);
+      setCurrentCategoryName(undefined);
+      setFilters(prev => ({
+        ...prev,
+        categoryId: undefined,
+      }));
+    }
+  }, [location.search]);
+
+  const fetchCategoryPath = async (categoryId: string) => {
+    try {
+      const category = await getCategoryById(categoryId);
+      if (category) {
+        setCurrentCategoryName(category.name['en-US']);
+      }
+
+      const path = await getCategoryPath(categoryId);
+      setCategoryPath(path.slice(0, -1));
+    } catch (error) {
+      console.error('Error fetching category path:', error);
+    }
   };
 
   useEffect(() => {
@@ -72,8 +118,15 @@ const Catalog: React.FC = () => {
     setSortOption(e.target.value as SortOption);
   };
 
+  const handleCategorySelect = (categoryId: string) => {
+    navigate(`/catalog?category=${categoryId}`);
+  };
+
   const handleFilterChange = (newFilters: ProductFilters) => {
-    setFilters(newFilters);
+    setFilters({
+      ...newFilters,
+      categoryId: filters.categoryId,
+    });
   };
 
   const handleResetFilters = () => {
@@ -81,6 +134,7 @@ const Catalog: React.FC = () => {
       flavors: [],
       priceRange: undefined,
       isBestSeller: undefined,
+      categoryId: filters.categoryId,
     });
   };
 
@@ -116,8 +170,12 @@ const Catalog: React.FC = () => {
           isBestSeller: undefined,
         });
         break;
+      case 'category':
+        navigate('/catalog');
+        break;
       case 'all':
         handleResetFilters();
+        navigate('/catalog');
         break;
       default:
         break;
@@ -136,6 +194,8 @@ const Catalog: React.FC = () => {
 
   return (
     <div className="catalog-page">
+      <Breadcrumbs categoryPath={categoryPath} currentCategory={currentCategoryName} />
+
       <h1>Product Catalog</h1>
       <div className="catalog-controls">
         <div className="search-container">
@@ -159,10 +219,21 @@ const Catalog: React.FC = () => {
         </div>
       </div>
 
-      <ActiveFilters filters={filters} onRemoveFilter={handleRemoveFilter} />
+      <ActiveFilters
+        filters={{
+          ...filters,
+          categoryName: currentCategoryName,
+        }}
+        onRemoveFilter={handleRemoveFilter}
+      />
 
       <div className="catalog-layout">
-        <div className="catalog-filters">
+        <div className="catalog-sidebar">
+          <CategoryNav
+            onSelectCategory={handleCategorySelect}
+            selectedCategoryId={selectedCategoryId}
+          />
+
           <FilterPanel
             filters={filters}
             onFilterChange={handleFilterChange}

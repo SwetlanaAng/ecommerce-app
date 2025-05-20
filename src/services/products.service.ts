@@ -29,6 +29,10 @@ const buildFilterPredicates = (filters?: ProductFilters): string[] => {
     if (filters.isBestSeller === true) {
       predicates.push(`variants.attributes.isBestSeller:true`);
     }
+
+    if (filters.categoryId) {
+      predicates.push(`categories.id:"${filters.categoryId}"`);
+    }
   }
 
   return predicates;

@@ -15,8 +15,11 @@
     display: flex;
     gap: 20px;
   }
-  .catalog-filters {
+  .catalog-sidebar {
     flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
   .catalog-products {
     flex: 1;
@@ -48,7 +51,7 @@
     .catalog-layout {
       flex-direction: column;
     }
-    .catalog-filters {
+    .catalog-sidebar {
       flex: 0 0 auto;
       margin-bottom: 20px;
     }

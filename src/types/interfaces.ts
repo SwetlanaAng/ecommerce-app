@@ -145,6 +145,7 @@ export interface ProductFilters {
     max?: number;
   };
   isBestSeller?: boolean;
+  categoryId?: string;
 }
 
 export interface CustomerInfo {
