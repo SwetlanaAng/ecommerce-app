@@ -130,6 +130,7 @@ export interface CustomerInfo {
   dateOfBirth: string;
   defaultBillingAddressId?: string;
   defaultShippingAddressId?: string;
+  version: number;
 }
 export interface ProfileAddressData {
   country: string;

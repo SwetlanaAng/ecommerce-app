@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
 import './EditPersonalInformationContent.css';
-import { getCustomer } from '../../../../services/profile.service';
+import { getCustomer, updateCustomerProfile } from '../../../../services/profile.service';
 import { CustomerInfo } from '../../../../types/interfaces';
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { FieldErrors, UseFormRegister, SubmitHandler } from 'react-hook-form';
 import { editPersonalInfoModal } from '../../../../schemas/editPersonalInfoSchema';
-import { useEditPersonalInfoForm } from '../../../../features/auth/hooks/useEditPersonalInfoForm';
 
 type EditPersonalInfoProps = {
   formData: {
@@ -19,13 +18,21 @@ type EditPersonalInfoProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   register: UseFormRegister<editPersonalInfoModal>;
   errors: FieldErrors<editPersonalInfoModal>;
+  handleSubmit?: (
+    onSubmit: SubmitHandler<editPersonalInfoModal>
+  ) => (e: React.BaseSyntheticEvent) => void;
+  onSuccess?: () => void;
+  onCancel?: () => void;
 };
+
 export const EditPersonalInformationContent = ({
   formData,
   isDisabled,
   onChange,
   register,
   errors,
+  handleSubmit,
+  onSuccess,
 }: EditPersonalInfoProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,20 +46,14 @@ export const EditPersonalInformationContent = ({
     shippingAddressIds: [],
     billingAddressIds: [],
     dateOfBirth: '',
+    version: 0,
   });
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
+
   useEffect(() => {
     const fetchCustomerData = async () => {
       try {
         const data = await getCustomer();
         setCustomer(data);
-        setFirstName(customer.firstName);
-        setLastName(customer.lastName);
-        setEmail(customer.email);
-        setDateOfBirth(customer.dateOfBirth);
       } catch (err) {
         setError(
           `Error loading profile information. ${err instanceof Error ? err.message : String(err)}`
@@ -62,14 +63,29 @@ export const EditPersonalInformationContent = ({
       }
     };
     fetchCustomerData();
-  }, [customer.firstName, customer.lastName, customer.email, customer.dateOfBirth]);
-  const { handleSubmit } = useEditPersonalInfoForm({
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    dateOfBirth: dateOfBirth,
-  });
-  const onSubmit = () => {};
+  }, []);
+
+  const onSubmit: SubmitHandler<editPersonalInfoModal> = async data => {
+    try {
+      setError(null);
+
+      await updateCustomerProfile({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        dateOfBirth: data.dateOfBirth,
+      });
+
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        alert('Profile updated successfully!');
+      }
+    } catch (err) {
+      setError(`Failed to update profile: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  };
+
   if (error) {
     return (
       <div className="edit-personal">
@@ -87,12 +103,15 @@ export const EditPersonalInformationContent = ({
   return (
     <div className="edit-personal">
       <h3>Edit personal information</h3>
-      <form onSubmit={handleSubmit(onSubmit)} className="edit-personal-form">
+      <form
+        onSubmit={handleSubmit ? handleSubmit(onSubmit) : e => e.preventDefault()}
+        className="edit-personal-form"
+      >
         <Input
           labelText="First Name"
           name="firstName"
           id="firstName"
-          value={formData.firstName}
+          value={formData.firstName || customer.firstName}
           register={register}
           onChange={onChange}
           disabled={isDisabled}
@@ -102,7 +121,7 @@ export const EditPersonalInformationContent = ({
           labelText="Last Name"
           name="lastName"
           id="lastName"
-          value={formData.lastName}
+          value={formData.lastName || customer.lastName}
           onChange={onChange}
           register={register}
           disabled={isDisabled}
@@ -112,7 +131,7 @@ export const EditPersonalInformationContent = ({
           labelText="Email"
           name="email"
           id="email"
-          value={formData.email}
+          value={formData.email || customer.email}
           onChange={onChange}
           register={register}
           disabled={isDisabled}
@@ -123,13 +142,13 @@ export const EditPersonalInformationContent = ({
           type="date"
           name="dateOfBirth"
           id="dateOfBirth"
-          value={formData.dateOfBirth}
+          value={formData.dateOfBirth || customer.dateOfBirth}
           onChange={onChange}
           disabled={isDisabled}
           register={register}
           error={errors.dateOfBirth}
         ></Input>
-        <Button className="submit-button " type="submit">
+        <Button className="submit-button" type="submit" disabled={isDisabled}>
           Save changes
         </Button>
       </form>
