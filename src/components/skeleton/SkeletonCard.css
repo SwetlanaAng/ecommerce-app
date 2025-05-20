@@ -3,7 +3,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: calc((100% - 60px) / 4);
+  width: calc((100% - 40px) / 3);
   position: relative;
   .skeleton-image {
     width: 100%;
@@ -84,5 +84,17 @@
   }
   100% {
     transform: translateX(100%);
+  }
+}
+
+@media (max-width: 1150px) {
+  .skeleton-card {
+    width: calc((100% - 20px) / 2);
+  }
+}
+
+@media (max-width: 480px) {
+  .skeleton-card {
+    width: 100%;
   }
 }
