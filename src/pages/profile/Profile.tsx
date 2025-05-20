@@ -10,7 +10,7 @@ import { ChangePasswordContent } from '../../components/modal/modal-content/chan
 import { EditPersonalInformationContent } from '../../components/modal/modal-content/edit-personal-info/EditPersonalInformationContent';
 import { useChangePasswordForm } from '../../features/auth/hooks/useChangePasswordForm';
 import { useEditPersonalInfoForm } from '../../features/auth/hooks/useEditPersonalInfoForm';
-//import { EditBillingAddressesContent } from '../../components/modal/modal-content/edit-billing-addresses/EditBillingContent';
+//import { AddNewAddressContent } from '../../components/modal/modal-content/add-address/AddNewAddressContent';
 
 const Profile: React.FC = () => {
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -88,6 +88,17 @@ const Profile: React.FC = () => {
         ></EditPersonalInformationContent>
       );
     }
+    /* if (modalContent === 'newBilling' || modalContent === 'newShipping') {
+      return (
+        {<AddNewAddressContent
+          formData={formData}
+          isDisabled={isSubmitting}
+          onChange={handleChange}
+          
+          errors={errors}
+        ></AddNewAddressContent> }
+      );
+    }*/
   }
   const billingAddresses = customer.addresses.filter(address =>
     customer.billingAddressIds.includes(address.id)
@@ -167,6 +178,16 @@ const Profile: React.FC = () => {
         ))
       )}
 
+      <Button
+        className={isLoading ? 'disabled edit' : 'edit'}
+        onClick={() => {
+          setModalContent('newBilling');
+          setModalOpen(true);
+        }}
+      >
+        Add new billing address{' '}
+      </Button>
+
       <h3>Shipping Addresses</h3>
       {shippingAddresses.length === 0 ? (
         <p>No shipping addresses found</p>
@@ -185,7 +206,16 @@ const Profile: React.FC = () => {
           ></AddressBox>
         ))
       )}
-
+      <Button
+        className={isLoading ? 'disabled edit' : 'edit'}
+        onClick={() => {
+          setModalContent('newShipping');
+          setModalOpen(true);
+        }}
+      >
+        Add new shipping address{' '}
+      </Button>
+      <br />
       <Button
         className={isLoading ? 'disabled edit' : 'edit'}
         onClick={() => {

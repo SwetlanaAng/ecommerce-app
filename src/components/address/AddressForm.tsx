@@ -5,6 +5,7 @@ import Input from '../input/Input';
 import Select from '../select/Select';
 import { countryId } from '../../services/registration.service';
 import { FormFields } from '../../schemas/signInSchema';
+import { editAddressModal } from '../../schemas/editAddressSchema';
 
 interface AddressFormProps {
   type: 'billing' | 'shipping';
@@ -12,7 +13,7 @@ interface AddressFormProps {
   isDisabled: boolean;
   onAddressChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onDefaultAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  register: UseFormRegister<FormFields>;
+  register: UseFormRegister<FormFields | editAddressModal>;
   errors: FieldErrors<FormFields>;
 }
 

@@ -164,7 +164,6 @@ export const EditAddressesContent = ({
         </Button>
         <Button children="Delete this address"></Button>
       </form>
-      <Button children="Add a new address"></Button>
     </div>
   );
 };
