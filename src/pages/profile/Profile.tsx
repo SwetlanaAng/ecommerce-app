@@ -34,7 +34,8 @@ const Profile: React.FC = () => {
   const [modalIsOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
 
-  const { formData, errors, isSubmitting, register, handleChange } = useChangePasswordForm();
+  const { formData, handleSubmit, errors, isSubmitting, register, handleChange } =
+    useChangePasswordForm();
 
   const refreshProfileData = useCallback(async () => {
     try {
@@ -67,11 +68,14 @@ const Profile: React.FC = () => {
   } = useEditPersonalInfoForm();
 
   const {
-    formDataAddAddress,
-    errorsAddAddress,
-    registerAddAddress,
-    handleAddressChangeAddAddress,
-    isSubmittingAddAddress,
+    formDataAddBilling,
+    formDataAddShipping,
+    errorsAdd,
+    registerAdd,
+    handleShippingChangeAdd,
+    handleBillingChangeAdd,
+    isSubmittingAdd,
+    handleSubmitAdd,
   } = useNewAddressForm();
 
   function getModalChild() {
@@ -83,6 +87,10 @@ const Profile: React.FC = () => {
           onChange={handleChange}
           register={register}
           errors={errors}
+          handleSubmit={handleSubmit}
+          onSuccess={() => {
+            setModalOpen(false);
+          }}
         ></ChangePasswordContent>
       );
     }
@@ -106,12 +114,16 @@ const Profile: React.FC = () => {
     if (modalContent === 'billing' || modalContent === 'shipping') {
       return (
         <AddNewAddressContent
-          formData={formDataAddAddress}
-          isDisabled={isSubmittingAddAddress}
+          formData={modalContent === 'billing' ? formDataAddBilling : formDataAddShipping}
+          isDisabled={isSubmittingAdd}
           type={modalContent}
-          onChange={handleAddressChangeAddAddress}
-          errors={errorsAddAddress}
-          register={registerAddAddress}
+          onChange={modalContent === 'billing' ? handleBillingChangeAdd : handleShippingChangeAdd}
+          errors={errorsAdd}
+          register={registerAdd}
+          handleSubmit={handleSubmitAdd}
+          onSuccess={() => {
+            setModalOpen(false);
+          }}
         ></AddNewAddressContent>
       );
     }

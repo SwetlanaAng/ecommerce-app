@@ -1,8 +1,7 @@
-//import  IconClose  from '../../assets/icon-close.svg'
 import './Modal.css';
 interface ModalProps {
   isOpen: boolean;
-  onClose: (/* e: React.MouseEvent<HTMLElement> */) => void;
+  onClose: () => void;
   children: React.ReactNode;
 }
 export const Modal = ({ isOpen, onClose, children }: ModalProps) => {

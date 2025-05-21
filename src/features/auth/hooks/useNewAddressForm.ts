@@ -17,11 +17,17 @@ export const useNewAddressForm = () => {
       street: '',
       postalCode: '',
       isDefault: false,
-    } /* ,
-    reValidateMode: 'onChange', */,
+    },
   });
 
-  const [formData, setFormData] = useState({
+  const [formBillingData, setFormBillingData] = useState({
+    country: '',
+    city: '',
+    street: '',
+    postalCode: '',
+    isDefault: false,
+  });
+  const [formShippingData, setFormShippingData] = useState({
     country: '',
     city: '',
     street: '',
@@ -30,10 +36,21 @@ export const useNewAddressForm = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleAddressChange = useCallback(
+  const handleShippingAddressChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
-      setFormData(prev => ({
+      setFormShippingData(prev => ({
+        ...prev,
+        [name]: value,
+      }));
+      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
+    },
+    [setValue]
+  );
+  const handleBillingAddressChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      setFormBillingData(prev => ({
         ...prev,
         [name]: value,
       }));
@@ -42,10 +59,21 @@ export const useNewAddressForm = () => {
     [setValue]
   );
 
-  const handleChange = useCallback(
+  const handleShippingChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
-      setFormData(prev => ({
+      setFormShippingData(prev => ({
+        ...prev,
+        [name]: value,
+      }));
+      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
+    },
+    [setValue]
+  );
+  const handleBillingChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormBillingData(prev => ({
         ...prev,
         [name]: value,
       }));
@@ -55,14 +83,17 @@ export const useNewAddressForm = () => {
   );
 
   return {
-    formDataAddAddress: formData,
+    formDataAddBilling: formBillingData,
+    formDataAddShipping: formShippingData,
     isLoading,
-    errorsAddAddress: errors,
-    isSubmittingAddAddress: isSubmitting,
-    registerAddAddress: register,
-    handleSubmit,
-    handleChange,
-    handleAddressChangeAddAddress: handleAddressChange,
+    errorsAdd: errors,
+    isSubmittingAdd: isSubmitting,
+    registerAdd: register,
+    handleSubmitAdd: handleSubmit,
+    handleBillingChange,
+    handleShippingChange,
+    handleBillingChangeAdd: handleBillingAddressChange,
+    handleShippingChangeAdd: handleShippingAddressChange,
     setIsLoading,
   };
 };

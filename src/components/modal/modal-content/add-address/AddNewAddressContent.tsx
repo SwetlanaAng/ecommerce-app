@@ -1,8 +1,7 @@
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { FieldErrors, SubmitHandler, UseFormRegister } from 'react-hook-form';
 import Button from '../../../button/Button';
 import './AddNewAddressContent.css';
 import { EditAddressModal } from '../../../../schemas/editAddressSchema';
-import { useNewAddressForm } from '../../../../features/auth/hooks/useNewAddressForm';
 import Select from '../../../select/Select';
 import { countryId } from '../../../../services/registration.service';
 import Input from '../../../input/Input';
@@ -15,6 +14,11 @@ interface AddNewAddressFormProps {
   register: UseFormRegister<EditAddressModal>;
   errors: FieldErrors<EditAddressModal>;
   type: string;
+  handleSubmit?: (
+    onSubmit: SubmitHandler<EditAddressModal>
+  ) => (e: React.BaseSyntheticEvent) => void;
+  onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
 export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = ({
@@ -24,13 +28,23 @@ export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = ({
   register,
   errors,
   type,
+  onSuccess,
+  handleSubmit,
 }) => {
-  const { handleSubmit } = useNewAddressForm();
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    console.log('close');
+    if (onSuccess) {
+      onSuccess();
+    }
+  };
+
   return (
     <div className="add-address">
       <h3>{`Add new ${type} address`}</h3>
-      <form onSubmit={handleSubmit(onSubmit)} className="add-address-form">
+      <form
+        onSubmit={handleSubmit ? handleSubmit(onSubmit) : e => e.preventDefault()}
+        className="add-address-form"
+      >
         <Select
           labelText="Country"
           className="select"

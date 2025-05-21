@@ -1,9 +1,8 @@
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { FieldErrors, SubmitHandler, UseFormRegister } from 'react-hook-form';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
 import './ChangePasswordContent.css';
 import { ChangePasswordModal } from '../../../../schemas/changePasswordSchemas';
-import { useChangePasswordForm } from '../../../../features/auth/hooks/useChangePasswordForm';
 
 interface ChangePasswordFormProps {
   formData: ChangePasswordModal;
@@ -11,6 +10,11 @@ interface ChangePasswordFormProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   register: UseFormRegister<ChangePasswordModal>;
   errors: FieldErrors<ChangePasswordModal>;
+  onSuccess?: () => void;
+  onCancel?: () => void;
+  handleSubmit?: (
+    onSubmit: SubmitHandler<ChangePasswordModal>
+  ) => (e: React.BaseSyntheticEvent) => void;
 }
 
 export const ChangePasswordContent: React.FC<ChangePasswordFormProps> = ({
@@ -19,12 +23,20 @@ export const ChangePasswordContent: React.FC<ChangePasswordFormProps> = ({
   onChange,
   register,
   errors,
+  handleSubmit,
+  onSuccess,
 }) => {
-  const { handleSubmit } = useChangePasswordForm();
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    if (onSuccess) {
+      onSuccess();
+    }
+  };
   return (
     <div className="edit-password">
-      <form onSubmit={handleSubmit(onSubmit)} className="edit-password-form">
+      <form
+        onSubmit={handleSubmit ? handleSubmit(onSubmit) : e => e.preventDefault()}
+        className="edit-password-form"
+      >
         <Input
           id="password"
           register={register}

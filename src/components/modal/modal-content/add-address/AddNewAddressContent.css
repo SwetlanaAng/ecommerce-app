@@ -1,9 +1,7 @@
-.add-address {
+.add-address-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-.add-address-form {
   input[type='checkbox'] {
     -webkit-appearance: none;
     appearance: none;
