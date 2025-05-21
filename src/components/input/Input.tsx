@@ -33,6 +33,7 @@ interface InputProps<T extends Record<string, unknown>> {
   required?: boolean;
   disabled?: boolean;
   minLength?: number;
+  min?: string;
   autoComplete?:
     | 'off'
     | 'on'
@@ -67,6 +68,7 @@ const Input = <T extends Record<string, unknown>>({
   required,
   disabled,
   minLength,
+  min,
   autoComplete,
   id,
   checked,
@@ -114,6 +116,7 @@ const Input = <T extends Record<string, unknown>>({
             value={value}
             required={required}
             disabled={disabled}
+            min={min}
             minLength={minLength}
             autoComplete={autoComplete}
             aria-invalid={error ? 'true' : 'false'}

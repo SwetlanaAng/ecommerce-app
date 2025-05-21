@@ -36,8 +36,6 @@
     }
     .no-products-found img {
       max-width: 100px;
-      margin-bottom: 20px;
-      opacity: 0.7;
     }
     .no-products-found p {
       color: #666;

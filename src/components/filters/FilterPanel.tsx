@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ProductFilters } from '../../types/interfaces';
-import { getProductFlavors, getPriceRange } from '../../services/products.service';
 import Button from '../button/Button';
 import Input from '../input/Input';
+import { useAppContext } from '../../features/app/context/AppContext';
 import './FilterPanel.css';
 
 interface FilterPanelProps {
@@ -12,34 +12,13 @@ interface FilterPanelProps {
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onResetFilters }) => {
-  const [availableFlavors, setAvailableFlavors] = useState<string[]>([]);
-  const [minPrice, setMinPrice] = useState<number | undefined>(filters.priceRange?.min);
-  const [maxPrice, setMaxPrice] = useState<number | undefined>(filters.priceRange?.max);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchFilterData = async () => {
-      setLoading(true);
-      try {
-        const [flavors, prices] = await Promise.all([getProductFlavors(), getPriceRange()]);
-
-        setAvailableFlavors(flavors);
-
-        if (minPrice === undefined) {
-          setMinPrice(prices.min);
-        }
-        if (maxPrice === undefined) {
-          setMaxPrice(prices.max);
-        }
-      } catch (error) {
-        console.error('Error fetching filter data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFilterData();
-  }, []);
+  const { availableFlavors, priceRange, isLoading } = useAppContext();
+  const [minPrice, setMinPrice] = useState<number | undefined>(
+    filters.priceRange?.min ?? priceRange.min
+  );
+  const [maxPrice, setMaxPrice] = useState<number | undefined>(
+    filters.priceRange?.max ?? priceRange.max
+  );
 
   const handleFlavorChange = (flavor: string) => {
     onFilterChange({
@@ -67,19 +46,27 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
 
   const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value ? parseInt(event.target.value) : undefined;
+    if (value !== undefined && value < 0) return;
     setMinPrice(value);
   };
 
   const handleMaxPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value ? parseInt(event.target.value) : undefined;
+    if (value !== undefined && value < 0) return;
     setMaxPrice(value);
+  };
+
+  const handleResetFilters = () => {
+    setMinPrice(priceRange.min);
+    setMaxPrice(priceRange.max);
+    onResetFilters();
   };
 
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  if (loading) {
+  if (isLoading) {
     return <div className="filter-panel-loading">Loading filters...</div>;
   }
 
@@ -87,7 +74,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
     <div className="filter-panel">
       <div className="filter-header">
         <h3>Filters</h3>
-        <button className="reset-button" onClick={onResetFilters}>
+        <button className="reset-button" onClick={handleResetFilters}>
           Reset All
         </button>
       </div>
@@ -97,20 +84,22 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
         <div className="price-range-inputs">
           <div className="price-input">
             <Input
+              labelText="Min:"
               id="min-price"
               name="minPrice"
-              labelText="Min:"
               type="number"
+              min="0"
               value={minPrice?.toString() || ''}
               onChange={handleMinPriceChange}
             />
           </div>
           <div className="price-input">
             <Input
+              labelText="Max:"
               id="max-price"
               name="maxPrice"
-              labelText="Max:"
               type="number"
+              min="0"
               value={maxPrice?.toString() || ''}
               onChange={handleMaxPriceChange}
             />

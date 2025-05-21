@@ -169,3 +169,7 @@ export interface ProfileAddressData {
   id: string;
   postalCode: string;
 }
+
+export interface CategoryWithChildren extends CategoryData {
+  children: CategoryWithChildren[];
+}

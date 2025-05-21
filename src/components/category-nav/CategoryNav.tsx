@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { CategoryData } from '../../types/interfaces';
-import { getCategoryHierarchy } from '../../services/category.service';
+import React, { useState } from 'react';
+import { CategoryWithChildren } from '../../types/interfaces';
+import { useAppContext } from '../../features/app/context/AppContext';
 import './CategoryNav.css';
 
 interface CategoryNavProps {
@@ -8,29 +8,9 @@ interface CategoryNavProps {
   selectedCategoryId?: string;
 }
 
-interface CategoryWithChildren extends CategoryData {
-  children: CategoryWithChildren[];
-}
-
 const CategoryNav: React.FC<CategoryNavProps> = ({ onSelectCategory, selectedCategoryId }) => {
-  const [categories, setCategories] = useState<CategoryWithChildren[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { categories, isLoading } = useAppContext();
   const [expandedCategories, setExpandedCategories] = useState<{ [key: string]: boolean }>({});
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categoriesData = await getCategoryHierarchy();
-        setCategories(categoriesData as CategoryWithChildren[]);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
 
   const toggleCategory = (categoryId: string) => {
     setExpandedCategories(prev => ({
@@ -82,7 +62,7 @@ const CategoryNav: React.FC<CategoryNavProps> = ({ onSelectCategory, selectedCat
     );
   };
 
-  if (loading) {
+  if (isLoading) {
     return <div className="category-nav-loading">Loading categories...</div>;
   }
 
