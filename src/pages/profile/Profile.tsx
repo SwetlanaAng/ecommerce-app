@@ -60,16 +60,11 @@ const Profile: React.FC = () => {
   const {
     formDataPersonal,
     errorsPersonal,
-    /* isSubmittingPersonal, */
+    isSubmittingPersonal,
     registerPersonal,
     handleChangePersonal,
     handleSubmit: handleSubmitPersonal,
-  } = useEditPersonalInfoForm({
-    firstName: customer.firstName,
-    lastName: customer.lastName,
-    email: customer.email,
-    dateOfBirth: customer.dateOfBirth,
-  });
+  } = useEditPersonalInfoForm();
 
   const {
     formDataAddAddress,
@@ -96,7 +91,7 @@ const Profile: React.FC = () => {
       return (
         <EditPersonalInformationContent
           formData={formDataPersonal}
-          isDisabled={false}
+          isDisabled={isSubmittingPersonal}
           onChange={handleChangePersonal}
           register={registerPersonal}
           errors={errorsPersonal}

@@ -1,14 +1,20 @@
 import { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PersonalInfo } from '../../../types/interfaces';
+import { /* Customer, */ PersonalInfo } from '../../../types/interfaces';
 import {
   editPersonalInfoModal,
   editPersonalInfoSchema,
 } from '../../../schemas/editPersonalInfoSchema';
 
-export const useEditPersonalInfoForm = (personalData: PersonalInfo) => {
-  const [formData, setFormData] = useState(personalData);
+export const useEditPersonalInfoForm = () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}') as PersonalInfo;
+  const [formData, setFormData] = useState({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    dateOfBirth: user.dateOfBirth,
+  });
   const {
     handleSubmit,
     register,
@@ -18,10 +24,10 @@ export const useEditPersonalInfoForm = (personalData: PersonalInfo) => {
     resolver: zodResolver(editPersonalInfoSchema),
     mode: 'onChange',
     defaultValues: {
-      firstName: personalData.firstName,
-      lastName: personalData.lastName,
-      email: personalData.email,
-      dateOfBirth: personalData.dateOfBirth,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      dateOfBirth: user.dateOfBirth,
     },
   });
 
