@@ -26,12 +26,14 @@ const Profile: React.FC = () => {
     dateOfBirth: '',
     version: 0,
   });
+
   const [defaultBillingId, setDefaultBillingId] = useState('');
   const [defaultShippingId, setDefaultShippingId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [modalIsOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
+
   const { formData, errors, isSubmitting, register, handleChange } = useChangePasswordForm();
 
   const refreshProfileData = useCallback(async () => {
@@ -58,7 +60,7 @@ const Profile: React.FC = () => {
   const {
     formDataPersonal,
     errorsPersonal,
-    isSubmittingPersonal,
+    /* isSubmittingPersonal, */
     registerPersonal,
     handleChangePersonal,
     handleSubmit: handleSubmitPersonal,
@@ -68,6 +70,7 @@ const Profile: React.FC = () => {
     email: customer.email,
     dateOfBirth: customer.dateOfBirth,
   });
+
   const {
     formDataAddAddress,
     errorsAddAddress,
@@ -75,6 +78,7 @@ const Profile: React.FC = () => {
     handleAddressChangeAddAddress,
     isSubmittingAddAddress,
   } = useNewAddressForm();
+
   function getModalChild() {
     if (modalContent === 'changePassword') {
       return (
@@ -92,7 +96,7 @@ const Profile: React.FC = () => {
       return (
         <EditPersonalInformationContent
           formData={formDataPersonal}
-          isDisabled={isSubmittingPersonal}
+          isDisabled={false}
           onChange={handleChangePersonal}
           register={registerPersonal}
           errors={errorsPersonal}
@@ -117,12 +121,14 @@ const Profile: React.FC = () => {
       );
     }
   }
+
   const billingAddresses = customer.addresses.filter(address =>
     customer.billingAddressIds.includes(address.id)
   );
   const shippingAddresses = customer.addresses.filter(address =>
     customer.shippingAddressIds.includes(address.id)
   );
+
   if (error) {
     return (
       <div className="profile-page">

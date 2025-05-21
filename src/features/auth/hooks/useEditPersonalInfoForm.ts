@@ -9,7 +9,6 @@ import {
 
 export const useEditPersonalInfoForm = (personalData: PersonalInfo) => {
   const [formData, setFormData] = useState(personalData);
-
   const {
     handleSubmit,
     register,

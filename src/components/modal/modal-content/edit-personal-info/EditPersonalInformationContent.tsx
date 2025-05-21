@@ -36,6 +36,10 @@ export const EditPersonalInformationContent = ({
 }: EditPersonalInfoProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFirstNameEdited, setIsFirstNameEdited] = useState(false);
+  const [isLastNameEdited, setIsLastNameEdited] = useState(false);
+  const [isEmailEdited, setIsEmailEdited] = useState(false);
+  const [isDateEdited, setIsDateEdited] = useState(false);
   const [customer, setCustomer] = useState<CustomerInfo>({
     id: '',
     email: '',
@@ -64,17 +68,18 @@ export const EditPersonalInformationContent = ({
     };
     fetchCustomerData();
   }, []);
-
+  console.log(customer);
+  console.log(customer.id);
   const onSubmit: SubmitHandler<editPersonalInfoModal> = async data => {
     try {
       setError(null);
-
-      await updateCustomerProfile({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        dateOfBirth: data.dateOfBirth,
-      });
+      const customerData = {
+        firstName: isFirstNameEdited ? data.firstName : customer.firstName,
+        lastName: isLastNameEdited ? data.lastName : customer.lastName,
+        email: isEmailEdited ? data.email : customer.email,
+        dateOfBirth: isDateEdited ? data.dateOfBirth : customer.dateOfBirth,
+      };
+      await updateCustomerProfile(customerData);
 
       if (onSuccess) {
         onSuccess();
@@ -111,9 +116,12 @@ export const EditPersonalInformationContent = ({
           labelText="First Name"
           name="firstName"
           id="firstName"
-          value={formData.firstName || customer.firstName}
+          value={isFirstNameEdited ? formData.firstName : customer.firstName}
           register={register}
-          onChange={onChange}
+          onChange={e => {
+            setIsFirstNameEdited(true);
+            onChange(e);
+          }}
           disabled={isDisabled}
           error={errors.firstName}
         ></Input>
@@ -121,8 +129,11 @@ export const EditPersonalInformationContent = ({
           labelText="Last Name"
           name="lastName"
           id="lastName"
-          value={formData.lastName || customer.lastName}
-          onChange={onChange}
+          value={isLastNameEdited ? formData.lastName : customer.lastName}
+          onChange={e => {
+            setIsLastNameEdited(true);
+            onChange(e);
+          }}
           register={register}
           disabled={isDisabled}
           error={errors.lastName}
@@ -131,8 +142,11 @@ export const EditPersonalInformationContent = ({
           labelText="Email"
           name="email"
           id="email"
-          value={formData.email || customer.email}
-          onChange={onChange}
+          value={isEmailEdited ? formData.email : customer.email}
+          onChange={e => {
+            setIsEmailEdited(true);
+            onChange(e);
+          }}
           register={register}
           disabled={isDisabled}
           error={errors.email}
@@ -142,8 +156,11 @@ export const EditPersonalInformationContent = ({
           type="date"
           name="dateOfBirth"
           id="dateOfBirth"
-          value={formData.dateOfBirth || customer.dateOfBirth}
-          onChange={onChange}
+          value={isDateEdited ? formData.dateOfBirth : customer.dateOfBirth}
+          onChange={e => {
+            setIsDateEdited(true);
+            onChange(e);
+          }}
           disabled={isDisabled}
           register={register}
           error={errors.dateOfBirth}
