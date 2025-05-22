@@ -31,6 +31,9 @@ export const passwordSchema = z
   .refine((v: string) => v.trim() === v, {
     message: 'Password must not have leading or trailing spaces',
   })
+  .refine((v: string) => !v.includes(' '), {
+    message: 'Password must not contain any spaces',
+  })
   .refine((v: string) => /[A-Z]/.test(v), {
     message: 'Must contain at least one uppercase letter',
   })
