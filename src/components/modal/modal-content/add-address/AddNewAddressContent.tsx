@@ -4,11 +4,11 @@ import './AddNewAddressContent.css';
 import Select from '../../../select/Select';
 import { countryId } from '../../../../services/registration.service';
 import Input from '../../../input/Input';
-import { BillingAddress /* , ShippingAddress */ } from '../../../../types/address.types';
+import { AddAddress } from '../../../../types/address.types';
 import { AddAddressModal } from '../../../../schemas/addAddressSchema';
 
 interface AddNewAddressFormProps {
-  formData: BillingAddress /* | ShippingAddress */;
+  formData: AddAddress;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   isDisabled: boolean;
   register: UseFormRegister<AddAddressModal>;
