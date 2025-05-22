@@ -1,21 +1,21 @@
 import { FieldErrors, SubmitHandler, UseFormRegister } from 'react-hook-form';
 import Button from '../../../button/Button';
 import './AddNewAddressContent.css';
-import { EditAddressModal } from '../../../../schemas/editAddressSchema';
 import Select from '../../../select/Select';
 import { countryId } from '../../../../services/registration.service';
 import Input from '../../../input/Input';
-import { Address } from '../../../../types/address.types';
+import { BillingAddress /* , ShippingAddress */ } from '../../../../types/address.types';
+import { AddAddressModal } from '../../../../schemas/addAddressSchema';
 
 interface AddNewAddressFormProps {
-  formData: Address;
+  formData: BillingAddress /* | ShippingAddress */;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   isDisabled: boolean;
-  register: UseFormRegister<EditAddressModal>;
-  errors: FieldErrors<EditAddressModal>;
-  type: string;
+  register: UseFormRegister<AddAddressModal>;
+  errors: FieldErrors<AddAddressModal>;
+  type: 'billing' | 'shipping';
   handleSubmit?: (
-    onSubmit: SubmitHandler<EditAddressModal>
+    onSubmit: SubmitHandler<AddAddressModal>
   ) => (e: React.BaseSyntheticEvent) => void;
   onSuccess?: () => void;
   onCancel?: () => void;
@@ -50,7 +50,7 @@ export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = ({
           className="select"
           onChange={onChange}
           name={`${type}_country`}
-          value={formData.country}
+          value={formData[`${type}_country`]}
           required={true}
           disabled={isDisabled}
           optionsList={countryId}
@@ -59,40 +59,40 @@ export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = ({
 
         <Input
           labelText="City"
-          name={`city`}
+          name={`${type}_city`}
           id={`${type}_city`}
           onChange={onChange}
           placeholder="New York"
-          value={formData.city}
+          value={formData[`${type}_city`]}
           disabled={isDisabled}
           register={register}
-          error={errors.city}
+          error={errors[`${type}_city`]}
           autoComplete="address-level2"
         />
 
         <Input
           labelText="Street"
-          name={`street`}
+          name={`${type}_street`}
           id={`${type}_street`}
           onChange={onChange}
           placeholder="123 Main St"
-          value={formData.street}
+          value={formData[`${type}_street`]}
           disabled={isDisabled}
           register={register}
-          error={errors.street}
+          error={errors[`${type}_street`]}
           autoComplete="street-address"
         />
 
         <Input
           labelText="Postal Code"
-          name={`postalCode`}
+          name={`${type}_postalCode`}
           id={`${type}_postalCode`}
           onChange={onChange}
           placeholder="10001"
-          value={formData.postalCode}
+          value={formData[`${type}_postalCode`]}
           disabled={isDisabled}
           register={register}
-          error={errors.postalCode}
+          error={errors[`${type}_postalCode`]}
           autoComplete="postal-code"
         />
 
@@ -100,12 +100,12 @@ export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = ({
           labelText={`Set as default ${type} address for future orders`}
           type="checkbox"
           id={`default_${type}`}
-          name={`isDefault`}
-          checked={formData.isDefault}
+          name={`${type}_isDefault`}
+          checked={formData[`${type}_isDefault`]}
           onChange={onChange}
           disabled={isDisabled}
           register={register}
-          error={errors[`isDefault`]}
+          error={errors[`${type}_isDefault`]}
         />
         <Button className="submit-button " type="submit">
           Save new address

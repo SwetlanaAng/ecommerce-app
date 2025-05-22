@@ -5,7 +5,7 @@ interface SelectProps {
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   name: string;
-  value: string;
+  value: string | undefined;
   required: boolean;
   disabled: boolean;
   optionsList: { [key: string]: string };

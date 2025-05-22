@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EditAddressModal, EditAddressSchema } from '../../../schemas/editAddressSchema';
+import { AddAddressModal, AddAddressSchema } from '../../../schemas/addAddressSchema';
 
 export const useNewAddressForm = () => {
   const {
@@ -9,30 +9,34 @@ export const useNewAddressForm = () => {
     register,
     formState: { errors, isSubmitting },
     setValue,
-  } = useForm<EditAddressModal>({
-    resolver: zodResolver(EditAddressSchema),
+  } = useForm<AddAddressModal>({
+    resolver: zodResolver(AddAddressSchema),
     mode: 'onChange',
     defaultValues: {
-      city: '',
-      street: '',
-      postalCode: '',
-      isDefault: false,
+      billing_city: '',
+      billing_street: '',
+      billing_postalCode: '',
+      billing_isDefault: false,
+      shipping_city: '',
+      shipping_street: '',
+      shipping_postalCode: '',
+      shipping_isDefault: false,
     },
   });
 
   const [formBillingData, setFormBillingData] = useState({
-    country: '',
-    city: '',
-    street: '',
-    postalCode: '',
-    isDefault: false,
+    billing_country: '',
+    billing_city: '',
+    billing_street: '',
+    billing_postalCode: '',
+    billing_isDefault: false,
   });
   const [formShippingData, setFormShippingData] = useState({
-    country: '',
-    city: '',
-    street: '',
-    postalCode: '',
-    isDefault: false,
+    shipping_country: '',
+    shipping_city: '',
+    shipping_street: '',
+    shipping_postalCode: '',
+    shipping_isDefault: false,
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -43,7 +47,7 @@ export const useNewAddressForm = () => {
         ...prev,
         [name]: value,
       }));
-      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
+      setValue(name as keyof AddAddressModal, value, { shouldValidate: true });
     },
     [setValue]
   );
@@ -54,7 +58,7 @@ export const useNewAddressForm = () => {
         ...prev,
         [name]: value,
       }));
-      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
+      setValue(name as keyof AddAddressModal, value, { shouldValidate: true });
     },
     [setValue]
   );
@@ -66,7 +70,7 @@ export const useNewAddressForm = () => {
         ...prev,
         [name]: value,
       }));
-      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
+      setValue(name as keyof AddAddressModal, value, { shouldValidate: true });
     },
     [setValue]
   );
@@ -77,7 +81,7 @@ export const useNewAddressForm = () => {
         ...prev,
         [name]: value,
       }));
-      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
+      setValue(name as keyof AddAddressModal, value, { shouldValidate: true });
     },
     [setValue]
   );

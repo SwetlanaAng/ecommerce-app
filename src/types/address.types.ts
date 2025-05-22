@@ -7,6 +7,27 @@ export interface Address {
   isDefault: boolean;
 }
 
+export interface BillingAddress {
+  billing_country?: string;
+  billing_city?: string;
+  billing_street?: string;
+  billing_postalCode?: string;
+  billing_isDefault?: boolean;
+  shipping_country?: string;
+  shipping_city?: string;
+  shipping_street?: string;
+  shipping_postalCode?: string;
+  shipping_isDefault?: boolean;
+}
+
+export interface ShippingAddress {
+  shipping_country: string;
+  shipping_city: string;
+  shipping_street: string;
+  shipping_postalCode: string;
+  shipping_isDefault: boolean;
+}
+
 export interface AddressData {
   billingAddress: Address;
   shippingAddress: Address;
