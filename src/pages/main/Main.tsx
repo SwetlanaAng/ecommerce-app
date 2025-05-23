@@ -36,7 +36,7 @@ const Main = () => {
   return (
     <div className="main-container">
       <section className="hero-section">
-        <video
+        {/* <video
           src="src/assets/macarons-sweet-decorative-candy.mp4"
           autoPlay
           muted
@@ -54,7 +54,32 @@ const Main = () => {
           }}
         >
           Order now
-        </Button>
+        </Button> */}
+        <video
+          src="src/assets/macarons-sweet-decorative-candy.mp4"
+          autoPlay
+          muted
+          loop
+          className="hero-video"
+        />
+        <div className="hero-content">
+          <h1 className="title">
+            Premium <span className="title-highlight">French</span> Macarons
+          </h1>
+          <div className="subtitle-container">
+            <p className="subtitle">
+              Step into a world of indulgence — handcrafted, gluten-free, and full of flavor
+            </p>
+            <Button
+              className="hero-button"
+              onClick={() => {
+                navigate('/catalog');
+              }}
+            >
+              Order now
+            </Button>
+          </div>
+        </div>
       </section>
 
       <section className="section featured-products">

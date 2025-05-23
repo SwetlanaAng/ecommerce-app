@@ -1,43 +1,34 @@
 .main-container {
   .hero-section {
-    position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
-    height: 60vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-    border-radius: 8px;
-    overflow: hidden;
     video {
       width: 100%;
-      height: 100%;
+      height: 600px;
+      border-radius: 8px;
       object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
+      margin-bottom: 40px;
+      margin-top: -40px;
     }
-    .title {
-      color: white;
-      font-size: 4rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      animation: fadeInDown 1s ease-out;
-    }
-    .subtitle {
-      font-size: 1.5rem;
-      font-weight: 300;
-      max-width: 500px;
-      line-height: 1.6;
-      margin-bottom: 30px;
-      animation: fadeInUp 1s ease-out;
-    }
-    .hero-button {
-      animation: fadeInUp 1s ease-out;
-      min-width: 180px;
+    .hero-content {
+      display: flex;
+      gap: 20px;
+      .title {
+        font-size: 4rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        animation: fadeInDown 1s ease-out;
+      }
+      .subtitle {
+        font-size: 1.5rem;
+        font-weight: 300;
+        max-width: 500px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        animation: fadeInUp 1s ease-out;
+      }
+      .hero-button {
+        animation: fadeInUp 1s ease-out;
+        min-width: 180px;
+      }
     }
   }
   .section {
@@ -136,6 +127,11 @@
 
 @media (max-width: 1024px) {
   .main-container {
+    .hero-section {
+      .hero-content {
+        flex-wrap: wrap;
+      }
+    }
     & .section {
       &.featured-products {
         & .featured-products-grid {
@@ -151,11 +147,13 @@
 @media (max-width: 768px) {
   .main-container {
     .hero-section {
-      .title {
-        font-size: 2.5rem;
-      }
-      .subtitle {
-        font-size: 1.2rem;
+      .hero-content {
+        .title {
+          font-size: 2.5rem;
+        }
+        .subtitle {
+          font-size: 1.2rem;
+        }
       }
     }
     .section {
@@ -187,6 +185,11 @@
 
 @media (max-width: 480px) {
   .main-container {
+    .hero-section {
+      video {
+        height: 400px;
+      }
+    }
     & .section {
       &.featured-products {
         & .featured-products-grid {
