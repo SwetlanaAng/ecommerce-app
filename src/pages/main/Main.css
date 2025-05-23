@@ -40,9 +40,8 @@
       min-width: 180px;
     }
   }
-
   .section {
-    margin: 80px 0;
+    margin: 100px 0;
     border-radius: 8px;
     .section-title {
       display: flex;
@@ -63,6 +62,9 @@
         flex-wrap: wrap;
         gap: 20px;
         margin: 30px 0;
+        .product-card {
+          width: calc((100% - 60px) / 4);
+        }
       }
     }
     &.flavors {
@@ -72,10 +74,11 @@
       padding: 80px;
       h2 {
         max-width: 600px;
-        margin-bottom: 60px;
+        margin-bottom: 40px;
       }
       h3 {
         font-size: 24px;
+        margin-bottom: 8px;
       }
       .flavor-flex {
         max-width: 320px;
@@ -90,7 +93,7 @@
     }
   }
   ul {
-    margin: 40px 0;
+    margin: 0 0 40px 0;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -131,6 +134,20 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .main-container {
+    & .section {
+      &.featured-products {
+        & .featured-products-grid {
+          .product-card {
+              width: calc((100% - 20px) / 2);
+          }
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .main-container {
     .hero-section {
@@ -140,9 +157,9 @@
       .subtitle {
         font-size: 1.2rem;
       }
-      .section {
-        margin: 40px 0px;
-      }
+    }
+    .section {
+      margin: 60px 0px;
     }
     .section {
       &.flavors {
@@ -162,6 +179,20 @@
           width: 100%;
           padding: 20px;
           font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .main-container {
+    & .section {
+      &.featured-products {
+        & .featured-products-grid {
+          .product-card {
+            width: 100%;
+          }
         }
       }
     }

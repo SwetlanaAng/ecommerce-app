@@ -14,7 +14,7 @@ const Main = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const products = await getProductsList(3);
+        const products = await getProductsList(4);
         if (products) {
           setFeaturedProducts(products);
         }
