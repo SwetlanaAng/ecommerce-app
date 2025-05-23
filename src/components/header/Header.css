@@ -112,11 +112,7 @@
 @media (max-width: 480px) {
   .header {
     .header-content {
-      padding: 15px 0;
-      .logo {
-        width: 40px;
-        height: 40px;
-      }
+      padding: 10px 0;
       .nav {
         max-width: 100%;
       }

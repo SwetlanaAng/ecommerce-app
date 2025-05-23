@@ -1,34 +1,38 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ProductCard from '../../components/product/ProductCard';
 import { Product, ProductCardProps, ProductFilters } from '../../types/interfaces';
 import { getProductsList, SortOption, searchProducts } from '../../services/products.service';
-import { getCategoriesNamesWithParent } from '../../services/category.service';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
 import SkeletonCard from '../../components/skeleton/SkeletonCard';
 import Select from '../../components/select/Select';
 import sadMacaron from '../../assets/sadMacaron.png';
 import Input from '../../components/input/Input';
-import FilterSidebar from '../../components/filters/FilterSidebar';
 import Button from '../../components/button/Button';
+import FilterPanel from '../../components/filters/FilterPanel';
+import ActiveFilters from '../../components/filters/ActiveFilters';
+import CategoryNav from '../../components/category-nav/CategoryNav';
+import Breadcrumbs from '../../components/breadcrumbs/Breadcrumbs';
+import { getCategoryById, getCategoryPath, CategoryPath } from '../../services/category.service';
 import './Catalog.css';
 
-interface CategoryStructure {
-  name: string;
-  parentName: string | null;
-}
-
-interface GroupedCategories {
-  [key: string]: string[];
-}
-
 const Catalog: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<ProductCardProps[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('');
-  const [filters, setFilters] = useState<ProductFilters>({});
-  const [categoryStructure, setCategoryStructure] = useState<GroupedCategories>({});
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined);
+  const [categoryPath, setCategoryPath] = useState<CategoryPath[]>([]);
+  const [currentCategoryName, setCurrentCategoryName] = useState<string | undefined>(undefined);
+  const [filters, setFilters] = useState<ProductFilters>({
+    flavors: [],
+    priceRange: undefined,
+    isBestSeller: undefined,
+    categoryId: undefined,
+  });
 
   const sortOptions = {
     '': 'Default',
@@ -39,41 +43,51 @@ const Catalog: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categories = await getCategoriesNamesWithParent();
+    const queryParams = new URLSearchParams(location.search);
+    const categoryParam = queryParams.get('category');
 
-        const grouped: GroupedCategories = {};
-        categories.forEach((category: CategoryStructure) => {
-          if (!category.parentName) return;
+    if (categoryParam) {
+      setSelectedCategoryId(categoryParam);
+      setFilters(prev => ({
+        ...prev,
+        categoryId: categoryParam,
+      }));
+      fetchCategoryPath(categoryParam);
+    } else {
+      setSelectedCategoryId(undefined);
+      setCategoryPath([]);
+      setCurrentCategoryName(undefined);
+      setFilters(prev => ({
+        ...prev,
+        categoryId: undefined,
+      }));
+    }
+  }, [location.search]);
 
-          if (!grouped[category.parentName]) {
-            grouped[category.parentName] = [];
-          }
-
-          grouped[category.parentName].push(category.name);
-        });
-
-        setCategoryStructure(grouped);
-      } catch (error) {
-        setError('Error fetching categories, please try again later');
-        console.error('Error fetching categories:', error);
+  const fetchCategoryPath = async (categoryId: string) => {
+    try {
+      const category = await getCategoryById(categoryId);
+      if (category) {
+        setCurrentCategoryName(category.name['en-US']);
       }
-    };
 
-    fetchCategories();
-  }, []);
+      const path = await getCategoryPath(categoryId);
+      setCategoryPath(path.slice(0, -1));
+    } catch (error) {
+      console.error('Error fetching category path:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async (sort: SortOption, productFilters: ProductFilters) => {
+    const fetchProducts = async (sort: SortOption) => {
       setLoading(true);
       try {
         let productsList: Product[] | undefined;
 
         if (searchQuery) {
-          productsList = await searchProducts(searchQuery);
+          productsList = await searchProducts(searchQuery, filters, sort);
         } else {
-          productsList = await getProductsList(200, '', sort, productFilters);
+          productsList = await getProductsList(200, '', sort, filters);
         }
 
         if (productsList) {
@@ -92,7 +106,7 @@ const Catalog: React.FC = () => {
       }
     };
 
-    fetchProducts(sortOption, filters);
+    fetchProducts(sortOption);
   }, [sortOption, searchQuery, filters]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,8 +118,68 @@ const Catalog: React.FC = () => {
     setSortOption(e.target.value as SortOption);
   };
 
+  const handleCategorySelect = (categoryId: string) => {
+    navigate(`/catalog?category=${categoryId}`);
+  };
+
   const handleFilterChange = (newFilters: ProductFilters) => {
-    setFilters(newFilters);
+    setFilters({
+      ...newFilters,
+      categoryId: filters.categoryId,
+    });
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      flavors: [],
+      priceRange: undefined,
+      isBestSeller: undefined,
+      categoryId: filters.categoryId,
+    });
+  };
+
+  const handleRemoveFilter = (filterType: string) => {
+    switch (filterType) {
+      case 'minPrice':
+        setFilters({
+          ...filters,
+          priceRange: {
+            ...filters.priceRange,
+            min: undefined,
+          },
+        });
+        break;
+      case 'maxPrice':
+        setFilters({
+          ...filters,
+          priceRange: {
+            ...filters.priceRange,
+            max: undefined,
+          },
+        });
+        break;
+      case 'flavor':
+        setFilters({
+          ...filters,
+          flavors: [],
+        });
+        break;
+      case 'isBestSeller':
+        setFilters({
+          ...filters,
+          isBestSeller: undefined,
+        });
+        break;
+      case 'category':
+        navigate('/catalog');
+        break;
+      case 'all':
+        handleResetFilters();
+        navigate('/catalog');
+        break;
+      default:
+        break;
+    }
   };
 
   if (error) {
@@ -120,6 +194,8 @@ const Catalog: React.FC = () => {
 
   return (
     <div className="catalog-page">
+      <Breadcrumbs categoryPath={categoryPath} currentCategory={currentCategoryName} />
+
       <h1>Product Catalog</h1>
       <div className="catalog-controls">
         <div className="search-container">
@@ -133,39 +209,58 @@ const Catalog: React.FC = () => {
             isSearchField={true}
           />
         </div>
-        <Select
-          name="sort-select"
-          value={sortOption}
-          onChange={handleSortChange}
-          optionsList={sortOptions}
-        />
+        <div className="filter-sort-controls">
+          <Select
+            name="sort-select"
+            value={sortOption}
+            onChange={handleSortChange}
+            optionsList={sortOptions}
+          />
+        </div>
       </div>
 
-      <div className="catalog-layout">
-        <FilterSidebar
-          onFilterChange={handleFilterChange}
-          categoryStructure={categoryStructure}
-          initialFilters={filters}
-        />
+      <ActiveFilters
+        filters={{
+          ...filters,
+          categoryName: currentCategoryName,
+        }}
+        onRemoveFilter={handleRemoveFilter}
+      />
 
-        {loading ? (
-          <div className="catalog-flex">
-            {[...Array(8)].map((_, index) => (
-              <SkeletonCard key={index} count={1} />
-            ))}
-          </div>
-        ) : (
-          <div className="catalog-flex">
-            {products.length === 0 ? (
-              <div className="no-products-found">
-                <img src={sadMacaron} alt="sad macaron" />
-                <p>No products found</p>
-              </div>
-            ) : (
-              products.map((product, index) => <ProductCard {...product} key={index} />)
-            )}
-          </div>
-        )}
+      <div className="catalog-layout">
+        <div className="catalog-sidebar">
+          <CategoryNav
+            onSelectCategory={handleCategorySelect}
+            selectedCategoryId={selectedCategoryId}
+          />
+
+          <FilterPanel
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            onResetFilters={handleResetFilters}
+          />
+        </div>
+
+        <div className="catalog-products">
+          {loading ? (
+            <div className="catalog-flex">
+              {[...Array(8)].map((_, index) => (
+                <SkeletonCard key={index} count={1} />
+              ))}
+            </div>
+          ) : (
+            <div className="catalog-flex">
+              {products.length === 0 ? (
+                <div className="no-products-found">
+                  <img src={sadMacaron} alt="sad macaron" />
+                  <p>No products found</p>
+                </div>
+              ) : (
+                products.map((product, index) => <ProductCard {...product} key={index} />)
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

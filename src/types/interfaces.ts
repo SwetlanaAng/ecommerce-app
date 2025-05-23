@@ -81,6 +81,15 @@ export interface Product {
         h: number;
       };
     }>;
+    attributes: Array<{
+      name: string;
+      value:
+        | string
+        | {
+            key: string;
+            label: string;
+          };
+    }>;
   };
   searchKeywords?: {
     en: Array<{
@@ -131,12 +140,12 @@ export interface CategoryData {
 
 export interface ProductFilters {
   flavors?: string[];
-  packaging?: string[];
-  special?: string[];
   priceRange?: {
     min?: number;
     max?: number;
   };
+  isBestSeller?: boolean;
+  categoryId?: string;
 }
 
 export interface CustomerInfo {
@@ -159,4 +168,8 @@ export interface ProfileAddressData {
   streetName: string;
   id: string;
   postalCode: string;
+}
+
+export interface CategoryWithChildren extends CategoryData {
+  children: CategoryWithChildren[];
 }
