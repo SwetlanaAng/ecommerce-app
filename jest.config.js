@@ -12,4 +12,12 @@ export default {
   },
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  collectCoverageFrom: [
+    './src/**/*.{ts,tsx}',
+    '!**/*.d.{ts,tsx}',
+    '!**/*.test.{ts,tsx}',
+    '!**/node_modules/**',
+    '!**/coverage/**',
+    '!**/__tests__/**',
+  ],
 };
