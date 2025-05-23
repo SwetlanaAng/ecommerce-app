@@ -14,7 +14,7 @@ const Main = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const products = await getProductsList(4);
+        const products = await getProductsList(3);
         if (products) {
           setFeaturedProducts(products);
         }
@@ -36,7 +36,13 @@ const Main = () => {
   return (
     <div className="main-container">
       <section className="hero-section">
-        <video src="src/assets/macaron-video.mp4" autoPlay muted loop className="hero-video" />
+        <video
+          src="src/assets/macarons-sweet-decorative-candy.mp4"
+          autoPlay
+          muted
+          loop
+          className="hero-video"
+        />
         <h1 className="title">Premium French Macarons</h1>
         <p className="subtitle">
           Step into a world of indulgence — handcrafted, gluten-free, and full of flavor
@@ -52,24 +58,22 @@ const Main = () => {
       </section>
 
       <section className="section featured-products">
-        <h2 className="section-title">Products</h2>
+        <div className="section-title">
+          <h2>Products</h2>
+          <div className="view-all-container">
+            <Button onClick={() => navigate('/catalog')}>View all products</Button>
+          </div>
+        </div>
         <div className="featured-products-grid">
           {featuredProducts.map(product => (
             <ProductCard key={product.id} {...toCardAdapter(product)} />
           ))}
         </div>
-        <div className="view-all-container">
-          <Button onClick={() => navigate('/catalog')}>View all products</Button>
-        </div>
       </section>
 
-      <section className="section">
-        <h2 className="section-title">Our Flavors</h2>
-        <p>
-          From classic vanilla and rich chocolate to vibrant raspberry and earthy pistachio —
-          discover flavors for every mood. Try our surprise assortment for something new!
-        </p>
-        <div className="flavor-grid">
+      <section className="section flavors">
+        <h2 className="section-title">Try our surprise assortment for something new!</h2>
+        <div className="flavor-flex">
           {flavors.map((flavor, index) => (
             <div key={index} className="flavor-card">
               <h3>{flavor.name}</h3>
@@ -91,22 +95,6 @@ const Main = () => {
           Naturally gluten-free and elegantly packaged, our macarons are made to delight. Each box
           is carefully crafted to ensure your gift arrives in perfect condition.
         </p>
-      </section>
-
-      <section className="section">
-        <h2 className="section-title">What Our Customers Say</h2>
-        <blockquote className="quote">
-          "I never knew macarons could taste this good! The texture is perfect, and the flavors are
-          absolutely divine. Will definitely order again!"
-          <br />
-          <strong>— Anna, London</strong>
-        </blockquote>
-        <blockquote className="quote">
-          "The packaging is beautiful, and the macarons arrived fresh and perfect. A wonderful gift
-          that made my friend's day!"
-          <br />
-          <strong>— Michael, Manchester</strong>
-        </blockquote>
       </section>
     </div>
   );
