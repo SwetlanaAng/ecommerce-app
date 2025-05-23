@@ -30,7 +30,6 @@ export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = ({
   handleSubmit,
 }) => {
   const onSubmit = () => {
-    console.log('close');
     if (onSuccess) {
       onSuccess();
     }

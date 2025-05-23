@@ -15,6 +15,7 @@ type EditAddressProps = {
   isDisabled: boolean;
   addressData: Address;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onDefaultAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   register: UseFormRegister<EditAddressModal>;
   errors: FieldErrors<EditAddressModal>;
   onSuccess?: () => void;
@@ -30,6 +31,7 @@ export const EditAddressesContent = ({
   register,
   errors,
   onSuccess,
+  onDefaultAddressChange,
 }: EditAddressProps) => {
   console.log(id);
   const onSubmit = () => {
@@ -49,7 +51,7 @@ export const EditAddressesContent = ({
           type={addressType}
           isDisabled={isDisabled}
           onAddressChange={onChange}
-          onDefaultAddressChange={onChange}
+          onDefaultAddressChange={onDefaultAddressChange}
           register={register}
           errors={errors}
         ></AddressForm>

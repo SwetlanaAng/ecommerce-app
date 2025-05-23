@@ -44,6 +44,8 @@ export const AddressBox = ({
     formDataEditBilling,
     formDataEditShipping,
     handleSubmitEdit,
+    handleBillingChange,
+    handleShippingChange,
   } = useEditAddressForm(addressData);
   return (
     <>
@@ -84,6 +86,9 @@ export const AddressBox = ({
             isDisabled={isSubmittingEdit}
             onChange={
               addressType === 'billing' ? handleBillingChangeEdit : handleShippingChangeEdit
+            }
+            onDefaultAddressChange={
+              addressType === 'billing' ? handleBillingChange : handleShippingChange
             }
             register={registerEdit}
             errors={errorsEdit}

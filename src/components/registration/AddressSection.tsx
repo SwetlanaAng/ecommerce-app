@@ -4,6 +4,7 @@ import { AddressData } from '../../types/address.types';
 import Input from '../input/Input';
 import AddressForm from '../address/AddressForm';
 import { FormFields } from '../../schemas/signInSchema';
+import { EditAddressModal } from '../../schemas/aditAddressSchema';
 
 interface AddressSectionProps {
   addressData: AddressData;
@@ -12,7 +13,7 @@ interface AddressSectionProps {
   onAddressChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onDefaultAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSameAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  register: UseFormRegister<FormFields>;
+  register: UseFormRegister<FormFields | EditAddressModal>;
   errors: FieldErrors<FormFields>;
 }
 
