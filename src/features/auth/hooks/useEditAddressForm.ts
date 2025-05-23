@@ -100,23 +100,23 @@ export const useEditAddressForm = (data?: Address) => {
 
   const handleShippingChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
+      const { name, checked } = e.target;
       setFormShippingData(prev => ({
         ...prev,
-        [name]: value,
+        [name]: checked,
       }));
-      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
+      setValue(name as keyof EditAddressModal, checked, { shouldValidate: true });
     },
     [setValue]
   );
   const handleBillingChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
+      const { name, checked } = e.target;
       setFormBillingData(prev => ({
         ...prev,
-        [name]: value,
+        [name]: checked,
       }));
-      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
+      setValue(name as keyof EditAddressModal, checked, { shouldValidate: true });
     },
     [setValue]
   );

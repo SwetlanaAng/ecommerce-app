@@ -8,6 +8,7 @@ import AddressForm from '../../../address/AddressForm';
 interface AddNewAddressFormProps {
   formData: EditAddress;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onDefaultAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isDisabled: boolean;
   register: UseFormRegister<EditAddressModal>;
   errors: FieldErrors<EditAddressModal>;
@@ -23,6 +24,7 @@ export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = ({
   formData,
   isDisabled,
   onChange,
+  onDefaultAddressChange,
   register,
   errors,
   type,
@@ -47,7 +49,7 @@ export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = ({
           type={type}
           isDisabled={isDisabled}
           onAddressChange={onChange}
-          onDefaultAddressChange={onChange}
+          onDefaultAddressChange={onDefaultAddressChange}
           register={register}
           errors={errors}
         ></AddressForm>

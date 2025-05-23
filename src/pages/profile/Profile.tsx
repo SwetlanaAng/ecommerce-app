@@ -76,6 +76,8 @@ const Profile: React.FC = () => {
     handleBillingChangeEdit,
     isSubmittingEdit,
     handleSubmitEdit,
+    handleBillingChange,
+    handleShippingChange,
   } = useEditAddressForm();
 
   function getModalChild() {
@@ -118,6 +120,9 @@ const Profile: React.FC = () => {
           isDisabled={isSubmittingEdit}
           type={modalContent}
           onChange={modalContent === 'billing' ? handleBillingChangeEdit : handleShippingChangeEdit}
+          onDefaultAddressChange={
+            modalContent === 'billing' ? handleBillingChange : handleShippingChange
+          }
           errors={errorsEdit}
           register={registerEdit}
           handleSubmit={handleSubmitEdit}
