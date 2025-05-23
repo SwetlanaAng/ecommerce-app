@@ -11,7 +11,10 @@ import { EditPersonalInformationContent } from '../../components/modal/modal-con
 import { useChangePasswordForm } from '../../features/auth/hooks/useChangePasswordForm';
 import { useEditPersonalInfoForm } from '../../features/auth/hooks/useEditPersonalInfoForm';
 import { AddNewAddressContent } from '../../components/modal/modal-content/add-address/AddNewAddressContent';
-import { useEditAddressForm } from '../../features/auth/hooks/useEditAddressForm';
+import {
+  useBillingAddressForm,
+  useShippingAddressForm,
+} from '../../features/auth/hooks/useEditAddressForm';
 
 const Profile: React.FC = () => {
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -67,18 +70,8 @@ const Profile: React.FC = () => {
     handleSubmit: handleSubmitPersonal,
   } = useEditPersonalInfoForm();
 
-  const {
-    formDataEditBilling,
-    formDataEditShipping,
-    errorsEdit,
-    registerEdit,
-    handleShippingChangeEdit,
-    handleBillingChangeEdit,
-    isSubmittingEdit,
-    handleSubmitEdit,
-    handleBillingChange,
-    handleShippingChange,
-  } = useEditAddressForm();
+  const billingForm = useBillingAddressForm();
+  const shippingForm = useShippingAddressForm();
 
   function getModalChild() {
     if (modalContent === 'changePassword') {
@@ -107,29 +100,47 @@ const Profile: React.FC = () => {
           errors={errorsPersonal}
           handleSubmit={handleSubmitPersonal}
           onSuccess={() => {
-            setModalOpen(false); // Закрыть модальное окно
-            refreshProfileData(); // Обновить данные профиля
+            setModalOpen(false);
+            refreshProfileData();
           }}
         ></EditPersonalInformationContent>
       );
     }
-    if (modalContent === 'billing' || modalContent === 'shipping') {
+    if (modalContent === 'billing') {
       return (
         <AddNewAddressContent
-          formData={modalContent === 'billing' ? formDataEditBilling : formDataEditShipping}
-          isDisabled={isSubmittingEdit}
-          type={modalContent}
-          onChange={modalContent === 'billing' ? handleBillingChangeEdit : handleShippingChangeEdit}
-          onDefaultAddressChange={
-            modalContent === 'billing' ? handleBillingChange : handleShippingChange
-          }
-          errors={errorsEdit}
-          register={registerEdit}
-          handleSubmit={handleSubmitEdit}
+          formData={billingForm.formData}
+          isDisabled={billingForm.isSubmitting}
+          type="billing"
+          onChange={billingForm.handleChange}
+          onDefaultAddressChange={billingForm.handleChange}
+          register={billingForm.register}
+          errors={billingForm.errors}
+          handleSubmit={billingForm.handleSubmit}
           onSuccess={() => {
             setModalOpen(false);
+            refreshProfileData();
           }}
-        ></AddNewAddressContent>
+        />
+      );
+    }
+
+    if (modalContent === 'shipping') {
+      return (
+        <AddNewAddressContent
+          formData={shippingForm.formData}
+          isDisabled={shippingForm.isSubmitting}
+          type="shipping"
+          onChange={shippingForm.handleChange}
+          onDefaultAddressChange={shippingForm.handleChange}
+          register={shippingForm.register}
+          errors={shippingForm.errors}
+          handleSubmit={shippingForm.handleSubmit}
+          onSuccess={() => {
+            setModalOpen(false);
+            refreshProfileData();
+          }}
+        />
       );
     }
   }

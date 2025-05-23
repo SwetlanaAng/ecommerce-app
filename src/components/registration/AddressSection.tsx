@@ -2,9 +2,10 @@ import React from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 import { AddressData } from '../../types/address.types';
 import Input from '../input/Input';
-import AddressForm from '../address/AddressForm';
 import { FormFields } from '../../schemas/signInSchema';
-import { EditAddressModal } from '../../schemas/aditAddressSchema';
+import { BillingAddressModal, ShippingAddressModal } from '../../schemas/aditAddressSchema';
+import BillingAddressForm from '../address/BillingAddressForm';
+import ShippingAddressForm from '../address/ShippingAddressForm';
 
 interface AddressSectionProps {
   addressData: AddressData;
@@ -13,7 +14,7 @@ interface AddressSectionProps {
   onAddressChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onDefaultAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSameAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  register: UseFormRegister<FormFields | EditAddressModal>;
+  register: UseFormRegister<FormFields>;
   errors: FieldErrors<FormFields>;
 }
 
@@ -27,17 +28,30 @@ const AddressSection: React.FC<AddressSectionProps> = ({
   register,
   errors,
 }) => {
+  const billingFormData: BillingAddressModal = {
+    billing_city: addressData.billingAddress?.city || '',
+    billing_street: addressData.billingAddress?.street || '',
+    billing_postalCode: addressData.billingAddress?.postalCode || '',
+    billing_isDefault: addressData.billingAddress?.isDefault || false,
+  };
+
+  const shippingFormData: ShippingAddressModal = {
+    shipping_city: addressData.shippingAddress?.city || '',
+    shipping_street: addressData.shippingAddress?.street || '',
+    shipping_postalCode: addressData.shippingAddress?.postalCode || '',
+    shipping_isDefault: addressData.shippingAddress?.isDefault || false,
+  };
+
   return (
     <>
       <h2>Billing Address</h2>
-      <AddressForm
-        type="billing"
-        address={addressData.billingAddress}
+      <BillingAddressForm
+        formData={billingFormData}
         isDisabled={isDisabled}
         onAddressChange={onAddressChange}
         onDefaultAddressChange={onDefaultAddressChange}
-        register={register}
-        errors={errors}
+        register={register as unknown as UseFormRegister<BillingAddressModal>}
+        errors={errors as unknown as FieldErrors<BillingAddressModal>}
       />
 
       <Input
@@ -55,14 +69,13 @@ const AddressSection: React.FC<AddressSectionProps> = ({
       {!sameAsShipping && (
         <>
           <h2>Shipping Address</h2>
-          <AddressForm
-            type="shipping"
-            address={addressData.shippingAddress}
+          <ShippingAddressForm
+            formData={shippingFormData}
             isDisabled={isDisabled || sameAsShipping}
             onAddressChange={onAddressChange}
             onDefaultAddressChange={onDefaultAddressChange}
-            register={register}
-            errors={errors}
+            register={register as unknown as UseFormRegister<ShippingAddressModal>}
+            errors={errors as unknown as FieldErrors<ShippingAddressModal>}
           />
         </>
       )}

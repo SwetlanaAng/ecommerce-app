@@ -1,138 +1,116 @@
 import { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EditAddress, Address } from '../../../types/address.types';
-import { EditAddressModal, EditAddressSchema } from '../../../schemas/aditAddressSchema';
+import { Address } from '../../../types/address.types';
+import {
+  BillingAddressSchema,
+  ShippingAddressSchema,
+  BillingAddressModal,
+  ShippingAddressModal,
+} from '../../../schemas/aditAddressSchema';
 
-export const useEditAddressForm = (data?: Address) => {
-  let initialShippingFormData: EditAddress,
-    initialBillingFormData: EditAddress,
-    initialValues: EditAddress;
+export const useBillingAddressForm = (data?: Address) => {
+  const initialFormData: BillingAddressModal = {
+    billing_city: data?.city || '',
+    billing_street: data?.street || '',
+    billing_postalCode: data?.postalCode || '',
+    billing_isDefault: data?.isDefault || false,
+  };
 
-  if (data) {
-    initialShippingFormData = {
-      shipping_country: data.country,
-      shipping_city: data.city,
-      shipping_street: data.street,
-      shipping_postalCode: data.postalCode,
-      shipping_isDefault: data.isDefault,
-    };
-    initialBillingFormData = {
-      billing_country: data.country,
-      billing_city: data.city,
-      billing_street: data.street,
-      billing_postalCode: data.postalCode,
-      billing_isDefault: data.isDefault,
-    };
-    initialValues = {
-      billing_city: data.city,
-      billing_street: data.street,
-      billing_postalCode: data.postalCode,
-      billing_isDefault: data.isDefault,
-      shipping_city: data.city,
-      shipping_street: data.street,
-      shipping_postalCode: data.postalCode,
-      shipping_isDefault: data.isDefault,
-    };
-  } else {
-    initialShippingFormData = {
-      shipping_country: '',
-      shipping_city: '',
-      shipping_street: '',
-      shipping_postalCode: '',
-      shipping_isDefault: false,
-    };
-    initialBillingFormData = {
-      billing_country: '',
-      billing_city: '',
-      billing_street: '',
-      billing_postalCode: '',
-      billing_isDefault: false,
-    };
-    initialValues = {
-      billing_city: '',
-      billing_street: '',
-      billing_postalCode: '',
-      billing_isDefault: false,
-      shipping_city: '',
-      shipping_street: '',
-      shipping_postalCode: '',
-      shipping_isDefault: false,
-    };
-  }
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
     setValue,
-  } = useForm<EditAddressModal>({
-    resolver: zodResolver(EditAddressSchema),
+  } = useForm<BillingAddressModal>({
+    resolver: zodResolver(BillingAddressSchema),
     mode: 'onChange',
-    defaultValues: initialValues,
+    defaultValues: initialFormData,
   });
 
-  const [formBillingData, setFormBillingData] = useState(initialBillingFormData);
-  const [formShippingData, setFormShippingData] = useState(initialShippingFormData);
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<BillingAddressModal>(initialFormData);
 
-  const handleShippingAddressChange = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
-      setFormShippingData(prev => ({
-        ...prev,
-        [name]: value,
-      }));
-      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
-    },
-    [setValue]
-  );
-  const handleBillingAddressChange = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const { name, value } = e.target;
-      setFormBillingData(prev => ({
-        ...prev,
-        [name]: value,
-      }));
-      setValue(name as keyof EditAddressModal, value, { shouldValidate: true });
-    },
-    [setValue]
-  );
+      const newValue =
+        e.target instanceof HTMLInputElement && e.target.type === 'checkbox'
+          ? e.target.checked
+          : value;
 
-  const handleShippingChange = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, checked } = e.target;
-      setFormShippingData(prev => ({
+      setFormData(prev => ({
         ...prev,
-        [name]: checked,
+        [name]: newValue,
       }));
-      setValue(name as keyof EditAddressModal, checked, { shouldValidate: true });
-    },
-    [setValue]
-  );
-  const handleBillingChange = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, checked } = e.target;
-      setFormBillingData(prev => ({
-        ...prev,
-        [name]: checked,
-      }));
-      setValue(name as keyof EditAddressModal, checked, { shouldValidate: true });
+
+      setValue(
+        name as keyof BillingAddressModal,
+        newValue as BillingAddressModal[keyof BillingAddressModal],
+        { shouldValidate: true }
+      );
     },
     [setValue]
   );
 
   return {
-    formDataEditBilling: formBillingData,
-    formDataEditShipping: formShippingData,
-    isLoading,
-    errorsEdit: errors,
-    isSubmittingEdit: isSubmitting,
-    registerEdit: register,
-    handleSubmitEdit: handleSubmit,
-    handleBillingChange,
-    handleShippingChange,
-    handleBillingChangeEdit: handleBillingAddressChange,
-    handleShippingChangeEdit: handleShippingAddressChange,
-    setIsLoading,
+    formData,
+    handleChange,
+    register,
+    handleSubmit,
+    errors,
+    isSubmitting,
+  };
+};
+
+export const useShippingAddressForm = (data?: Address) => {
+  const initialFormData: ShippingAddressModal = {
+    shipping_city: data?.city || '',
+    shipping_street: data?.street || '',
+    shipping_postalCode: data?.postalCode || '',
+    shipping_isDefault: data?.isDefault || false,
+  };
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+    setValue,
+  } = useForm<ShippingAddressModal>({
+    resolver: zodResolver(ShippingAddressSchema),
+    mode: 'onChange',
+    defaultValues: initialFormData,
+  });
+
+  const [formData, setFormData] = useState<ShippingAddressModal>(initialFormData);
+
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      const newValue =
+        e.target instanceof HTMLInputElement && e.target.type === 'checkbox'
+          ? e.target.checked
+          : value;
+
+      setFormData(prev => ({
+        ...prev,
+        [name]: newValue,
+      }));
+
+      setValue(
+        name as keyof ShippingAddressModal,
+        newValue as ShippingAddressModal[keyof ShippingAddressModal],
+        { shouldValidate: true }
+      );
+    },
+    [setValue]
+  );
+
+  return {
+    formData,
+    handleChange,
+    register,
+    handleSubmit,
+    errors,
+    isSubmitting,
   };
 };

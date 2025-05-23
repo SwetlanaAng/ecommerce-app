@@ -4,23 +4,20 @@ import { EditAddress } from '../../types/address.types';
 import Input from '../input/Input';
 import Select from '../select/Select';
 import { countryId } from '../../services/registration.service';
-import { FormFields } from '../../schemas/signInSchema';
-import { EditAddressModal } from '../../schemas/aditAddressSchema';
+import { BillingAddressModal } from '../../schemas/aditAddressSchema';
 
-interface AddressFormProps {
+interface BillingAddressFormProps {
   formData?: EditAddress;
-  type: 'billing' | 'shipping';
   address?: EditAddress;
   isDisabled: boolean;
   onAddressChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onDefaultAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  register: UseFormRegister<FormFields | EditAddressModal>;
-  errors: FieldErrors<FormFields | EditAddressModal>;
+  register: UseFormRegister<BillingAddressModal>;
+  errors: FieldErrors<BillingAddressModal>;
 }
 
-const AddressForm: React.FC<AddressFormProps> = ({
+const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
   formData,
-  type,
   address,
   isDisabled,
   onAddressChange,
@@ -34,8 +31,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
         labelText="Country"
         className="select"
         onChange={onAddressChange}
-        name={`${type}_country`}
-        value={address ? address[`${type}_country`] : formData ? formData[`${type}_country`] : ''}
+        name="billing_country"
+        value={address ? address.billing_country : formData ? formData.billing_country : ''}
         required={true}
         disabled={isDisabled}
         optionsList={countryId}
@@ -44,60 +41,58 @@ const AddressForm: React.FC<AddressFormProps> = ({
 
       <Input
         labelText="City"
-        name={`${type}_city`}
-        id={`${type}_city`}
+        name="billing_city"
+        id="billing_city"
         onChange={onAddressChange}
         placeholder="New York"
-        value={address ? address[`${type}_city`] : formData ? formData[`${type}_city`] : ''}
+        value={address ? address.billing_city : formData ? formData.billing_city : ''}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_city`]}
+        error={errors.billing_city}
         autoComplete="address-level2"
       />
 
       <Input
         labelText="Street"
-        name={`${type}_street`}
-        id={`${type}_street`}
+        name="billing_street"
+        id="billing_street"
         onChange={onAddressChange}
         placeholder="123 Main St"
-        value={address ? address[`${type}_street`] : formData ? formData[`${type}_street`] : ''}
+        value={address ? address.billing_street : formData ? formData.billing_street : ''}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_street`]}
+        error={errors.billing_street}
         autoComplete="street-address"
       />
 
       <Input
         labelText="Postal Code"
-        name={`${type}_postalCode`}
-        id={`${type}_postalCode`}
+        name="billing_postalCode"
+        id="billing_postalCode"
         onChange={onAddressChange}
         placeholder="10001"
-        value={
-          address ? address[`${type}_postalCode`] : formData ? formData[`${type}_postalCode`] : ''
-        }
+        value={address ? address.billing_postalCode : formData ? formData.billing_postalCode : ''}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_postalCode`]}
+        error={errors.billing_postalCode}
         autoComplete="postal-code"
       />
 
       <Input
-        labelText={`Set as default ${type} address for future orders`}
+        labelText="Set as default billing address for future orders"
         type="checkbox"
-        id={`default_${type}`}
-        name={`${type}_isDefault`}
+        id="default_billing"
+        name="billing_isDefault"
         checked={
-          address ? address[`${type}_isDefault`] : formData ? formData[`${type}_isDefault`] : false
+          address ? address.billing_isDefault : formData ? formData.billing_isDefault : false
         }
         onChange={onDefaultAddressChange}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_isDefault`]}
+        error={errors.billing_isDefault}
       />
     </>
   );
 };
 
-export default AddressForm;
+export default BillingAddressForm;

@@ -3,7 +3,10 @@ import Button from '../button/Button';
 import { Modal } from '../modal/Modal';
 import { EditAddressesContent } from '../modal/modal-content/edit-addresses/EditAddressesContent';
 import { InfoBox } from '../profile-info-box/InfoBox';
-import { useEditAddressForm } from '../../features/auth/hooks/useEditAddressForm';
+import {
+  useBillingAddressForm,
+  useShippingAddressForm,
+} from '../../features/auth/hooks/useEditAddressForm';
 import { Address } from '../../types/address.types';
 
 interface AddressBoxProps {
@@ -35,18 +38,50 @@ export const AddressBox = ({
     postalCode: postalCode,
     isDefault: defaultId === addressId,
   };
-  const {
-    errorsEdit,
-    isSubmittingEdit,
-    registerEdit,
-    handleBillingChangeEdit,
-    handleShippingChangeEdit,
-    formDataEditBilling,
-    formDataEditShipping,
-    handleSubmitEdit,
-    handleBillingChange,
-    handleShippingChange,
-  } = useEditAddressForm(addressData);
+
+  const billingForm = useBillingAddressForm(addressData);
+  const shippingForm = useShippingAddressForm(addressData);
+
+  const renderEditContent = () => {
+    if (addressType === 'billing') {
+      return (
+        <EditAddressesContent
+          addressType="billing"
+          formData={billingForm.formData}
+          handleSubmit={billingForm.handleSubmit}
+          addressData={addressData}
+          id={addressNumber}
+          isDisabled={billingForm.isSubmitting}
+          onChange={billingForm.handleChange}
+          onDefaultAddressChange={billingForm.handleChange}
+          register={billingForm.register}
+          errors={billingForm.errors}
+          onSuccess={() => {
+            setModalOpen(false);
+          }}
+        />
+      );
+    } else {
+      return (
+        <EditAddressesContent
+          addressType="shipping"
+          formData={shippingForm.formData}
+          handleSubmit={shippingForm.handleSubmit}
+          addressData={addressData}
+          id={addressNumber}
+          isDisabled={shippingForm.isSubmitting}
+          onChange={shippingForm.handleChange}
+          onDefaultAddressChange={shippingForm.handleChange}
+          register={shippingForm.register}
+          errors={shippingForm.errors}
+          onSuccess={() => {
+            setModalOpen(false);
+          }}
+        />
+      );
+    }
+  };
+
   return (
     <>
       <div className="address-information-container">
@@ -77,25 +112,7 @@ export const AddressBox = ({
         <Modal
           isOpen={modalIsOpen}
           onClose={() => setModalOpen(false)}
-          children=<EditAddressesContent
-            addressType={addressType}
-            formData={addressType === 'billing' ? formDataEditBilling : formDataEditShipping}
-            handleSubmit={handleSubmitEdit}
-            addressData={addressData}
-            id={addressNumber}
-            isDisabled={isSubmittingEdit}
-            onChange={
-              addressType === 'billing' ? handleBillingChangeEdit : handleShippingChangeEdit
-            }
-            onDefaultAddressChange={
-              addressType === 'billing' ? handleBillingChange : handleShippingChange
-            }
-            register={registerEdit}
-            errors={errorsEdit}
-            onSuccess={() => {
-              setModalOpen(false);
-            }}
-          ></EditAddressesContent>
+          children={renderEditContent()}
         ></Modal>
         {defaultId === addressId && (
           <div className="default">{`This address is set as default ${addressType} address`} </div>
