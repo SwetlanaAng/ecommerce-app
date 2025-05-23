@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { streetSchema, citySchema, postalCodeSchema } from './commonSchemas';
 
-export const AddAddressSchema = z.object({
+export const EditAddressSchema = z.object({
   billing_city: citySchema,
   billing_street: streetSchema,
   billing_postalCode: postalCodeSchema,
@@ -12,4 +12,4 @@ export const AddAddressSchema = z.object({
   shipping_isDefault: z.boolean(),
 });
 
-export type AddAddressModal = z.infer<typeof AddAddressSchema>;
+export type EditAddressModal = z.infer<typeof EditAddressSchema>;

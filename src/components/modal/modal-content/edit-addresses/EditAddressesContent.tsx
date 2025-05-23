@@ -1,15 +1,13 @@
 import Button from '../../../button/Button';
 import './EditAddressesContent.css';
 import { FieldErrors, SubmitHandler, UseFormRegister } from 'react-hook-form';
-import Select from '../../../select/Select';
-import { countryId } from '../../../../services/registration.service';
-import Input from '../../../input/Input';
-import { EditAddressModal } from '../../../../schemas/editAddressSchema';
-import { Address } from '../../../../types/address.types';
+import { EditAddress, Address } from '../../../../types/address.types';
+import AddressForm from '../../../address/AddressForm';
+import { EditAddressModal } from '../../../../schemas/aditAddressSchema';
 
 type EditAddressProps = {
   id: number;
-  formData: Address;
+  formData: EditAddress;
   handleSubmit?: (
     onSubmit: SubmitHandler<EditAddressModal>
   ) => (e: React.BaseSyntheticEvent) => void;
@@ -46,63 +44,15 @@ export const EditAddressesContent = ({
         className={`edit-${addressType}-form`}
         onSubmit={handleSubmit ? handleSubmit(onSubmit) : e => e.preventDefault()}
       >
-        <>
-          <Select
-            labelText="Country"
-            className="select"
-            name={`${addressType}_country`}
-            value={formData.country}
-            onChange={onChange}
-            required={true}
-            disabled={isDisabled}
-            optionsList={countryId}
-            autoComplete="country"
-          />
-          <Input
-            labelText="City"
-            name={`city`}
-            id={`${addressType}_city`}
-            value={formData.city}
-            onChange={onChange}
-            disabled={isDisabled}
-            register={register}
-            error={errors[`city`]}
-            autoComplete="address-level2"
-          ></Input>
-          <Input
-            labelText="Street"
-            name={`street`}
-            id={`${addressType}_street`}
-            value={formData.street}
-            onChange={onChange}
-            disabled={isDisabled}
-            register={register}
-            error={errors[`street`]}
-            autoComplete="street-address"
-          ></Input>
-          <Input
-            labelText="Postal Code"
-            name={`postalCode`}
-            value={formData.postalCode}
-            onChange={onChange}
-            id={`${addressType}_postalCode`}
-            disabled={isDisabled}
-            register={register}
-            error={errors[`postalCode`]}
-            autoComplete="postal-code"
-          ></Input>
-          <Input
-            labelText={`Set as default ${addressType} address for future orders`}
-            type="checkbox"
-            name={`isDefault`}
-            id={`${addressType}_isDefault`}
-            onChange={onChange}
-            disabled={isDisabled}
-            register={register}
-            error={errors[`isDefault`]}
-            checked={formData.isDefault ? true : false}
-          ></Input>
-        </>
+        <AddressForm
+          formData={formData}
+          type={addressType}
+          isDisabled={isDisabled}
+          onAddressChange={onChange}
+          onDefaultAddressChange={onChange}
+          register={register}
+          errors={errors}
+        ></AddressForm>
         <Button className="submit-button " type="submit">
           Save changes
         </Button>

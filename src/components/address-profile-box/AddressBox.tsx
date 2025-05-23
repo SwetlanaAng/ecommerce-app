@@ -35,8 +35,16 @@ export const AddressBox = ({
     postalCode: postalCode,
     isDefault: defaultId === addressId,
   };
-  const { errors, isSubmitting, register, handleChange, formData, handleSubmit } =
-    useEditAddressForm(addressData);
+  const {
+    errorsEdit,
+    isSubmittingEdit,
+    registerEdit,
+    handleBillingChangeEdit,
+    handleShippingChangeEdit,
+    formDataEditBilling,
+    formDataEditShipping,
+    handleSubmitEdit,
+  } = useEditAddressForm(addressData);
   return (
     <>
       <div className="address-information-container">
@@ -69,14 +77,16 @@ export const AddressBox = ({
           onClose={() => setModalOpen(false)}
           children=<EditAddressesContent
             addressType={addressType}
-            formData={formData}
-            handleSubmit={handleSubmit}
+            formData={addressType === 'billing' ? formDataEditBilling : formDataEditShipping}
+            handleSubmit={handleSubmitEdit}
             addressData={addressData}
             id={addressNumber}
-            isDisabled={isSubmitting}
-            onChange={handleChange}
-            register={register}
-            errors={errors}
+            isDisabled={isSubmittingEdit}
+            onChange={
+              addressType === 'billing' ? handleBillingChangeEdit : handleShippingChangeEdit
+            }
+            register={registerEdit}
+            errors={errorsEdit}
             onSuccess={() => {
               setModalOpen(false);
             }}

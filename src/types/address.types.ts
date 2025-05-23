@@ -7,7 +7,7 @@ export interface Address {
   isDefault: boolean;
 }
 
-export interface AddAddress {
+export interface EditAddress {
   billing_country?: string;
   billing_city?: string;
   billing_street?: string;
@@ -18,6 +18,11 @@ export interface AddAddress {
   shipping_street?: string;
   shipping_postalCode?: string;
   shipping_isDefault?: boolean;
+  country?: string;
+  city?: string;
+  street?: string;
+  postalCode?: string;
+  isDefault?: boolean;
 }
 
 export interface AddressData {

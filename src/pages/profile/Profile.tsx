@@ -11,7 +11,7 @@ import { EditPersonalInformationContent } from '../../components/modal/modal-con
 import { useChangePasswordForm } from '../../features/auth/hooks/useChangePasswordForm';
 import { useEditPersonalInfoForm } from '../../features/auth/hooks/useEditPersonalInfoForm';
 import { AddNewAddressContent } from '../../components/modal/modal-content/add-address/AddNewAddressContent';
-import { useNewAddressForm } from '../../features/auth/hooks/useNewAddressForm';
+import { useEditAddressForm } from '../../features/auth/hooks/useEditAddressForm';
 
 const Profile: React.FC = () => {
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -68,15 +68,15 @@ const Profile: React.FC = () => {
   } = useEditPersonalInfoForm();
 
   const {
-    formDataAddBilling,
-    formDataAddShipping,
-    errorsAdd,
-    registerAdd,
-    handleShippingChangeAdd,
-    handleBillingChangeAdd,
-    isSubmittingAdd,
-    handleSubmitAdd,
-  } = useNewAddressForm();
+    formDataEditBilling,
+    formDataEditShipping,
+    errorsEdit,
+    registerEdit,
+    handleShippingChangeEdit,
+    handleBillingChangeEdit,
+    isSubmittingEdit,
+    handleSubmitEdit,
+  } = useEditAddressForm();
 
   function getModalChild() {
     if (modalContent === 'changePassword') {
@@ -114,13 +114,13 @@ const Profile: React.FC = () => {
     if (modalContent === 'billing' || modalContent === 'shipping') {
       return (
         <AddNewAddressContent
-          formData={modalContent === 'billing' ? formDataAddBilling : formDataAddShipping}
-          isDisabled={isSubmittingAdd}
+          formData={modalContent === 'billing' ? formDataEditBilling : formDataEditShipping}
+          isDisabled={isSubmittingEdit}
           type={modalContent}
-          onChange={modalContent === 'billing' ? handleBillingChangeAdd : handleShippingChangeAdd}
-          errors={errorsAdd}
-          register={registerAdd}
-          handleSubmit={handleSubmitAdd}
+          onChange={modalContent === 'billing' ? handleBillingChangeEdit : handleShippingChangeEdit}
+          errors={errorsEdit}
+          register={registerEdit}
+          handleSubmit={handleSubmitEdit}
           onSuccess={() => {
             setModalOpen(false);
           }}
