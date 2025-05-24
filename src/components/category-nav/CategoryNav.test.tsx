@@ -10,18 +10,18 @@ const mockUseAppContext = useAppContext as jest.MockedFunction<typeof useAppCont
 const mockCategories: CategoryWithChildren[] = [
   {
     id: 'cat-1',
-    name: { 'en-US': 'Fruits' },
+    name: { 'en-US': 'Packaging' },
     children: [
       {
         id: 'cat-1-1',
-        name: { 'en-US': 'Apples' },
+        name: { 'en-US': '6-pack' },
         children: [],
       },
     ],
   },
   {
     id: 'cat-2',
-    name: { 'en-US': 'Vegetables' },
+    name: { 'en-US': 'Special' },
     children: [],
   },
 ];
@@ -48,8 +48,8 @@ describe('CategoryNav', () => {
       error: null,
     });
     render(<CategoryNav onSelectCategory={() => {}} />);
-    expect(screen.getByText('Fruits')).toBeInTheDocument();
-    expect(screen.getByText('Vegetables')).toBeInTheDocument();
+    expect(screen.getByText('Packaging')).toBeInTheDocument();
+    expect(screen.getByText('Special')).toBeInTheDocument();
   });
 
   it('calls onSelectCategory when a category is clicked', () => {
@@ -62,8 +62,8 @@ describe('CategoryNav', () => {
       error: null,
     });
     render(<CategoryNav onSelectCategory={onSelectCategory} />);
-    fireEvent.click(screen.getByText('Vegetables'));
-    expect(onSelectCategory).toHaveBeenCalledWith('cat-2');
+    fireEvent.click(screen.getByText('Packaging'));
+    expect(onSelectCategory).toHaveBeenCalledWith('cat-1');
   });
 
   it('expands and shows subcategories on toggle', () => {
@@ -77,7 +77,7 @@ describe('CategoryNav', () => {
     render(<CategoryNav onSelectCategory={() => {}} />);
     const expandButton = screen.getByRole('button', { name: /expand category/i });
     fireEvent.click(expandButton);
-    expect(screen.getByText('Apples')).toBeInTheDocument();
+    expect(screen.getByText('6-pack')).toBeInTheDocument();
   });
 
   it('highlights selected category', () => {
@@ -89,6 +89,6 @@ describe('CategoryNav', () => {
       error: null,
     });
     render(<CategoryNav onSelectCategory={() => {}} selectedCategoryId="cat-1" />);
-    expect(screen.getByText('Fruits')).toHaveClass('selected');
+    expect(screen.getByText('Packaging')).toHaveClass('selected');
   });
 });

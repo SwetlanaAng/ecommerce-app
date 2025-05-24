@@ -11,12 +11,7 @@ const mockedUseAuth = useAuth as jest.Mock;
 
 const renderHeader = () => {
   return render(
-    <Router
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
+    <Router>
       <Header />
     </Router>
   );
