@@ -1,28 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { getCategoryHierarchy } from '../../../services/category.service';
 import { getProductFlavors, getPriceRange } from '../../../services/products.service';
 import { CategoryWithChildren } from '../../../types/interfaces';
-
-interface AppContextType {
-  categories: CategoryWithChildren[];
-  availableFlavors: string[];
-  priceRange: {
-    min: number;
-    max: number;
-  };
-  isLoading: boolean;
-  error: string | null;
-}
-
-const AppContext = createContext<AppContextType | undefined>(undefined);
-
-export const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error('useAppContext must be used within an AppProvider');
-  }
-  return context;
-};
+import { AppContext, AppContextType } from './AppContextTypes';
 
 interface AppProviderProps {
   children: ReactNode;
@@ -59,7 +39,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     fetchAppData();
   }, []);
 
-  const value = {
+  const value: AppContextType = {
     categories,
     availableFlavors,
     priceRange,

@@ -6,6 +6,7 @@ export interface AuthContextType {
   user: Customer | null;
   login: (userData: Customer) => void;
   logout: () => void;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,6 +18,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<Customer | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -31,6 +33,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.removeItem('token');
       }
     }
+    setLoading(false);
   }, []);
 
   const login = (userData: Customer) => {
@@ -47,14 +50,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem('login');
   };
 
-  const value = {
-    isAuthenticated,
-    user,
-    login,
-    logout,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthContext;

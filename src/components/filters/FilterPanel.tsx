@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ProductFilters } from '../../types/interfaces';
 import Button from '../button/Button';
 import Input from '../input/Input';
-import { useAppContext } from '../../features/app/context/AppContext';
+import { useAppContext } from '../../features/app/hooks/useAppContext';
 import './FilterPanel.css';
 
 interface FilterPanelProps {

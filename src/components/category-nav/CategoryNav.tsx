@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CategoryWithChildren } from '../../types/interfaces';
-import { useAppContext } from '../../features/app/context/AppContext';
+import { useAppContext } from '../../features/app/hooks/useAppContext';
 import './CategoryNav.css';
 
 interface CategoryNavProps {
