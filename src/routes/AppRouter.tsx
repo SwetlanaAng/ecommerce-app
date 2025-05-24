@@ -6,7 +6,7 @@ import { AuthProvider } from '../features/auth/context/AuthContext';
 import { AppProvider } from '../features/app/context/AppContext';
 import AuthGuard from '../features/auth/guards/AuthGuard';
 import Loader from '../components/loader/Loader';
-
+import ScrollToTop from './ScrollToTop';
 const Main = lazy(() => import('../pages/main/Main'));
 const Login = lazy(() => import('../pages/login/Login'));
 const Register = lazy(() => import('../pages/register/Register'));
@@ -23,6 +23,7 @@ const AppRouter: React.FC = () => {
         v7_relativeSplatPath: true,
       }}
     >
+      <ScrollToTop />
       <AuthProvider>
         <AppProvider>
           <div className="app-container">
