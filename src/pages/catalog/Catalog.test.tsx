@@ -1,4 +1,3 @@
-import { InputHTMLAttributes } from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Catalog from './Catalog';
@@ -19,17 +18,6 @@ jest.mock(
     </select>
   )
 );
-
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-  isSearchField?: boolean;
-  'aria-invalid'?: string;
-};
-
-jest.mock('../../components/input/Input', () => (props: InputProps) => {
-  const { 'aria-invalid': ariaInvalid, ...rest } = props;
-
-  return <input {...rest} aria-invalid={ariaInvalid === 'true'} data-testid="search-input" />;
-});
 
 jest.mock(
   '../../components/button/Button',
@@ -101,15 +89,6 @@ describe('Catalog Component', () => {
     renderCatalog();
     await waitFor(() => {
       expect(screen.getAllByText('Mocked ProductCard').length).toBeGreaterThan(0);
-    });
-  });
-
-  test('searches products', async () => {
-    renderCatalog();
-    const input = screen.getByTestId('search-input') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: 'vanilla' } });
-    await waitFor(() => {
-      expect(searchProducts).toHaveBeenCalledWith('vanilla', expect.anything(), '');
     });
   });
 

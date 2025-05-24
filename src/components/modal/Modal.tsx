@@ -16,22 +16,24 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
+      document.body.style.overflow = 'hidden';
+
       requestAnimationFrame(() => setAnimationState('entering'));
       setTimeout(() => setAnimationState('entered'), 10);
-      document.body.style.overflow = 'hidden';
-    } else if (isVisible) {
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen && isVisible) {
       setAnimationState('exiting');
       const timeout = setTimeout(() => {
         setIsVisible(false);
-      }, 300);
-      document.body.style.overflow = 'auto';
-
-      return () => {
-        clearTimeout(timeout);
         document.body.style.overflow = 'auto';
-      };
+      }, 300);
+
+      return () => clearTimeout(timeout);
     }
-  }, [isOpen]);
+  }, [isOpen, isVisible]);
 
   const onWrapperClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target instanceof HTMLElement && event.target.classList.contains('modal-wrapper')) {

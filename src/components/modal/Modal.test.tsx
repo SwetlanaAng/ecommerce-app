@@ -48,11 +48,9 @@ describe('Modal', () => {
       </Modal>
     );
 
-    const closeButton =
-      screen.getByRole('button', { hidden: true }) ||
-      screen.getByText('', { selector: '.modal-close-button' });
-
+    const closeButton = screen.getByRole('button', { hidden: true });
     fireEvent.click(closeButton);
+
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
@@ -79,10 +77,11 @@ describe('Modal', () => {
 
     const content = screen.getByText('Modal Content');
     fireEvent.click(content);
+
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  it('unlocks body scroll and hides modal after exit animation when isOpen changes from true to false', () => {
+  it('unlocks body scroll and hides modal after exit animation', () => {
     const { rerender, container } = render(
       <Modal isOpen={true} onClose={onClose}>
         {modalContent}
@@ -90,6 +89,7 @@ describe('Modal', () => {
     );
 
     expect(document.body.style.overflow).toBe('hidden');
+    expect(screen.getByText('Modal Content')).toBeInTheDocument();
 
     rerender(
       <Modal isOpen={false} onClose={onClose}>
@@ -100,14 +100,11 @@ describe('Modal', () => {
     const modalDiv = container.querySelector('.modal');
     expect(modalDiv).toHaveClass('modal--exiting');
 
-    expect(document.body.style.overflow).toBe('auto');
-
-    expect(screen.getByText('Modal Content')).toBeInTheDocument();
-
     act(() => {
       jest.advanceTimersByTime(300);
     });
 
+    expect(document.body.style.overflow).toBe('auto');
     expect(container.firstChild).toBeNull();
   });
 });
