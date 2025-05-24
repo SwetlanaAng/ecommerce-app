@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { getProductById } from '../../services/product.service';
 import ProductDetailCard from '../../components/product/ProductDetailCard';
 import Loader from '../../components/loader/Loader';
+import Breadcrumb from '../../components/breadcrumbs/Breadcrumbs';
 import './ProductDetails.css';
 
 const ProductDetails: React.FC = () => {
@@ -45,6 +46,7 @@ const ProductDetails: React.FC = () => {
 
   return (
     <div className="product-details">
+      <Breadcrumb categoryPath={[]} currentCategory={product.name['en-US']} />
       <ProductDetailCard product={product} />
     </div>
   );
