@@ -9,7 +9,7 @@ import {
   postalCodeSchema,
 } from './commonSchemas';
 
-jest.mock('../shared/utils/functions', () => ({
+jest.mock('../shared/utils/getAge', () => ({
   getAge: (date: Date) => {
     const today = new Date('2024-01-01');
     return today.getFullYear() - date.getFullYear();

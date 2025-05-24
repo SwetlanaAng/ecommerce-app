@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { getAge } from '../shared/utils/functions';
+import { getAge } from '../shared/utils/getAge';
 
 export const emailSchema = z
   .string()
