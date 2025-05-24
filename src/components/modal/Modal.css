@@ -32,7 +32,9 @@
   border-radius: 20px;
   background-color: var(--bg-color-light);
   padding: 40px 40px 20px 40px;
-  transition:  opacity 0.3s, transform 0.3s;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
   transform: translateY(-50px);
 }
 
@@ -50,7 +52,6 @@
   background-position: center;
   background-size: 30px;
 }
-
 
 .modal--entering .modal-content {
   transform: translateY(0);
