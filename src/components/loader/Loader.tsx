@@ -18,6 +18,8 @@ export const Loader: React.FC<LoaderProps> = ({
         style={{
           borderColor: `${color} transparent ${color} transparent`,
         }}
+        role="status"
+        aria-label="Loading"
       />
     </div>
   );

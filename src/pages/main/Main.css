@@ -136,7 +136,7 @@
       &.featured-products {
         & .featured-products-grid {
           .product-card {
-              width: calc((100% - 20px) / 2);
+            width: calc((100% - 20px) / 2);
           }
         }
       }
