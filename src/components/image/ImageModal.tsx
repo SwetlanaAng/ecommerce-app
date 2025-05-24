@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 import Modal from 'react-modal';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -15,7 +15,7 @@ interface ImageModalProps {
 
 Modal.setAppElement('#root');
 
-const ImageModal: React.FC<ImageModalProps> = ({ images, isOpen, initialIndex, onClose }) => {
+const ImageModal: FC<ImageModalProps> = ({ images, isOpen, initialIndex, onClose }) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -33,9 +33,9 @@ const ImageModal: React.FC<ImageModalProps> = ({ images, isOpen, initialIndex, o
         initialSlide={initialIndex}
         className="modal-swiper"
       >
-        {images.map((img, idx) => (
-          <SwiperSlide key={idx}>
-            <img src={img.url} alt={`Product image ${idx + 1}`} className="modal-image" />
+        {images.map(img => (
+          <SwiperSlide key={img.url}>
+            <img src={img.url} alt="Product image" className="modal-image" />
           </SwiperSlide>
         ))}
       </Swiper>
