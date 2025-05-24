@@ -1,13 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { useForm, UseFormRegister } from 'react-hook-form';
+import { UseFormRegister } from 'react-hook-form';
 import Input from './Input';
 
 jest.mock('../../assets/view.png', () => 'view-icon');
 jest.mock('../../assets/hide.png', () => 'hide-icon');
 
 const FormWrapper = ({ children }: { children: React.ReactNode }) => {
-  const methods = useForm();
-  return <form {...methods}>{children}</form>;
+  return <form>{children}</form>;
 };
 
 describe('Input Component', () => {

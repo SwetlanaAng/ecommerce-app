@@ -27,3 +27,24 @@ export async function getProducts(): Promise<Product[]> {
     throw error;
   }
 }
+
+export async function getProductById(id: string): Promise<Product> {
+  const accessToken = await getBasicToken();
+
+  try {
+    const response = await fetch(`${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw error;
+  }
+}

@@ -1,5 +1,5 @@
 .product-card {
-  width: calc((100% - 60px) / 4);
+  width: calc((100% - 40px) / 3);
   display: block;
   text-decoration: none;
   color: inherit;
@@ -17,12 +17,12 @@
   }
   .product-image {
     width: 100%;
-    height: 200px;
+    height: 250px;
     overflow: hidden;
     img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
     }
   }
   .product-info {
@@ -63,9 +63,25 @@
     font-size: 0.9rem;
     color: #666;
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 1150px) {
+  .product-card {
+    width: calc((100% - 20px) / 2);
+  }
+}
+
+@media (max-width: 480px) {
+  .product-card {
+    width: 100%;
+    .product-image {
+      height: 200px;
+    }
   }
 }

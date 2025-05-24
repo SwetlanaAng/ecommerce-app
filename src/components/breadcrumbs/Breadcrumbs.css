@@ -1,0 +1,23 @@
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 14px;
+  .breadcrumb-item {
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s ease;
+    &:hover {
+      color: #333;
+    }
+    &.active {
+      color: #333;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+  .breadcrumb-separator {
+    margin: 0 8px;
+    color: #999;
+  }
+}

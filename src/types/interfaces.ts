@@ -81,6 +81,15 @@ export interface Product {
         h: number;
       };
     }>;
+    attributes: Array<{
+      name: string;
+      value:
+        | string
+        | {
+            key: string;
+            label: string;
+          };
+    }>;
   };
   searchKeywords?: {
     en: Array<{
@@ -118,6 +127,27 @@ export interface ProductCardProps {
   imageUrl: string;
   category?: string;
 }
+
+export interface CategoryData {
+  id: string;
+  name: {
+    'en-US': string;
+  };
+  parent?: {
+    id: string;
+  };
+}
+
+export interface ProductFilters {
+  flavors?: string[];
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  isBestSeller?: boolean;
+  categoryId?: string;
+}
+
 export interface CustomerInfo {
   id: string;
   email: string;
@@ -132,6 +162,7 @@ export interface CustomerInfo {
   defaultShippingAddressId?: string;
   version: number;
 }
+
 export interface ProfileAddressData {
   country: string;
   city: string;
@@ -139,9 +170,14 @@ export interface ProfileAddressData {
   id: string;
   postalCode: string;
 }
+
 export interface PersonalInfo {
   email: string;
   firstName: string;
   lastName: string;
   dateOfBirth: string;
+
+
+export interface CategoryWithChildren extends CategoryData {
+  children: CategoryWithChildren[];
 }
