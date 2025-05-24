@@ -172,10 +172,10 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-page">
       <h1>Profile information</h1>
+      <h2>Personal information</h2>
       <div className="personal-information-container">
-        <h2>Personal information</h2>
         <Button
-          className="edit-pen"
+          className="edit-personal-pen"
           onClick={() => {
             setModalContent('changePersonalInfo');
             setModalOpen(true);

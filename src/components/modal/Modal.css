@@ -5,7 +5,6 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.75);
-  /* opacity: 0; */
   overflow: hidden;
   overflow-y: auto;
   transition: opacity 0.3s;
@@ -31,7 +30,6 @@
   border-radius: 20px;
   background-color: var(--bg-color-light);
   padding: 40px 40px 20px 40px;
-  /* transform: translateY(-50px); */
   transition:
     opacity 0.3s,
     transform 0.3s;
@@ -74,4 +72,9 @@
 .modal--exiting .modal-content,
 .modal--exited .modal-content {
   transform: translateY(-50px);
+}
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 30px 15px 10px 15px;
+  }
 }
