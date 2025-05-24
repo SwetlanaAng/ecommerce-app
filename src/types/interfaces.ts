@@ -160,6 +160,7 @@ export interface CustomerInfo {
   dateOfBirth: string;
   defaultBillingAddressId?: string;
   defaultShippingAddressId?: string;
+  version: number;
 }
 
 export interface ProfileAddressData {
@@ -169,6 +170,13 @@ export interface ProfileAddressData {
   id: string;
   postalCode: string;
 }
+
+export interface PersonalInfo {
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+
 
 export interface CategoryWithChildren extends CategoryData {
   children: CategoryWithChildren[];

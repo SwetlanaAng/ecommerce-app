@@ -8,6 +8,8 @@ import { UseFormRegister, FieldError, Path } from 'react-hook-form';
 export type InputName =
   | 'email'
   | 'password'
+  | 'currentPassword'
+  | 'newPassword'
   | 'dateOfBirth'
   | 'firstName'
   | 'lastName'
@@ -53,6 +55,8 @@ interface InputProps<T extends Record<string, unknown>> {
   checked?: boolean;
   register?: UseFormRegister<T>;
   error?: FieldError;
+  defaultValue?: string;
+
   isSearchField?: boolean;
 }
 

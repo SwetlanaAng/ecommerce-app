@@ -1,0 +1,19 @@
+.edit-billing-form,
+.edit-billing,
+.edit-shipping-form,
+.edit-shipping {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+@media (max-width: 480px) {
+  .edit-personal-form {
+    .input {
+      font-size: 10px;
+    }
+    .submit-button {
+      font-size: 13px;
+      padding: 10px 15px;
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { getAge } from '../shared/utils/functions';
 
 export const emailSchema = z
   .string()
@@ -42,4 +43,60 @@ export const passwordSchema = z
   })
   .refine((v: string) => /[!@#$%^&*]/.test(v), {
     message: 'Must contain at least one special character (!@#$%^&*)',
+  });
+export const firstNameSchema = z
+  .string()
+  .nonempty({ message: 'First name must contain at least one character' })
+  .refine(
+    value =>
+      /[a-zA-Z]/.test(value) &&
+      !/\d/.test(value) &&
+      !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
+    {
+      message: 'First name must contain only Latin characters and no special characters or numbers',
+    }
+  );
+export const lastNameSchema = z
+  .string()
+  .nonempty({ message: 'Last name must contain at least one character' })
+  .refine(
+    value =>
+      /[a-zA-Z]/.test(value) &&
+      !/\d/.test(value) &&
+      !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
+    {
+      message: 'Last name must contain only Latin characters and no special characters or numbers',
+    }
+  );
+export const dateOfBirthSchema = z
+  .string()
+  .refine(val => !isNaN(Date.parse(val)), {
+    message: 'Please, enter a valid date of birth',
+  })
+  .refine(val => getAge(new Date(val)) >= 18, {
+    message: 'You must be at least 18 years old',
+  });
+export const citySchema = z
+  .string()
+  .nonempty({ message: 'City must contain at least one character' })
+  .refine(
+    value =>
+      /[a-zA-Z]/.test(value) &&
+      !/\d/.test(value) &&
+      !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
+    {
+      message: 'City must contain only Latin characters and no special characters or numbers',
+    }
+  );
+export const streetSchema = z
+  .string()
+  .nonempty({ message: 'Street must contain at least one character' })
+  .refine(value => /^[a-zA-Z0-9\s.,'-]+$/.test(value), {
+    message: 'Street must contain only Latin characters, numbers, and spaces',
+  });
+export const postalCodeSchema = z
+  .string()
+  .nonempty({ message: 'Postal code is required' })
+  .refine(value => /^\d{5}$/.test(value), {
+    message: 'Postal code must be 5 digits',
   });

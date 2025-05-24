@@ -1,23 +1,23 @@
 import React from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
-import { Address } from '../../types/address.types';
+import { EditAddress } from '../../types/address.types';
 import Input from '../input/Input';
 import Select from '../select/Select';
 import { countryId } from '../../services/registration.service';
-import { FormFields } from '../../schemas/signInSchema';
+import { BillingAddressModal } from '../../schemas/aditAddressSchema';
 
-interface AddressFormProps {
-  type: 'billing' | 'shipping';
-  address: Address;
+interface BillingAddressFormProps {
+  formData?: EditAddress;
+  address?: EditAddress;
   isDisabled: boolean;
   onAddressChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onDefaultAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  register: UseFormRegister<FormFields>;
-  errors: FieldErrors<FormFields>;
+  register: UseFormRegister<BillingAddressModal>;
+  errors: FieldErrors<BillingAddressModal>;
 }
 
-const AddressForm: React.FC<AddressFormProps> = ({
-  type,
+const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
+  formData,
   address,
   isDisabled,
   onAddressChange,
@@ -31,8 +31,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
         labelText="Country"
         className="select"
         onChange={onAddressChange}
-        name={`${type}_country`}
-        value={address.country}
+        name="billing_country"
+        value={address ? address.billing_country : formData ? formData.billing_country : ''}
         required={true}
         disabled={isDisabled}
         optionsList={countryId}
@@ -41,56 +41,58 @@ const AddressForm: React.FC<AddressFormProps> = ({
 
       <Input
         labelText="City"
-        name={`${type}_city`}
-        id={`${type}_city`}
+        name="billing_city"
+        id="billing_city"
         onChange={onAddressChange}
         placeholder="New York"
-        value={address.city}
+        value={address ? address.billing_city : formData ? formData.billing_city : ''}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_city`]}
+        error={errors.billing_city}
         autoComplete="address-level2"
       />
 
       <Input
         labelText="Street"
-        name={`${type}_street`}
-        id={`${type}_street`}
+        name="billing_street"
+        id="billing_street"
         onChange={onAddressChange}
         placeholder="123 Main St"
-        value={address.street}
+        value={address ? address.billing_street : formData ? formData.billing_street : ''}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_street`]}
+        error={errors.billing_street}
         autoComplete="street-address"
       />
 
       <Input
         labelText="Postal Code"
-        name={`${type}_postalCode`}
-        id={`${type}_postalCode`}
+        name="billing_postalCode"
+        id="billing_postalCode"
         onChange={onAddressChange}
         placeholder="10001"
-        value={address.postalCode}
+        value={address ? address.billing_postalCode : formData ? formData.billing_postalCode : ''}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_postalCode`]}
+        error={errors.billing_postalCode}
         autoComplete="postal-code"
       />
 
       <Input
-        labelText={`Set as default ${type} address for future orders`}
+        labelText="Set as default billing address for future orders"
         type="checkbox"
-        id={`default_${type}`}
-        name={`${type}_isDefault`}
-        checked={address.isDefault}
+        id="default_billing"
+        name="billing_isDefault"
+        checked={
+          address ? address.billing_isDefault : formData ? formData.billing_isDefault : false
+        }
         onChange={onDefaultAddressChange}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_isDefault`]}
+        error={errors.billing_isDefault}
       />
     </>
   );
 };
 
-export default AddressForm;
+export default BillingAddressForm;

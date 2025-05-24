@@ -1,18 +1,27 @@
+import { useState } from 'react';
+import Button from '../button/Button';
+import { Modal } from '../modal/Modal';
+import { EditAddressesContent } from '../modal/modal-content/edit-addresses/EditAddressesContent';
 import { InfoBox } from '../profile-info-box/InfoBox';
+import {
+  useBillingAddressForm,
+  useShippingAddressForm,
+} from '../../features/auth/hooks/useEditAddressForm';
+import { Address } from '../../types/address.types';
 
 interface AddressBoxProps {
-  headingText: string;
-  addressType: string;
-  country: string | undefined;
-  city: string | undefined;
-  street: string | undefined;
-  postalCode: string | undefined;
+  addressNumber: number;
+  addressType: 'billing' | 'shipping';
+  country: string;
+  city: string;
+  street: string;
+  postalCode: string;
   defaultId: string;
-  addressId: string | undefined;
+  addressId: string;
 }
 
 export const AddressBox = ({
-  headingText,
+  addressNumber,
   addressType,
   country,
   city,
@@ -20,24 +29,95 @@ export const AddressBox = ({
   postalCode,
   defaultId,
   addressId,
-}: AddressBoxProps) => (
-  <>
-    <h3>{headingText}</h3>
+}: AddressBoxProps) => {
+  const [modalIsOpen, setModalOpen] = useState(false);
+  const addressData: Address = {
+    country: country,
+    city: city,
+    street: street,
+    postalCode: postalCode,
+    isDefault: defaultId === addressId,
+  };
 
-    <InfoBox className={`${addressType}-country`} spanText="Country: " infoText={country}></InfoBox>
+  const billingForm = useBillingAddressForm(addressData);
+  const shippingForm = useShippingAddressForm(addressData);
 
-    <InfoBox className={`${addressType}-city`} spanText="City: " infoText={city}></InfoBox>
+  const renderEditContent = () => {
+    if (addressType === 'billing') {
+      return (
+        <EditAddressesContent
+          addressType="billing"
+          formData={billingForm.formData}
+          handleSubmit={billingForm.handleSubmit}
+          addressData={addressData}
+          id={addressNumber}
+          isDisabled={billingForm.isSubmitting}
+          onChange={billingForm.handleChange}
+          onDefaultAddressChange={billingForm.handleChange}
+          register={billingForm.register}
+          errors={billingForm.errors}
+          onSuccess={() => {
+            setModalOpen(false);
+          }}
+        />
+      );
+    } else {
+      return (
+        <EditAddressesContent
+          addressType="shipping"
+          formData={shippingForm.formData}
+          handleSubmit={shippingForm.handleSubmit}
+          addressData={addressData}
+          id={addressNumber}
+          isDisabled={shippingForm.isSubmitting}
+          onChange={shippingForm.handleChange}
+          onDefaultAddressChange={shippingForm.handleChange}
+          register={shippingForm.register}
+          errors={shippingForm.errors}
+          onSuccess={() => {
+            setModalOpen(false);
+          }}
+        />
+      );
+    }
+  };
 
-    <InfoBox className={`${addressType}-street`} spanText="Street : " infoText={street}></InfoBox>
+  return (
+    <>
+      <div className="address-information-container">
+        <p>{`Address #${addressNumber + 1}`}</p>
+        <Button className="edit-pen" onClick={() => setModalOpen(true)}>
+          Edit
+        </Button>
 
-    <InfoBox
-      className={`${addressType}-postal-code`}
-      spanText="Postal code: "
-      infoText={postalCode}
-    ></InfoBox>
+        <InfoBox
+          className={`${addressType}-country`}
+          spanText="Country: "
+          infoText={country}
+        ></InfoBox>
 
-    {defaultId === addressId && (
-      <div className="default">{`This address is set as default ${addressType} address`} </div>
-    )}
-  </>
-);
+        <InfoBox className={`${addressType}-city`} spanText="City: " infoText={city}></InfoBox>
+
+        <InfoBox
+          className={`${addressType}-street`}
+          spanText="Street : "
+          infoText={street}
+        ></InfoBox>
+
+        <InfoBox
+          className={`${addressType}-postal-code`}
+          spanText="Postal code: "
+          infoText={postalCode}
+        ></InfoBox>
+        <Modal
+          isOpen={modalIsOpen}
+          onClose={() => setModalOpen(false)}
+          children={renderEditContent()}
+        ></Modal>
+        {defaultId === addressId && (
+          <div className="default">{`This address is set as default ${addressType} address`} </div>
+        )}
+      </div>
+    </>
+  );
+};
