@@ -176,7 +176,7 @@ export interface PersonalInfo {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-
+}
 
 export interface CategoryWithChildren extends CategoryData {
   children: CategoryWithChildren[];

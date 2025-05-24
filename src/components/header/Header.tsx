@@ -109,7 +109,11 @@ const Header: React.FC<HeaderProps> = () => {
             </Link>
           </div>
 
-          <div className={`hamburger ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
+          <div
+            className={`hamburger ${mobileMenuOpen ? 'active' : ''}`}
+            onClick={toggleMobileMenu}
+            role="button"
+          >
             <span></span>
             <span></span>
             <span></span>
