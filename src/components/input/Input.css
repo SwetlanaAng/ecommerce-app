@@ -146,8 +146,3 @@ input[type='checkbox'] {
     background-size: 11px;
   }
 }
-.label {
-  padding-left: 10px;
-  width: fit-content;
-  line-height: 130%;
-}
