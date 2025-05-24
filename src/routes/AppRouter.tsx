@@ -11,7 +11,6 @@ import { AppRouterPaths } from './AppRouterPathsEnums';
 import NotFound from '../pages/notFound/NotFound';
 import { AuthProvider } from '../features/auth/context/AuthContext';
 import AuthGuard from '../features/auth/guards/AuthGuard';
-import ScrollToTop from './ScrollToTop';
 
 const AppRouter: React.FC = () => {
   return (
@@ -21,7 +20,6 @@ const AppRouter: React.FC = () => {
         v7_relativeSplatPath: true,
       }}
     >
-      <ScrollToTop />
       <AuthProvider>
         <div className="app-container">
           <Header />
