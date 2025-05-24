@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Product } from '../../types/interfaces';
+import ImageModal from '../image/ImageModal';
 import './ProductDetailCard.css';
 
 interface Props {
@@ -19,6 +20,17 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     : null;
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
 
   const handlePrev = () => {
     setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
@@ -59,7 +71,12 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
               src={images[currentIndex].url}
               alt={`${title} image ${currentIndex + 1}`}
               className="slider-image"
+              onClick={() => {
+                setModalIndex(currentIndex);
+                setIsModalOpen(true);
+              }}
             />
+
             {images.length > 1 && (
               <>
                 <button className="slider-btn prev" onClick={handlePrev}>
@@ -86,6 +103,12 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
           </div>
         )}
       </div>
+      <ImageModal
+        images={images}
+        isOpen={isModalOpen}
+        initialIndex={modalIndex}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
