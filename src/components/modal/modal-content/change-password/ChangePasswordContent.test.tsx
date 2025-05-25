@@ -35,8 +35,8 @@ describe('ChangePasswordContent', () => {
       ></ChangePasswordContent>
     );
 
-    const currentInput = screen.getByLabelText('Email') as HTMLInputElement;
-    const newInput = screen.getByLabelText('Password') as HTMLInputElement;
+    const currentInput = screen.getByLabelText('Password') as HTMLInputElement;
+    const newInput = screen.getByLabelText('New Password') as HTMLInputElement;
 
     expect(currentInput).toBeInTheDocument();
     expect(newInput).toBeInTheDocument();
