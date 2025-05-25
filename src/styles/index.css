@@ -27,10 +27,29 @@ h1,
 h2,
 h3,
 h4 {
-  font-weight: 600;
+  font-weight: 700;
   line-height: 130%;
   color: var(--text-color);
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 60px;
+}
+
+h2 {
+  font-size: 40px;
+}
+
+h3 {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 0px;
 }
 
 a {
@@ -50,10 +69,16 @@ a {
 
 @media (max-width: 480px) {
   h1 {
-    font-size: 24px;
+    font-size: 32px;
   }
   h2 {
+    font-size: 24px;
+  }
+  h3 {
     font-size: 20px;
+  }
+  h4 {
+    font-size: 18px;
   }
   body {
     font-size: 16px;

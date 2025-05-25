@@ -44,31 +44,31 @@ const AddressSection: React.FC<AddressSectionProps> = ({
 
   return (
     <>
-      <h2>Billing Address</h2>
-      <BillingAddressForm
-        formData={billingFormData}
-        isDisabled={isDisabled}
-        onAddressChange={onAddressChange}
-        onDefaultAddressChange={onDefaultAddressChange}
-        register={register as unknown as UseFormRegister<BillingAddressModal>}
-        errors={errors as unknown as FieldErrors<BillingAddressModal>}
-      />
-
-      <Input
-        labelText="Use same address for shipping"
-        type="checkbox"
-        name="sameAsShipping"
-        id="sameAsShipping"
-        checked={sameAsShipping}
-        onChange={onSameAddressChange}
-        disabled={isDisabled}
-        register={register}
-        error={errors.sameAsShipping}
-      />
-
+      <div className="form-card">
+        <h4>Billing Address</h4>
+        <BillingAddressForm
+          formData={billingFormData}
+          isDisabled={isDisabled}
+          onAddressChange={onAddressChange}
+          onDefaultAddressChange={onDefaultAddressChange}
+          register={register as unknown as UseFormRegister<BillingAddressModal>}
+          errors={errors as unknown as FieldErrors<BillingAddressModal>}
+        />
+        <Input
+          labelText="Use same address for shipping"
+          type="checkbox"
+          name="sameAsShipping"
+          id="sameAsShipping"
+          checked={sameAsShipping}
+          onChange={onSameAddressChange}
+          disabled={isDisabled}
+          register={register}
+          error={errors.sameAsShipping}
+        />
+      </div>
       {!sameAsShipping && (
-        <>
-          <h2>Shipping Address</h2>
+        <div className="form-card">
+          <h4>Shipping Address</h4>
           <ShippingAddressForm
             formData={shippingFormData}
             isDisabled={isDisabled || sameAsShipping}
@@ -77,7 +77,7 @@ const AddressSection: React.FC<AddressSectionProps> = ({
             register={register as unknown as UseFormRegister<ShippingAddressModal>}
             errors={errors as unknown as FieldErrors<ShippingAddressModal>}
           />
-        </>
+        </div>
       )}
     </>
   );

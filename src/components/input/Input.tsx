@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import view from '../../assets/view.png';
-import hide from '../../assets/hide.png';
+import view from '../../assets/view.svg';
+import hide from '../../assets/hide.svg';
 import searchIcon from '../../assets/search.png';
 import './Input.css';
 import { UseFormRegister, FieldError, Path } from 'react-hook-form';

@@ -43,7 +43,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   return (
     <div className="detail-card">
       <div className="detail-info">
-        <h1 className="detail-title">{title}</h1>
+        <h2 className="detail-title">{title}</h2>
         <p className="detail-description">{desc}</p>
 
         <div className="detail-price">

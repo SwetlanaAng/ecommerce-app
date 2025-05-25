@@ -1,59 +1,30 @@
 .auth-page {
-  width: 100%;
-  max-width: 850px;
-  text-align: center;
-  margin: 0 auto;
-  background-color: var(--bg-color-light);
-  padding: 50px 100px;
-  border-radius: 8px;
-  .auth-form {
+  .form-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center;
-    .form-group {
+    h2 {
+      margin: 0;
+    }
+    .form-card {
+      flex: 1;
+      background-color: var(--white);
+      border-radius: 32px;
+      padding: 32px;
       display: flex;
       flex-direction: column;
-      text-align: start;
-      width: calc((100% - 20px) / 2);
-      .label {
-        font-weight: 400;
-        font-size: 14px;
-        width: 100%;
-      }
-      &.checkbox-group {
-        flex-direction: row;
-        width: 100%;
-      }
-    }
-    h2 {
-      width: 100%;
-      font-weight: 600;
-      margin: 40px 0 10px 0;
-    }
-    .submit-button {
-      width: 100%;
-      margin-top: 20px;
+      gap: 32px;
     }
   }
-  .auth-links {
-    padding-top: 30px;
-  }
-}
-
-@media (max-width: 768px) {
-  .auth-page {
-    padding: 50px 30px;
-  }
-}
-
-@media (max-width: 480px) {
-  .auth-page {
-    padding: 30px 20px;
-    .auth-form {
-      .form-group {
-        width: 100%;
-      }
+  .links-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 40px auto 0;
+    gap: 20px;
+    width: fit-content;
+    .auth-links {
+      font-size: 14px;
     }
   }
 }
@@ -64,13 +35,13 @@
   margin-top: 4px;
 }
 
-.error-message {
-  color: #dc3545;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  border-radius: 4px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-  width: 100%;
+@media (max-width: 1200px) {
+  .auth-page {
+    .form-container {
+      .form-card {
+        width: 100%;
+        flex: unset;
+      }
+    }
+  }
 }

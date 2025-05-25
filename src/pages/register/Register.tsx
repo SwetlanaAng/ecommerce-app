@@ -35,33 +35,34 @@ const Register: React.FC = () => {
     <div className="auth-page">
       <h1>Registration</h1>
       <form onSubmit={handleSubmit(submitData)} className="auth-form">
-        <PersonalInfoForm
-          formData={formData}
-          isDisabled={isLoading}
-          onChange={handleChange}
-          register={register}
-          errors={errors}
-        />
-
-        <AddressSection
-          addressData={addressData}
-          sameAsShipping={sameAsShipping}
-          isDisabled={isLoading}
-          onAddressChange={handleAddressChange}
-          onDefaultAddressChange={handleDefaultAddressChange}
-          onSameAddressChange={handleSameAddressChange}
-          register={register}
-          errors={errors}
-        />
-
-        <Button className="submit-button" disabled={isLoading || isSubmitting} type="submit">
-          {isLoading ? 'Registering...' : 'Register'}
-        </Button>
+        <div className="form-container">
+          <PersonalInfoForm
+            formData={formData}
+            isDisabled={isLoading}
+            onChange={handleChange}
+            register={register}
+            errors={errors}
+          />
+          <AddressSection
+            addressData={addressData}
+            sameAsShipping={sameAsShipping}
+            isDisabled={isLoading}
+            onAddressChange={handleAddressChange}
+            onDefaultAddressChange={handleDefaultAddressChange}
+            onSameAddressChange={handleSameAddressChange}
+            register={register}
+            errors={errors}
+          />
+        </div>
+        <div className="links-container">
+          <Button className="submit-button" disabled={isLoading || isSubmitting} type="submit">
+            {isLoading ? 'Registering...' : 'Register'}
+          </Button>
+          <div className="auth-links">
+            Do you already have an account? <Link to={AppRouterPaths.LOGIN}>Log in</Link>
+          </div>
+        </div>
       </form>
-
-      <div className="auth-links">
-        Do you already have an account? <Link to={AppRouterPaths.LOGIN}>Log in</Link>
-      </div>
     </div>
   );
 };
