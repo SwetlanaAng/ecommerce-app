@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.50);
   overflow: hidden;
   overflow-y: auto;
   transition: opacity 0.3s;
@@ -27,11 +27,11 @@
 .modal-content {
   position: relative;
   margin: 20px;
-  width: 80%;
+  width: 100%;
   max-width: 600px;
   border-radius: 20px;
-  background-color: var(--bg-color-light);
-  padding: 40px 40px 20px 40px;
+  background-color: var(--white);
+  padding: 32px;
   transition:
     opacity 0.3s,
     transform 0.3s;
@@ -46,11 +46,15 @@
   height: 30px;
   padding: 0;
   border: none;
-  background-color: transparent;
-  background-image: url('../../assets/icon-close.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 30px;
+  background: none;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.1);
+    color: var(--accent-color);
+  }
 }
 
 .modal--entering .modal-content {
@@ -71,10 +75,4 @@
 }
 .modal--exiting {
   opacity: 0;
-}
-
-@media (max-width: 480px) {
-  .modal-content {
-    padding: 30px 15px 10px 15px;
-  }
 }

@@ -47,7 +47,9 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
     <div className={`modal modal--${animationState}`}>
       <div className="modal-wrapper" onClick={onWrapperClick}>
         <div className="modal-content">
-          <button className="modal-close-button" onClick={onClose}></button>
+          <button className="modal-close-button" onClick={onClose}>
+            ✕
+          </button>
           {children}
         </div>
       </div>

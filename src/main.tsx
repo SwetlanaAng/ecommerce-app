@@ -18,6 +18,9 @@ createRoot(document.getElementById('root')!).render(
       draggable
       pauseOnHover
       theme="light"
+      style={{
+        fontSize: '16px',
+      }}
     />
   </StrictMode>
 );
