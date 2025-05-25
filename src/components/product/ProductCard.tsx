@@ -19,6 +19,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
       <div className="product-info">
         <h3 className="product-name">{name}</h3>
+        {description && <p className="product-description">{description}</p>}
         <div className="product-price-container">
           {isOnSale && originalPrice && (
             <span className="product-original-price">${originalPrice.toFixed(2)}</span>
@@ -27,7 +28,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
             ${price.toFixed(2)}
           </span>
         </div>
-        {description && <p className="product-description">{description}</p>}
       </div>
     </Link>
   );

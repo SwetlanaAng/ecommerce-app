@@ -77,8 +77,8 @@
   gap: 8px;
   margin-bottom: 16px;
   .active-filter-tag {
-    background-color: #f8e1e8;
-    color: #d87093;
+    background-color: rgba(242, 109, 138, 0.1);
+    color: var(--primary-color);
     border-radius: 16px;
     padding: 4px 12px;
     font-size: 12px;
@@ -88,12 +88,22 @@
     button {
       background: none;
       border: none;
-      color: #d87093;
+      color: var(--primary-color);
       cursor: pointer;
       font-size: 14px;
       display: flex;
       align-items: center;
       padding: 0;
+    }
+    &.clear-all {
+      background-color: var(--accent-color);
+      transition: background-color 0.3s ease;
+      button {
+        color: var(--white);
+      }
+      &:hover {
+        background-color: var(--accent-color-hover);
+      }
     }
   }
 }
