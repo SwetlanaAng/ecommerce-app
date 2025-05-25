@@ -1,34 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { Product } from '../../types/interfaces';
 import { useParams } from 'react-router-dom';
-import { getProductById } from '../../services/product.service';
+import { getProductBySlug } from '../../services/product.service';
 import ProductDetailCard from '../../components/product/ProductDetailCard';
 import Loader from '../../components/loader/Loader';
 import Breadcrumb from '../../components/breadcrumbs/Breadcrumbs';
 import './ProductDetails.css';
 
 const ProductDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProduct = async (productId: string) => {
+    const fetchProduct = async (productSlug: string) => {
       setLoading(true);
       try {
-        const fetchedProduct = await getProductById(productId);
+        const fetchedProduct = await getProductBySlug(productSlug);
         setProduct(fetchedProduct);
+        setError(null);
       } catch (err) {
-        setError(`Error loading products. ${err instanceof Error ? err.message : String(err)}`);
+        setError(`Error loading product. ${err instanceof Error ? err.message : String(err)}`);
       } finally {
         setLoading(false);
       }
     };
-    if (id) {
-      fetchProduct(id);
+
+    if (slug) {
+      fetchProduct(slug);
     }
-  }, [id]);
+  }, [slug]);
 
   if (loading) return <Loader />;
   if (error)

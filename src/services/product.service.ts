@@ -48,3 +48,33 @@ export async function getProductById(id: string): Promise<Product> {
     throw error;
   }
 }
+
+export async function getProductBySlug(slug: string): Promise<Product> {
+  const accessToken = await getBasicToken();
+
+  try {
+    const encodedSlug = encodeURIComponent(`slug(en-US="${slug}")`);
+    const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections?where=${encodedSlug}&limit=1`;
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.results.length === 0) {
+      throw new Error('No product found with the given slug.');
+    }
+
+    return data.results[0];
+  } catch (error) {
+    console.error('Error fetching product by slug:', error);
+    throw error;
+  }
+}

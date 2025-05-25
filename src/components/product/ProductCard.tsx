@@ -4,16 +4,16 @@ import { ProductCardProps } from '../../types/interfaces';
 import './ProductCard.css';
 
 const ProductCard: React.FC<ProductCardProps> = ({
-  id,
   name,
   price,
   originalPrice,
   isOnSale,
   imageUrl,
   description,
+  slug,
 }) => {
   return (
-    <Link to={`/catalog/${id}`} className="product-card">
+    <Link to={`/catalog/${slug}`} className="product-card">
       <div className="product-image">
         <img src={imageUrl} alt={name} />
       </div>

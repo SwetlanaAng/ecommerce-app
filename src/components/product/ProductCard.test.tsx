@@ -11,6 +11,7 @@ describe('ProductCard', () => {
     isOnSale: true,
     imageUrl: 'https://example.com/image.jpg',
     description: 'This is a test product',
+    slug: 'test-product',
   };
 
   const renderComponent = (props = {}) => {
@@ -41,7 +42,7 @@ describe('ProductCard', () => {
     expect(discountedPrice).toHaveClass('product-price-discounted');
 
     const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', `/catalog/${defaultProps.id}`);
+    expect(link).toHaveAttribute('href', `/catalog/${defaultProps.slug}`);
   });
 
   it('does not show original price when not on sale', () => {

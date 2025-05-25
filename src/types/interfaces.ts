@@ -97,7 +97,7 @@ export interface Product {
     }>;
   };
   slug: {
-    en: string;
+    'en-US': string;
   };
   metaTitle?: {
     en: string;
@@ -118,7 +118,7 @@ export interface Product {
 }
 
 export interface ProductCardProps {
-  id: string;
+  id?: string;
   name: string;
   description?: string;
   price: number;
@@ -126,6 +126,7 @@ export interface ProductCardProps {
   isOnSale?: boolean;
   imageUrl: string;
   category?: string;
+  slug: string;
 }
 
 export interface CategoryData {

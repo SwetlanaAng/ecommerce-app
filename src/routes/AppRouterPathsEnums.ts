@@ -4,5 +4,5 @@ export enum AppRouterPaths {
   REGISTER = '/register',
   CATALOG = '/catalog',
   PROFILE = '/profile',
-  PRODUCT_DETAILS = '/catalog/:id',
+  PRODUCT_DETAILS = '/catalog/:slug',
 }

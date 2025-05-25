@@ -13,6 +13,7 @@ export default function toCardAdapter(product: Product): ProductCardProps {
   const name = product.name['en-US'] || '';
   const description = product.description?.['en-US'] || '';
   const category = product.categories[0]?.id || '';
+  const slug = product.slug['en-US'];
 
   return {
     id: product.id,
@@ -23,5 +24,6 @@ export default function toCardAdapter(product: Product): ProductCardProps {
     isOnSale,
     imageUrl,
     category,
+    slug,
   };
 }
