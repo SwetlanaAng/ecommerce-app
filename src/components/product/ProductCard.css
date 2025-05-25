@@ -58,7 +58,8 @@
   .product-description {
     margin: 0 0 40px 0;
     font-size: 14px;
-    color: #666;
+    color: #898989;
+    line-height: 130%;
     display: -webkit-box;
     line-clamp: 2;
     -webkit-line-clamp: 2;
