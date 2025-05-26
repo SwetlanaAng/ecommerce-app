@@ -36,7 +36,6 @@ export const ChangePasswordContent: React.FC<ChangePasswordFormProps> = ({
   const onSubmit: SubmitHandler<ChangePasswordModal> = async data => {
     try {
       setError(null);
-      console.log(data);
       await ChangePassword(data);
       reset();
       if (onSuccess) {
@@ -46,19 +45,13 @@ export const ChangePasswordContent: React.FC<ChangePasswordFormProps> = ({
     } catch (err) {
       toast.error(`Failed to change password`);
       setError(`Failed to change password: ${err instanceof Error ? err.message : String(err)}`);
+      console.log(error);
     }
   };
 
-  if (error) {
-    return (
-      <div className="edit-password">
-        <p>Failed to change password</p>
-      </div>
-    );
-  }
-
   return (
     <div className="edit-password">
+      <h3>Change password</h3>
       <form
         onSubmit={handleSubmit ? handleSubmit(onSubmit) : e => e.preventDefault()}
         className="edit-password-form"
@@ -66,7 +59,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordFormProps> = ({
         <Input
           id="password"
           register={register}
-          labelText="Password"
+          labelText="Current Password"
           placeholder="••••••••"
           type="password"
           disabled={isDisabled}
