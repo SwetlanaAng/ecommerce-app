@@ -29,12 +29,6 @@
   }
 }
 
-.error-text {
-  color: #dc3545;
-  font-size: 14px;
-  margin-top: 4px;
-}
-
 @media (max-width: 1200px) {
   .auth-page {
     .form-container {

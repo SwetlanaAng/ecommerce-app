@@ -152,3 +152,9 @@ input[type='checkbox'] {
     background-size: 11px;
   }
 }
+
+.error-text {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 4px;
+}
