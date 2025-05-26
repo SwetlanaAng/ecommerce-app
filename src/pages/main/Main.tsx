@@ -280,9 +280,6 @@ const Main = () => {
         <div className="benefits-flex">
           {benefits.map((benefit, index) => (
             <div key={index} className="benefit-card">
-              <div className="benefit-icon">
-                <p>0{index + 1}</p>
-              </div>
               <h3>{benefit.title}</h3>
               <p>{benefit.description}</p>
             </div>

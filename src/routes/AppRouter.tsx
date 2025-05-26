@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from '../components/header/Header';
+import Footer from '../components/footer/Footer';
 import { AppRouterPaths } from './AppRouterPathsEnums';
 import { AuthProvider } from '../features/auth/context/AuthContext';
 import { AppProvider } from '../features/app/context/AppContext';
@@ -64,6 +65,7 @@ const AppRouter: React.FC = () => {
                 </Suspense>
               </div>
             </main>
+            <Footer />
           </div>
         </AppProvider>
       </AuthProvider>

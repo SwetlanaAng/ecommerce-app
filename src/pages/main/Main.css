@@ -61,6 +61,9 @@
   .section {
     margin: 160px 0;
     border-radius: 8px;
+    &:last-child {
+      margin-bottom: 0;
+    }
     .section-title {
       display: flex;
       flex-wrap: wrap;
@@ -190,12 +193,6 @@
           display: flex;
           gap: 20px;
           color: var(--white);
-          .benefit-icon {
-            position: absolute;
-            top: 20px;
-            left: 60px;
-            font-size: 14px;
-          }
           h3 {
             font-size: 30px;
             color: var(--white);
@@ -367,10 +364,6 @@
             flex-direction: column;
             gap: 0;
             padding: 40px;
-            .benefit-icon {
-              top: 15px;
-              left: 40px;
-            }
             h3 {
               font-size: 20px;
             }
@@ -445,9 +438,6 @@
         .benefits-flex {
           .benefit-card {
             padding: 40px 20px 20px;
-            .benefit-icon {
-              left: 20px;
-            }
           }
         }
       }
