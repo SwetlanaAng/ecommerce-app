@@ -4,11 +4,14 @@ import './AddNewAddressContent.css';
 import { BillingAddressModal, ShippingAddressModal } from '../../../../schemas/aditAddressSchema';
 import BillingAddressForm from '../../../address/BillingAddressForm';
 import ShippingAddressForm from '../../../address/ShippingAddressForm';
+import { AddBillingAddress, AddShippingAddress } from '../../../../services/profile.service';
+import { toast } from 'react-toastify';
 
 interface BaseAddressFormProps {
   isDisabled: boolean;
   onSuccess?: () => void;
   onCancel?: () => void;
+  reset: () => void;
 }
 
 interface BillingAddressFormProps extends BaseAddressFormProps {
@@ -38,9 +41,28 @@ interface ShippingAddressFormProps extends BaseAddressFormProps {
 type AddNewAddressFormProps = BillingAddressFormProps | ShippingAddressFormProps;
 
 export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = props => {
-  const onSubmit = () => {
-    if (props.onSuccess) {
-      props.onSuccess();
+  const onBillingSubmit: SubmitHandler<BillingAddressModal> = async data => {
+    try {
+      await AddBillingAddress(data);
+      props.reset();
+      if (props.onSuccess) {
+        props.onSuccess();
+        toast.success('Billing address added successfully!');
+      }
+    } catch {
+      toast.error(`Failed to add billing address`);
+    }
+  };
+  const onShippingSubmit: SubmitHandler<ShippingAddressModal> = async data => {
+    try {
+      await AddShippingAddress(data);
+      props.reset();
+      if (props.onSuccess) {
+        props.onSuccess();
+        toast.success('Shipping address added successfully!');
+      }
+    } catch {
+      toast.error(`Failed to add shipping address`);
     }
   };
 
@@ -48,7 +70,13 @@ export const AddNewAddressContent: React.FC<AddNewAddressFormProps> = props => {
     <div className="add-address">
       <h3>{`Add new ${props.type} address`}</h3>
       <form
-        onSubmit={props.handleSubmit ? props.handleSubmit(onSubmit) : e => e.preventDefault()}
+        onSubmit={
+          props.handleSubmit
+            ? props.type === 'billing'
+              ? props.handleSubmit(onBillingSubmit)
+              : props.handleSubmit(onShippingSubmit)
+            : e => e.preventDefault()
+        }
         className="add-address-form"
       >
         {props.type === 'billing' ? (

@@ -11,6 +11,7 @@ import {
 
 export const useBillingAddressForm = (data?: Address) => {
   const initialFormData: BillingAddressModal = {
+    billing_country: data?.country || 'United States',
     billing_city: data?.city || '',
     billing_street: data?.street || '',
     billing_postalCode: data?.postalCode || '',
@@ -22,6 +23,7 @@ export const useBillingAddressForm = (data?: Address) => {
     register,
     formState: { errors, isSubmitting },
     setValue,
+    reset,
   } = useForm<BillingAddressModal>({
     resolver: zodResolver(BillingAddressSchema),
     mode: 'onChange',
@@ -59,11 +61,13 @@ export const useBillingAddressForm = (data?: Address) => {
     handleSubmit,
     errors,
     isSubmitting,
+    reset,
   };
 };
 
 export const useShippingAddressForm = (data?: Address) => {
   const initialFormData: ShippingAddressModal = {
+    shipping_country: data?.country || 'United States',
     shipping_city: data?.city || '',
     shipping_street: data?.street || '',
     shipping_postalCode: data?.postalCode || '',
@@ -75,6 +79,7 @@ export const useShippingAddressForm = (data?: Address) => {
     register,
     formState: { errors, isSubmitting },
     setValue,
+    reset,
   } = useForm<ShippingAddressModal>({
     resolver: zodResolver(ShippingAddressSchema),
     mode: 'onChange',
@@ -111,6 +116,7 @@ export const useShippingAddressForm = (data?: Address) => {
     register,
     handleSubmit,
     errors,
+    reset,
     isSubmitting,
   };
 };

@@ -110,6 +110,7 @@ const Profile: React.FC = () => {
     if (modalContent === 'billing') {
       return (
         <AddNewAddressContent
+          reset={billingForm.reset}
           formData={billingForm.formData}
           isDisabled={billingForm.isSubmitting}
           type="billing"
@@ -129,6 +130,7 @@ const Profile: React.FC = () => {
     if (modalContent === 'shipping') {
       return (
         <AddNewAddressContent
+          reset={shippingForm.reset}
           formData={shippingForm.formData}
           isDisabled={shippingForm.isSubmitting}
           type="shipping"
@@ -145,7 +147,6 @@ const Profile: React.FC = () => {
       );
     }
   }
-
   const billingAddresses = customer.addresses.filter(address =>
     customer.billingAddressIds.includes(address.id)
   );

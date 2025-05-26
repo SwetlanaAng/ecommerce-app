@@ -41,7 +41,10 @@ interface ShippingEditAddressProps extends BaseEditAddressProps {
 type EditAddressProps = BillingEditAddressProps | ShippingEditAddressProps;
 
 export const EditAddressesContent = (props: EditAddressProps) => {
-  const onSubmit = () => {
+  const onSubmit: SubmitHandler<ShippingAddressModal | BillingAddressModal> = async data => {
+    console.log(data);
+    console.log(props.id);
+
     if (props.onSuccess) {
       props.onSuccess();
     }

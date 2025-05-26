@@ -262,7 +262,7 @@
             margin-bottom: 32px;
             .gift-number {
               font-size: 100px;
-              color: rgba(242, 109, 138, 0.10);
+              color: rgba(242, 109, 138, 0.1);
               font-weight: 800;
               line-height: 100%;
             }
@@ -270,7 +270,7 @@
           h3 {
             font-size: 30px;
             margin-bottom: 20px;
-          }            
+          }
         }
       }
     }
