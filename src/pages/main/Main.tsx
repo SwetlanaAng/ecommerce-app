@@ -155,7 +155,7 @@ const Main = () => {
                 navigate('/catalog');
               }}
             >
-              Order now
+              Order Now
             </Button>
           </div>
           <div className="customers-container">
@@ -218,7 +218,7 @@ const Main = () => {
             </div>
           ))}
         </div>
-        <Button className="flavor-button">Order now</Button>
+        <Button className="flavor-button">Order Now</Button>
       </section>
 
       <section className="section">

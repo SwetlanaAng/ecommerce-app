@@ -125,8 +125,11 @@ export interface ProductCardProps {
   originalPrice?: number;
   isOnSale?: boolean;
   imageUrl: string;
-  category?: string;
   slug: string;
+  filters?: {
+    isBestSeller?: boolean;
+  };
+  category: string;
 }
 
 export interface CategoryData {

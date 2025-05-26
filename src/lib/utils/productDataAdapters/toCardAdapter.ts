@@ -13,7 +13,23 @@ export default function toCardAdapter(product: Product): ProductCardProps {
   const name = product.name['en-US'] || '';
   const description = product.description?.['en-US'] || '';
   const category = product.categories[0]?.id || '';
+
   const slug = product.slug['en-US'];
+  const isBestSellerAttr = variant.attributes.find(attribute => attribute.name === 'isBestSeller');
+
+  let isBestSeller = false;
+  if (isBestSellerAttr) {
+    const value = isBestSellerAttr.value;
+    if (typeof value === 'boolean') {
+      isBestSeller = value;
+    } else if (typeof value === 'string') {
+      isBestSeller = value === 'true';
+    } else if (typeof value === 'object' && 'key' in value) {
+      isBestSeller = value.key === 'true';
+    }
+  }
+
+  const filters = { isBestSeller };
 
   return {
     id: product.id,
@@ -25,5 +41,6 @@ export default function toCardAdapter(product: Product): ProductCardProps {
     imageUrl,
     category,
     slug,
+    filters,
   };
 }
