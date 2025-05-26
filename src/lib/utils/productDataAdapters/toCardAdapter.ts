@@ -12,7 +12,18 @@ export default function toCardAdapter(product: Product): ProductCardProps {
   const imageUrl = variant.images[0]?.url || '';
   const name = product.name['en-US'] || '';
   const description = product.description?.['en-US'] || '';
-  const category = product.categories[0]?.id || '';
+
+  const packagingCategory = product.categories.find(cat =>
+    cat.obj?.name?.['en-US']?.toLowerCase().includes('pack')
+  );
+
+  let category = '';
+  if (packagingCategory?.obj?.name?.['en-US']) {
+    const categoryName = packagingCategory.obj.name['en-US'];
+    if (['6-pack', '12-pack', '24-pack'].includes(categoryName)) {
+      category = categoryName;
+    }
+  }
 
   const slug = product.slug['en-US'];
   const isBestSellerAttr = variant.attributes.find(attribute => attribute.name === 'isBestSeller');

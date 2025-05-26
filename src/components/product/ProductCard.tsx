@@ -12,12 +12,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
   description,
   slug,
   filters,
+  category,
 }) => {
   return (
     <Link to={`/catalog/${slug}`} className="product-card">
       <div className="product-image">
         <img src={imageUrl} alt={name} />
         {filters?.isBestSeller && <div className="product-filter">Best Seller</div>}
+        {category && <div className="product-category">{category}</div>}
       </div>
       <div className="product-info">
         <h3 className="product-name">{name}</h3>

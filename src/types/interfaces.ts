@@ -54,6 +54,11 @@ export interface Product {
   categories: Array<{
     id: string;
     typeId: string;
+    obj?: {
+      name: {
+        'en-US': string;
+      };
+    };
   }>;
   masterVariant: {
     id: number;

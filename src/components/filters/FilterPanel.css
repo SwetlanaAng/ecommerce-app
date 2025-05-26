@@ -10,7 +10,7 @@
     margin-bottom: 20px;
     h3 {
       margin: 0;
-      font-size: 18px;
+      font-size: 20px;
     }
     .reset-button {
       background: none;
@@ -37,8 +37,11 @@
     h4 {
       margin-top: 0;
       margin-bottom: 20px;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 500;
+    }
+    .label {
+      font-size: 18px;
     }
   }
   .price-range-inputs {
@@ -48,7 +51,7 @@
     align-items: flex-end;
     input {
       width: 70px;
-      padding: 8px;
+      padding: 10px 8px;
       border: 1px solid #ddd;
     }
     .apply-price-button {
@@ -110,5 +113,15 @@
 @media (max-width: 768px) {
   .filter-panel {
     max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-panel {
+    .filter-section {
+      .label {
+        font-size: 16px;
+      }
+    }
   }
 }

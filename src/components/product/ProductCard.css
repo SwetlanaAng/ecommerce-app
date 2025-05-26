@@ -25,23 +25,24 @@
       height: 100%;
       object-fit: cover;
     }
-    .product-filter {
+    .product-filter,
+    .product-category {
       position: absolute;
       bottom: 8px;
       left: 8px;
       background-color: var(--primary-color);
-      color: white; 
+      color: white;
       border-radius: 8px;
       padding: 4px 8px;
       font-size: 14px;
       line-height: 100%;
     }
     .product-category {
-      position: absolute;
-      bottom: -10px;
-      left: -10px;
-      background-color: var(--primary-color);
-      color: white;
+      right: 8px;
+      left: unset;
+      background: rgba(255, 255, 255, 0.4);
+      color: var(--text-color);
+      backdrop-filter: blur(20px);
     }
   }
   .product-info {
