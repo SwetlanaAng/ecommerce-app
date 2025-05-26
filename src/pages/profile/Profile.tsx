@@ -37,7 +37,7 @@ const Profile: React.FC = () => {
   const [modalIsOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
 
-  const { formData, handleSubmit, errors, isSubmitting, register, handleChange } =
+  const { formData, handleSubmit, errors, reset, isSubmitting, register, handleChange } =
     useChangePasswordForm();
 
   const refreshProfileData = useCallback(async () => {
@@ -83,6 +83,7 @@ const Profile: React.FC = () => {
           register={register}
           errors={errors}
           handleSubmit={handleSubmit}
+          reset={reset}
           onSuccess={() => {
             setModalOpen(false);
           }}

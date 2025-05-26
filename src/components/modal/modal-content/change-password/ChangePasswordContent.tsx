@@ -3,6 +3,9 @@ import Button from '../../../button/Button';
 import Input from '../../../input/Input';
 import './ChangePasswordContent.css';
 import { ChangePasswordModal } from '../../../../schemas/changePasswordSchemas';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { ChangePassword } from '../../../../services/profile.service';
 
 interface ChangePasswordFormProps {
   formData: ChangePasswordModal;
@@ -10,6 +13,7 @@ interface ChangePasswordFormProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   register: UseFormRegister<ChangePasswordModal>;
   errors: FieldErrors<ChangePasswordModal>;
+  reset: () => void;
   onSuccess?: () => void;
   onCancel?: () => void;
   handleSubmit?: (
@@ -22,17 +26,32 @@ export const ChangePasswordContent: React.FC<ChangePasswordFormProps> = ({
   isDisabled,
   onChange,
   register,
+  reset,
   errors,
   handleSubmit,
   onSuccess,
 }) => {
-  const onSubmit = () => {
-    if (onSuccess) {
-      onSuccess();
+  const [error, setError] = useState<string | null>(null);
+
+  const onSubmit: SubmitHandler<ChangePasswordModal> = async data => {
+    try {
+      setError(null);
+      await ChangePassword(data);
+      reset();
+      if (onSuccess) {
+        onSuccess();
+        toast.success('Password changed successfully!');
+      }
+    } catch (err) {
+      toast.error(`Failed to change password`);
+      setError(`Failed to change password: ${err instanceof Error ? err.message : String(err)}`);
+      console.log(error);
     }
   };
+
   return (
     <div className="edit-password">
+      <h3>Change password</h3>
       <form
         onSubmit={handleSubmit ? handleSubmit(onSubmit) : e => e.preventDefault()}
         className="edit-password-form"
@@ -40,7 +59,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordFormProps> = ({
         <Input
           id="password"
           register={register}
-          labelText="Password"
+          labelText="Current Password"
           placeholder="••••••••"
           type="password"
           disabled={isDisabled}
