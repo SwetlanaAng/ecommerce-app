@@ -147,10 +147,8 @@
       color: var(--white);
       letter-spacing: normal;
       h2 {
-        font-size: 30px;
-        max-width: 420px;
+        max-width: 700px;
         margin-bottom: 20px;
-        letter-spacing: normal;
         color: var(--white);
       }
       h3 {
@@ -250,21 +248,33 @@
         }
       }
     }
-  }
-  ul {
-    margin: 0 0 40px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    li {
-      width: calc((100% - 20px) / 2);
-      background: #fff;
-      border-radius: 8px;
-      padding: 40px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      &::before {
-        content: '✨';
-        margin-right: 10px;
+    &.gift {
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        li {
+          width: calc((100% - 20px) / 2);
+          background: #fff;
+          border-radius: 8px;
+          padding: 32px;
+          .gift-icon {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 32px;
+            .gift-number {
+              font-size: 100px;
+              color: rgba(242, 109, 138, 0.10);
+              font-weight: 800;
+              line-height: 100%;
+            }
+          }
+          h3 {
+            font-size: 30px;
+            margin-bottom: 20px;
+          }            
+        }
       }
     }
   }
@@ -367,6 +377,13 @@
           }
         }
       }
+      &.gift {
+        ul {
+          li {
+            width: 100%;
+          }
+        }
+      }
       &.reviews {
         .reviews-flex {
           .review-card {
@@ -430,6 +447,25 @@
             padding: 40px 20px 20px;
             .benefit-icon {
               left: 20px;
+            }
+          }
+        }
+      }
+      &.gift {
+        ul {
+          li {
+            padding: 20px;
+            .gift-icon {
+              .gift-number {
+                font-size: 80px;
+              }
+              img {
+                width: 100px;
+                height: 100px;
+              }
+            }
+            h3 {
+              font-size: 20px;
             }
           }
         }

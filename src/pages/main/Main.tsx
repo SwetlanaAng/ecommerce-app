@@ -18,6 +18,10 @@ import number2 from '../../assets/numbers-icons-2.svg';
 import number3 from '../../assets/numbers-icons-3.svg';
 import number4 from '../../assets/numbers-icons-4.svg';
 import star from '../../assets/star.svg';
+import gift1 from '../../assets/gift1.jpg';
+import gift2 from '../../assets/gift2.jpg';
+import gift3 from '../../assets/gift3.jpg';
+import gift4 from '../../assets/gift4.jpg';
 import './Main.css';
 
 const Main = () => {
@@ -221,13 +225,53 @@ const Main = () => {
         <Button className="flavor-button">Order Now</Button>
       </section>
 
-      <section className="section">
+      <section className="section gift">
         <h2 className="section-title">The Perfect Gift</h2>
         <ul>
-          <li>Celebrations and special occasions</li>
-          <li>Romantic gestures and sweet surprises</li>
-          <li>Corporate gifts that leave a lasting impression</li>
-          <li>Everyday indulgence — just because</li>
+          <li>
+            <div className="gift-icon">
+              <div className="gift-number">01</div>
+              <img src={gift1} alt="gift" />
+            </div>
+            <h3>Celebrations and special occasions</h3>
+            <p>
+              Mark life’s big moments with elegance. Our macarons add an unforgettable touch of joy
+              to any celebration
+            </p>
+          </li>
+          <li>
+            <div className="gift-icon">
+              <div className="gift-number">02</div>
+              <img src={gift2} alt="gift" />
+            </div>
+            <h3>Romantic gestures and sweet surprises</h3>
+            <p>
+              Express your affection with a delicate treat. A thoughtful way to show you care,
+              perfect for any sweet surprise
+            </p>
+          </li>
+          <li>
+            <div className="gift-icon">
+              <div className="gift-number">03</div>
+              <img src={gift3} alt="gift" />
+            </div>
+            <h3>Corporate gifts for lasting impression</h3>
+            <p>
+              Elevate your business gifting. Impress clients and reward employees with a unique,
+              memorable taste of quality
+            </p>
+          </li>
+          <li>
+            <div className="gift-icon">
+              <div className="gift-number">04</div>
+              <img src={gift4} alt="gift" />
+            </div>
+            <h3>A Little Everyday Indulgence</h3>
+            <p>
+              Some days simply call for luxury. Treat yourself or someone special to a moment of
+              delicious bliss, just because
+            </p>
+          </li>
         </ul>
       </section>
 
