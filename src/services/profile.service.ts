@@ -336,3 +336,71 @@ export async function AddShippingAddress(addressData: ShippingAddressModal) {
     throw new Error(`Error adding shipping address: ${err}`);
   }
 }
+export async function deleteBillingAddress(addressBillingId: number) {
+  const tokenData = JSON.parse(localStorage.getItem('token') || '{}') as TokenResponse;
+  const accessToken = tokenData.access_token;
+  if (!accessToken) {
+    throw new Error('Authentication data is missing');
+  }
+  try {
+    const user = await getCustomer();
+
+    const id = user.id;
+    const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers/${id}`;
+    const addressesIdsArray = user.billingAddressIds;
+    const addressId = addressesIdsArray[addressBillingId];
+    const requestBody = {
+      version: user.version,
+      actions: [
+        {
+          action: 'removeAddress',
+          addressId: addressId,
+        },
+      ],
+    };
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+  } catch (err) {
+    throw new Error(`Error removing address: ${err}`);
+  }
+}
+export async function deleteShippingAddress(addressShippingId: number) {
+  const tokenData = JSON.parse(localStorage.getItem('token') || '{}') as TokenResponse;
+  const accessToken = tokenData.access_token;
+  if (!accessToken) {
+    throw new Error('Authentication data is missing');
+  }
+  try {
+    const user = await getCustomer();
+
+    const id = user.id;
+    const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers/${id}`;
+    const addressesIdsArray = user.shippingAddressIds;
+    const addressId = addressesIdsArray[addressShippingId];
+    const requestBody = {
+      version: user.version,
+      actions: [
+        {
+          action: 'removeAddress',
+          addressId: addressId,
+        },
+      ],
+    };
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+  } catch (err) {
+    throw new Error(`Error removing address: ${err}`);
+  }
+}
