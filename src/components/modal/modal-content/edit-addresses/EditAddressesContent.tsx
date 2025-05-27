@@ -5,7 +5,11 @@ import { Address } from '../../../../types/address.types';
 import BillingAddressForm from '../../../address/BillingAddressForm';
 import ShippingAddressForm from '../../../address/ShippingAddressForm';
 import { BillingAddressModal, ShippingAddressModal } from '../../../../schemas/aditAddressSchema';
-import { deleteAddress } from '../../../../services/profile.service';
+import {
+  EditBillingAddress,
+  EditShippingAddress,
+  deleteAddress,
+} from '../../../../services/profile.service';
 import { toast } from 'react-toastify';
 
 interface BaseEditAddressProps {
@@ -44,12 +48,28 @@ interface ShippingEditAddressProps extends BaseEditAddressProps {
 type EditAddressProps = BillingEditAddressProps | ShippingEditAddressProps;
 
 export const EditAddressesContent = (props: EditAddressProps) => {
-  const onSubmit: SubmitHandler<ShippingAddressModal | BillingAddressModal> = async data => {
-    console.log(data);
-    console.log(props.id);
-
-    if (props.onSuccess) {
-      props.onSuccess();
+  const onBillingSubmit: SubmitHandler<BillingAddressModal> = async data => {
+    try {
+      await EditBillingAddress(props.id, data);
+      if (props.onSuccess) {
+        props.onSuccess();
+        props.refresh();
+        toast.success('Address edited successfully!');
+      }
+    } catch {
+      toast.error(`Failed to edit address`);
+    }
+  };
+  const onShippingSubmit: SubmitHandler<ShippingAddressModal> = async data => {
+    try {
+      await EditShippingAddress(props.id, data);
+      if (props.onSuccess) {
+        props.onSuccess();
+        props.refresh();
+        toast.success('Address edited successfully!');
+      }
+    } catch {
+      toast.error(`Failed to edit address`);
     }
   };
   const deleteAddressData = async () => {
@@ -70,7 +90,13 @@ export const EditAddressesContent = (props: EditAddressProps) => {
       <h3>{`Edit ${props.addressType} address`}</h3>
       <form
         className={`edit-${props.addressType}-form`}
-        onSubmit={props.handleSubmit ? props.handleSubmit(onSubmit) : e => e.preventDefault()}
+        onSubmit={
+          props.handleSubmit
+            ? props.addressType === 'billing'
+              ? props.handleSubmit(onBillingSubmit)
+              : props.handleSubmit(onShippingSubmit)
+            : e => e.preventDefault()
+        }
       >
         {props.addressType === 'billing' ? (
           <BillingAddressForm

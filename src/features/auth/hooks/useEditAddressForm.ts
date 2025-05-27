@@ -11,7 +11,7 @@ import {
 
 export const useBillingAddressForm = (data?: Address) => {
   const initialFormData: BillingAddressModal = {
-    billing_country: data?.country || 'United States',
+    billing_country: data?.country || '',
     billing_city: data?.city || '',
     billing_street: data?.street || '',
     billing_postalCode: data?.postalCode || '',
@@ -67,7 +67,7 @@ export const useBillingAddressForm = (data?: Address) => {
 
 export const useShippingAddressForm = (data?: Address) => {
   const initialFormData: ShippingAddressModal = {
-    shipping_country: data?.country || 'United States',
+    shipping_country: data?.country || '',
     shipping_city: data?.city || '',
     shipping_street: data?.street || '',
     shipping_postalCode: data?.postalCode || '',

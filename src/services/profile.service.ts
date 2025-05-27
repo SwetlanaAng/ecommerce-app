@@ -205,9 +205,6 @@ export async function ChangePassword(passwordData: {
   }
 }
 
-export async function EditAddress(addressData: ShippingAddressModal | BillingAddressModal) {
-  console.log(addressData);
-}
 async function addAddress(
   actions: {
     action: string;
@@ -250,6 +247,7 @@ async function addAddress(
 
     const data = await response.json();
     const newAddressId = data.addresses[data.addresses.length - 1].id;
+    console.log(actionAddId);
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -270,7 +268,7 @@ async function addAddress(
       const addedAddressResponse = await response.json();
       localStorage.setItem('login', JSON.stringify(addedAddressResponse));
     } catch (error) {
-      throw new Error(`Error addBillingAddressId customer with version ${data.version}: ${error}`);
+      throw new Error(`Error addAddressId customer with version ${data.version}: ${error}`);
     }
     if (actionAddDefaultId) {
       try {
@@ -381,5 +379,115 @@ export async function deleteAddress(addressNumberId: number, type: string) {
     localStorage.setItem('login', JSON.stringify(deletedAddressResponse));
   } catch (err) {
     throw new Error(`Error removing address: ${err}`);
+  }
+}
+export async function EditAddress(
+  addressNumberId: number,
+  address: {
+    streetName: string;
+    postalCode: string;
+    city: string;
+    country: string;
+  },
+  type: string,
+  defaultAddress: boolean
+) {
+  const tokenData = JSON.parse(localStorage.getItem('token') || '{}') as TokenResponse;
+  const accessToken = tokenData.access_token;
+  if (!accessToken) {
+    throw new Error('Authentication data is missing');
+  }
+  try {
+    const user = await getCustomer();
+
+    const id = user.id;
+    const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers/${id}`;
+    let addressesIdsArray;
+    if (type === 'billing') {
+      addressesIdsArray = user.billingAddressIds;
+    } else {
+      addressesIdsArray = user.shippingAddressIds;
+    }
+    const addressId = addressesIdsArray[addressNumberId];
+
+    const requestBody = {
+      version: user.version,
+      actions: [
+        {
+          action: 'changeAddress',
+          addressId: addressId,
+          address: address,
+        },
+      ],
+    };
+    const setDefault =
+      type === 'billing'
+        ? {
+            action: 'setDefaultBillingAddress',
+            addressId: addressId,
+          }
+        : {
+            action: 'setDefaultShippingAddress',
+            addressId: addressId,
+          };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const editedAddressResponse = await response.json();
+    localStorage.setItem('login', JSON.stringify(editedAddressResponse));
+    if (defaultAddress) {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            version: editedAddressResponse.version,
+            actions: [setDefault],
+          }),
+        });
+        const addedDefaultResponse = await response.json();
+        localStorage.setItem('login', JSON.stringify(addedDefaultResponse));
+      } catch (err) {
+        throw new Error(`Error adding default address: ${err}`);
+      }
+    }
+  } catch (err) {
+    throw new Error(`Error removing address: ${err}`);
+  }
+}
+export async function EditBillingAddress(id: number, data: BillingAddressModal) {
+  const address = {
+    streetName: data.billing_street,
+    postalCode: data.billing_postalCode,
+    city: data.billing_city,
+    country: data.billing_country,
+  };
+  try {
+    await EditAddress(id, address, 'billing', data.billing_isDefault);
+  } catch {
+    throw new Error(`Error editing billing address`);
+  }
+}
+export async function EditShippingAddress(id: number, data: ShippingAddressModal) {
+  const address = {
+    streetName: data.shipping_street,
+    postalCode: data.shipping_postalCode,
+    city: data.shipping_city,
+    country: data.shipping_country,
+  };
+  try {
+    await EditAddress(id, address, 'shipping', data.shipping_isDefault);
+  } catch {
+    throw new Error(`Error editing shipping address`);
   }
 }
