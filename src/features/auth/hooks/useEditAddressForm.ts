@@ -11,7 +11,7 @@ import {
 
 export const useBillingAddressForm = (data?: Address) => {
   const initialFormData: BillingAddressModal = {
-    billing_country: data?.country || '',
+    billing_country: data?.country || 'US',
     billing_city: data?.city || '',
     billing_street: data?.street || '',
     billing_postalCode: data?.postalCode || '',

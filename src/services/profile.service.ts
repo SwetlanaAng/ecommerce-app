@@ -340,7 +340,7 @@ export async function AddShippingAddress(addressData: ShippingAddressModal) {
     throw new Error(`Error adding shipping address: ${err}`);
   }
 }
-export async function deleteAddress(addressId: string /* , type: string */) {
+export async function deleteAddress(addressId: string) {
   const tokenData = JSON.parse(localStorage.getItem('token') || '{}') as TokenResponse;
   const accessToken = tokenData.access_token;
   if (!accessToken) {
@@ -351,13 +351,6 @@ export async function deleteAddress(addressId: string /* , type: string */) {
 
     const id = user.id;
     const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers/${id}`;
-    /*  let addressesIdsArray;
-    if (type === 'billing') {
-      addressesIdsArray = user.billingAddressIds;
-    } else {
-      addressesIdsArray = user.shippingAddressIds;
-    }
-    const addressId = addressesIdsArray[addressNumberId]; */
     const requestBody = {
       version: user.version,
       actions: [
@@ -383,7 +376,7 @@ export async function deleteAddress(addressId: string /* , type: string */) {
 }
 export async function EditAddress(
   addressId: string,
-  address: {
+  requestAddress: {
     streetName: string;
     postalCode: string;
     city: string;
@@ -408,11 +401,14 @@ export async function EditAddress(
         {
           action: 'changeAddress',
           addressId: addressId,
-          address: address,
+          address: requestAddress,
         },
       ],
     };
-    const setDefault =
+    const setDefault: {
+      action: string;
+      addressId: string | undefined;
+    } =
       type === 'billing'
         ? {
             action: 'setDefaultBillingAddress',
@@ -434,7 +430,19 @@ export async function EditAddress(
 
     const editedAddressResponse = await response.json();
     localStorage.setItem('login', JSON.stringify(editedAddressResponse));
-    if (defaultAddress) {
+    if (
+      defaultAddress ||
+      (!defaultAddress &&
+        (editedAddressResponse.defaultBillingAddressId === addressId ||
+          editedAddressResponse.defaultShippingAddressId === addressId))
+    ) {
+      if (
+        !defaultAddress &&
+        (editedAddressResponse.defaultBillingAddressId === addressId ||
+          editedAddressResponse.defaultShippingAddressId === addressId)
+      ) {
+        setDefault.addressId = undefined;
+      }
       try {
         const response = await fetch(url, {
           method: 'POST',
@@ -454,31 +462,31 @@ export async function EditAddress(
       }
     }
   } catch (err) {
-    throw new Error(`Error removing address: ${err}`);
+    throw new Error(`Error editing address: ${err}`);
   }
 }
 export async function EditBillingAddress(addressId: string, data: BillingAddressModal) {
-  const address = {
+  const requestAddress = {
     streetName: data.billing_street,
     postalCode: data.billing_postalCode,
     city: data.billing_city,
     country: data.billing_country,
   };
   try {
-    await EditAddress(addressId, address, 'billing', data.billing_isDefault);
+    await EditAddress(addressId, requestAddress, 'billing', data.billing_isDefault);
   } catch {
     throw new Error(`Error editing billing address`);
   }
 }
 export async function EditShippingAddress(addressId: string, data: ShippingAddressModal) {
-  const address = {
+  const requestAddress = {
     streetName: data.shipping_street,
     postalCode: data.shipping_postalCode,
     city: data.shipping_city,
     country: data.shipping_country,
   };
   try {
-    await EditAddress(addressId, address, 'shipping', data.shipping_isDefault);
+    await EditAddress(addressId, requestAddress, 'shipping', data.shipping_isDefault);
   } catch {
     throw new Error(`Error editing shipping address`);
   }

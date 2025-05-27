@@ -74,7 +74,7 @@ export const EditAddressesContent = (props: EditAddressProps) => {
   };
   const deleteAddressData = async () => {
     try {
-      await deleteAddress(props.addressId /* , props.addressType */);
+      await deleteAddress(props.addressId);
       if (props.onSuccess) {
         props.onSuccess();
         props.refresh();
