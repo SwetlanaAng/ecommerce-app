@@ -45,7 +45,6 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
       <div className="detail-info">
         <h2 className="detail-title">{title}</h2>
         <p className="detail-description">{desc}</p>
-
         <div className="detail-price">
           {sale != null ? (
             <>
