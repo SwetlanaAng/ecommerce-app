@@ -17,7 +17,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAuth }) => {
   }
 
   if (requireAuth && !isAuthenticated) {
-    return <Navigate to={AppRouterPaths.MAIN} />;
+    return <Navigate to={AppRouterPaths.LOGIN} />;
   }
 
   if (!requireAuth && isAuthenticated) {
