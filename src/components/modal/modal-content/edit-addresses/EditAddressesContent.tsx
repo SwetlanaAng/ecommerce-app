@@ -5,7 +5,7 @@ import { Address } from '../../../../types/address.types';
 import BillingAddressForm from '../../../address/BillingAddressForm';
 import ShippingAddressForm from '../../../address/ShippingAddressForm';
 import { BillingAddressModal, ShippingAddressModal } from '../../../../schemas/aditAddressSchema';
-import { deleteBillingAddress, deleteShippingAddress } from '../../../../services/profile.service';
+import { deleteAddress } from '../../../../services/profile.service';
 import { toast } from 'react-toastify';
 
 interface BaseEditAddressProps {
@@ -14,6 +14,7 @@ interface BaseEditAddressProps {
   addressData: Address;
   onSuccess?: () => void;
   onCancel?: () => void;
+  refresh: () => Promise<void>;
 }
 
 interface BillingEditAddressProps extends BaseEditAddressProps {
@@ -51,28 +52,19 @@ export const EditAddressesContent = (props: EditAddressProps) => {
       props.onSuccess();
     }
   };
-  const deleteBilling = async () => {
+  const deleteAddressData = async () => {
     try {
-      await deleteBillingAddress(props.id);
+      await deleteAddress(props.id, props.addressType);
       if (props.onSuccess) {
         props.onSuccess();
-        toast.success('Billing address removed successfully!');
+        props.refresh();
+        toast.success('Address removed successfully!');
       }
     } catch {
-      toast.error(`Failed to remove billing address`);
+      toast.error(`Failed to remove address`);
     }
   };
-  const deleteShipping = async () => {
-    try {
-      await deleteShippingAddress(props.id);
-      if (props.onSuccess) {
-        props.onSuccess();
-        toast.success('Shipping address removed successfully!');
-      }
-    } catch {
-      toast.error(`Failed to remove shipping address`);
-    }
-  };
+
   return (
     <div className={`edit-${props.addressType}`}>
       <h3>{`Edit ${props.addressType} address`}</h3>
@@ -104,10 +96,7 @@ export const EditAddressesContent = (props: EditAddressProps) => {
         <Button className="submit-button " type="submit">
           Save changes
         </Button>
-        <Button
-          onClick={props.addressType === 'billing' ? deleteBilling : deleteShipping}
-          children="Delete this address"
-        ></Button>
+        <Button onClick={deleteAddressData} children="Delete this address"></Button>
       </form>
     </div>
   );

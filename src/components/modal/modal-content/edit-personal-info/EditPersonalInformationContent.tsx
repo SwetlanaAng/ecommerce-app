@@ -50,6 +50,7 @@ export const EditPersonalInformationContent = ({
       if (onSuccess) {
         onSuccess();
         toast.success('Profile updated successfully!');
+        document.body.style.overflow = 'auto';
       }
     } catch (err) {
       toast.error(`Failed to update profile`);

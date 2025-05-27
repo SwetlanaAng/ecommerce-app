@@ -18,6 +18,7 @@ interface AddressBoxProps {
   postalCode: string;
   defaultId: string;
   addressId: string;
+  refresh: () => Promise<void>;
 }
 
 export const AddressBox = ({
@@ -29,6 +30,7 @@ export const AddressBox = ({
   postalCode,
   defaultId,
   addressId,
+  refresh,
 }: AddressBoxProps) => {
   const [modalIsOpen, setModalOpen] = useState(false);
   const addressData: Address = {
@@ -56,6 +58,7 @@ export const AddressBox = ({
           onDefaultAddressChange={billingForm.handleChange}
           register={billingForm.register}
           errors={billingForm.errors}
+          refresh={refresh}
           onSuccess={() => {
             setModalOpen(false);
           }}
@@ -74,6 +77,7 @@ export const AddressBox = ({
           onDefaultAddressChange={shippingForm.handleChange}
           register={shippingForm.register}
           errors={shippingForm.errors}
+          refresh={refresh}
           onSuccess={() => {
             setModalOpen(false);
           }}

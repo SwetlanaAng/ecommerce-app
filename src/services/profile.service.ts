@@ -33,6 +33,7 @@ export async function getCustomer(): Promise<CustomerInfo> {
         version: data.version,
       })
     );
+    localStorage.setItem('login', JSON.stringify(data));
 
     return {
       id: data.id,
@@ -121,6 +122,7 @@ export async function updateCustomerProfile(personalData: {
           version: data.version,
         })
       );
+      localStorage.setItem('login', JSON.stringify(data));
 
       return {
         id: data.id,
@@ -249,7 +251,7 @@ async function addAddress(
     const data = await response.json();
     const newAddressId = data.addresses[data.addresses.length - 1].id;
     try {
-      await fetch(url, {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -265,13 +267,15 @@ async function addAddress(
           ],
         }),
       });
+      const addedAddressResponse = await response.json();
+      localStorage.setItem('login', JSON.stringify(addedAddressResponse));
     } catch (error) {
       throw new Error(`Error addBillingAddressId customer with version ${data.version}: ${error}`);
     }
     if (actionAddDefaultId) {
       try {
         const customer = await getCustomer();
-        await fetch(url, {
+        const response = await fetch(url, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -287,6 +291,8 @@ async function addAddress(
             ],
           }),
         });
+        const addDefaultResponse = await response.json();
+        localStorage.setItem('login', JSON.stringify(addDefaultResponse));
       } catch (error) {
         throw new Error(`Error update customer with version ${data.version}: ${error}`);
       }
@@ -336,7 +342,7 @@ export async function AddShippingAddress(addressData: ShippingAddressModal) {
     throw new Error(`Error adding shipping address: ${err}`);
   }
 }
-export async function deleteBillingAddress(addressBillingId: number) {
+export async function deleteAddress(addressNumberId: number, type: string) {
   const tokenData = JSON.parse(localStorage.getItem('token') || '{}') as TokenResponse;
   const accessToken = tokenData.access_token;
   if (!accessToken) {
@@ -347,8 +353,13 @@ export async function deleteBillingAddress(addressBillingId: number) {
 
     const id = user.id;
     const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers/${id}`;
-    const addressesIdsArray = user.billingAddressIds;
-    const addressId = addressesIdsArray[addressBillingId];
+    let addressesIdsArray;
+    if (type === 'billing') {
+      addressesIdsArray = user.billingAddressIds;
+    } else {
+      addressesIdsArray = user.shippingAddressIds;
+    }
+    const addressId = addressesIdsArray[addressNumberId];
     const requestBody = {
       version: user.version,
       actions: [
@@ -358,7 +369,7 @@ export async function deleteBillingAddress(addressBillingId: number) {
         },
       ],
     };
-    await fetch(url, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -366,40 +377,8 @@ export async function deleteBillingAddress(addressBillingId: number) {
       },
       body: JSON.stringify(requestBody),
     });
-  } catch (err) {
-    throw new Error(`Error removing address: ${err}`);
-  }
-}
-export async function deleteShippingAddress(addressShippingId: number) {
-  const tokenData = JSON.parse(localStorage.getItem('token') || '{}') as TokenResponse;
-  const accessToken = tokenData.access_token;
-  if (!accessToken) {
-    throw new Error('Authentication data is missing');
-  }
-  try {
-    const user = await getCustomer();
-
-    const id = user.id;
-    const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers/${id}`;
-    const addressesIdsArray = user.shippingAddressIds;
-    const addressId = addressesIdsArray[addressShippingId];
-    const requestBody = {
-      version: user.version,
-      actions: [
-        {
-          action: 'removeAddress',
-          addressId: addressId,
-        },
-      ],
-    };
-    await fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    });
+    const deletedAddressResponse = await response.json();
+    localStorage.setItem('login', JSON.stringify(deletedAddressResponse));
   } catch (err) {
     throw new Error(`Error removing address: ${err}`);
   }

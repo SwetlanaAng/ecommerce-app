@@ -54,6 +54,7 @@ const Profile: React.FC = () => {
       );
     } finally {
       setIsLoading(false);
+      document.body.style.overflow = 'auto';
     }
   }, []);
 
@@ -222,6 +223,7 @@ const Profile: React.FC = () => {
             postalCode={billingAddress?.postalCode}
             defaultId={defaultBillingId}
             addressId={billingAddress?.id}
+            refresh={refreshProfileData}
           ></AddressBox>
         ))
       )}
@@ -251,6 +253,7 @@ const Profile: React.FC = () => {
             postalCode={shippingAddress?.postalCode}
             defaultId={defaultShippingId}
             addressId={shippingAddress?.id}
+            refresh={refreshProfileData}
           ></AddressBox>
         ))
       )}
