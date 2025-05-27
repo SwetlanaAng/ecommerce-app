@@ -48,11 +48,11 @@ export const AddressBox = ({
     if (addressType === 'billing') {
       return (
         <EditAddressesContent
+          addressId={addressId}
           addressType="billing"
           formData={billingForm.formData}
           handleSubmit={billingForm.handleSubmit}
           addressData={addressData}
-          id={addressNumber}
           isDisabled={billingForm.isSubmitting}
           onChange={billingForm.handleChange}
           onDefaultAddressChange={billingForm.handleChange}
@@ -67,11 +67,11 @@ export const AddressBox = ({
     } else {
       return (
         <EditAddressesContent
+          addressId={addressId}
           addressType="shipping"
           formData={shippingForm.formData}
           handleSubmit={shippingForm.handleSubmit}
           addressData={addressData}
-          id={addressNumber}
           isDisabled={shippingForm.isSubmitting}
           onChange={shippingForm.handleChange}
           onDefaultAddressChange={shippingForm.handleChange}

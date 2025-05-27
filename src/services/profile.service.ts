@@ -340,7 +340,7 @@ export async function AddShippingAddress(addressData: ShippingAddressModal) {
     throw new Error(`Error adding shipping address: ${err}`);
   }
 }
-export async function deleteAddress(addressNumberId: number, type: string) {
+export async function deleteAddress(addressId: string /* , type: string */) {
   const tokenData = JSON.parse(localStorage.getItem('token') || '{}') as TokenResponse;
   const accessToken = tokenData.access_token;
   if (!accessToken) {
@@ -351,13 +351,13 @@ export async function deleteAddress(addressNumberId: number, type: string) {
 
     const id = user.id;
     const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers/${id}`;
-    let addressesIdsArray;
+    /*  let addressesIdsArray;
     if (type === 'billing') {
       addressesIdsArray = user.billingAddressIds;
     } else {
       addressesIdsArray = user.shippingAddressIds;
     }
-    const addressId = addressesIdsArray[addressNumberId];
+    const addressId = addressesIdsArray[addressNumberId]; */
     const requestBody = {
       version: user.version,
       actions: [
@@ -382,7 +382,7 @@ export async function deleteAddress(addressNumberId: number, type: string) {
   }
 }
 export async function EditAddress(
-  addressNumberId: number,
+  addressId: string,
   address: {
     streetName: string;
     postalCode: string;
@@ -402,14 +402,6 @@ export async function EditAddress(
 
     const id = user.id;
     const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers/${id}`;
-    let addressesIdsArray;
-    if (type === 'billing') {
-      addressesIdsArray = user.billingAddressIds;
-    } else {
-      addressesIdsArray = user.shippingAddressIds;
-    }
-    const addressId = addressesIdsArray[addressNumberId];
-
     const requestBody = {
       version: user.version,
       actions: [
@@ -465,7 +457,7 @@ export async function EditAddress(
     throw new Error(`Error removing address: ${err}`);
   }
 }
-export async function EditBillingAddress(id: number, data: BillingAddressModal) {
+export async function EditBillingAddress(addressId: string, data: BillingAddressModal) {
   const address = {
     streetName: data.billing_street,
     postalCode: data.billing_postalCode,
@@ -473,12 +465,12 @@ export async function EditBillingAddress(id: number, data: BillingAddressModal) 
     country: data.billing_country,
   };
   try {
-    await EditAddress(id, address, 'billing', data.billing_isDefault);
+    await EditAddress(addressId, address, 'billing', data.billing_isDefault);
   } catch {
     throw new Error(`Error editing billing address`);
   }
 }
-export async function EditShippingAddress(id: number, data: ShippingAddressModal) {
+export async function EditShippingAddress(addressId: string, data: ShippingAddressModal) {
   const address = {
     streetName: data.shipping_street,
     postalCode: data.shipping_postalCode,
@@ -486,7 +478,7 @@ export async function EditShippingAddress(id: number, data: ShippingAddressModal
     country: data.shipping_country,
   };
   try {
-    await EditAddress(id, address, 'shipping', data.shipping_isDefault);
+    await EditAddress(addressId, address, 'shipping', data.shipping_isDefault);
   } catch {
     throw new Error(`Error editing shipping address`);
   }

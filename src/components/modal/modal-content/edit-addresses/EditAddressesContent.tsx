@@ -13,7 +13,7 @@ import {
 import { toast } from 'react-toastify';
 
 interface BaseEditAddressProps {
-  id: number;
+  addressId: string;
   isDisabled: boolean;
   addressData: Address;
   onSuccess?: () => void;
@@ -50,7 +50,7 @@ type EditAddressProps = BillingEditAddressProps | ShippingEditAddressProps;
 export const EditAddressesContent = (props: EditAddressProps) => {
   const onBillingSubmit: SubmitHandler<BillingAddressModal> = async data => {
     try {
-      await EditBillingAddress(props.id, data);
+      await EditBillingAddress(props.addressId, data);
       if (props.onSuccess) {
         props.onSuccess();
         props.refresh();
@@ -62,7 +62,7 @@ export const EditAddressesContent = (props: EditAddressProps) => {
   };
   const onShippingSubmit: SubmitHandler<ShippingAddressModal> = async data => {
     try {
-      await EditShippingAddress(props.id, data);
+      await EditShippingAddress(props.addressId, data);
       if (props.onSuccess) {
         props.onSuccess();
         props.refresh();
@@ -74,7 +74,7 @@ export const EditAddressesContent = (props: EditAddressProps) => {
   };
   const deleteAddressData = async () => {
     try {
-      await deleteAddress(props.id, props.addressType);
+      await deleteAddress(props.addressId /* , props.addressType */);
       if (props.onSuccess) {
         props.onSuccess();
         props.refresh();
