@@ -2,11 +2,6 @@ import { getBasicToken } from './registration.service';
 import { KEYS } from './keys';
 import { ProductFilters, Product } from '../types/interfaces';
 
-export enum cardsPerPage {
-  home = 6,
-  catalog = 21,
-}
-
 export type SortOption = '' | 'name.en-US asc' | 'name.en-US desc' | 'price asc' | 'price desc';
 
 const buildFilterPredicates = (filters?: ProductFilters): string[] => {
@@ -93,7 +88,14 @@ export async function searchProducts(
   const accessToken = await getBasicToken();
 
   try {
-    let url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections/search?text.en-US=${encodeURIComponent(query)}`;
+    let fuzzyLevel = 0;
+    if (query.length > 5) {
+      fuzzyLevel = 2;
+    } else if (query.length >= 3) {
+      fuzzyLevel = 1;
+    }
+
+    let url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections/search?text.en-US=${encodeURIComponent(`*${query}*`)}&fuzzy=true&fuzzyLevel=${fuzzyLevel}`;
 
     if (sort) {
       url += `&sort=${sort}`;

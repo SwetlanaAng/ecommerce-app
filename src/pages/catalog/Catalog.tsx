@@ -186,7 +186,7 @@ const Catalog: React.FC = () => {
     return (
       <div className="catalog-page">
         <h1>Product Catalog</h1>
-        <h4>{error}</h4>
+        <h4 style={{ marginBottom: '20px' }}>{error}</h4>
         <Button onClick={() => window.location.reload()}>Try again</Button>
       </div>
     );
