@@ -1,5 +1,4 @@
 .select {
-  font-size: 16px;
   cursor: pointer;
   width: 100%;
   min-width: 200px;
@@ -52,7 +51,6 @@ option {
   background: #fff;
   padding: 15px;
   transition: 0.4s;
-  font-size: 16px;
 }
 
 option:hover {
@@ -71,7 +69,14 @@ selectedcontent .icon {
 option::checkmark {
   order: 1;
   margin-left: auto;
-  content: '☑️';
+  content: url('../../assets/tick.svg');
+  background-color: var(--accent-color);
+  border-radius: 4px;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 ::picker(select) {

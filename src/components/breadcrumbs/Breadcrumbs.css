@@ -6,13 +6,13 @@
   font-size: 14px;
   .breadcrumb-item {
     cursor: pointer;
-    color: #666;
+    color: #898989;
     transition: color 0.2s ease;
     &:hover {
-      color: #333;
+      color: #131313;
     }
     &.active {
-      color: #333;
+      color: #131313;
       cursor: default;
       pointer-events: none;
     }

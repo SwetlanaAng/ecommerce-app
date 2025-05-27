@@ -262,7 +262,7 @@
             margin-bottom: 32px;
             .gift-number {
               font-size: 100px;
-              color: rgba(242, 109, 138, 0.10);
+              color: rgba(242, 109, 138, 0.1);
               font-weight: 800;
               line-height: 100%;
             }
@@ -270,7 +270,7 @@
           h3 {
             font-size: 30px;
             margin-bottom: 20px;
-          }            
+          }
         }
       }
     }
@@ -434,10 +434,13 @@
           }
         }
       }
+      &.flavors {
+        padding: 20px;
+      }
       &.benefits {
         .benefits-flex {
           .benefit-card {
-            padding: 40px 20px 20px;
+            padding: 20px;
           }
         }
       }
@@ -464,6 +467,7 @@
         .reviews-flex {
           .review-card {
             padding: 20px;
+            flex-direction: column-reverse;
             .review-author-container {
               flex-direction: column;
               align-items: flex-start;
