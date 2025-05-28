@@ -119,10 +119,14 @@ export const EditAddressesContent = (props: EditAddressProps) => {
             errors={props.errors}
           />
         )}
-        <Button className="submit-button " type="submit">
-          Save changes
-        </Button>
-        <Button onClick={deleteAddressData} children="Delete this address"></Button>
+        <div className="button-wrapper">
+          <Button className="primary" onClick={deleteAddressData}>
+            Delete this address
+          </Button>
+          <Button className="submit-button" type="submit">
+            Save changes
+          </Button>
+        </div>
       </form>
     </div>
   );

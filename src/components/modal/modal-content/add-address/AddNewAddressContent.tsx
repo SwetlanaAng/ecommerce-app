@@ -1,6 +1,5 @@
 import { FieldErrors, SubmitHandler, UseFormRegister } from 'react-hook-form';
 import Button from '../../../button/Button';
-import './AddNewAddressContent.css';
 import { BillingAddressModal, ShippingAddressModal } from '../../../../schemas/aditAddressSchema';
 import BillingAddressForm from '../../../address/BillingAddressForm';
 import ShippingAddressForm from '../../../address/ShippingAddressForm';

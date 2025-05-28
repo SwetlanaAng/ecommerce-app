@@ -3,6 +3,7 @@ import Button from '../button/Button';
 import { Modal } from '../modal/Modal';
 import { EditAddressesContent } from '../modal/modal-content/edit-addresses/EditAddressesContent';
 import { InfoBox } from '../profile-info-box/InfoBox';
+import editIcon from '../../assets/pencil-edit-button-svgrepo-com.svg';
 import {
   useBillingAddressForm,
   useShippingAddressForm,
@@ -88,39 +89,43 @@ export const AddressBox = ({
 
   return (
     <>
-      <div className="address-information-container">
-        <p>{`Address #${addressNumber + 1}`}</p>
+      <div className="card">
+        <h4>{`Address #${addressNumber + 1}`}</h4>
+        {defaultId === addressId && (
+          <div className="default">{`default ${addressType} address`} </div>
+        )}
         <Button className="edit-pen" onClick={() => setModalOpen(true)}>
+          <img src={editIcon} alt="edit" />
           Edit
         </Button>
 
-        <InfoBox
-          className={`${addressType}-country`}
-          spanText="Country: "
-          infoText={country}
-        ></InfoBox>
+        <div className="info-box-wrapper">
+          <InfoBox
+            className={`${addressType}-country`}
+            spanText="Country: "
+            infoText={country}
+          ></InfoBox>
 
-        <InfoBox className={`${addressType}-city`} spanText="City: " infoText={city}></InfoBox>
+          <InfoBox className={`${addressType}-city`} spanText="City: " infoText={city}></InfoBox>
 
-        <InfoBox
-          className={`${addressType}-street`}
-          spanText="Street : "
-          infoText={street}
-        ></InfoBox>
+          <InfoBox
+            className={`${addressType}-street`}
+            spanText="Street : "
+            infoText={street}
+          ></InfoBox>
 
-        <InfoBox
-          className={`${addressType}-postal-code`}
-          spanText="Postal code: "
-          infoText={postalCode}
-        ></InfoBox>
+          <InfoBox
+            className={`${addressType}-postal-code`}
+            spanText="Postal code: "
+            infoText={postalCode}
+          ></InfoBox>
+        </div>
+
         <Modal
           isOpen={modalIsOpen}
           onClose={() => setModalOpen(false)}
           children={renderEditContent()}
         ></Modal>
-        {defaultId === addressId && (
-          <div className="default">{`This address is set as default ${addressType} address`} </div>
-        )}
       </div>
     </>
   );

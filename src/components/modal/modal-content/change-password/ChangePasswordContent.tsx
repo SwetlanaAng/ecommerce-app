@@ -1,7 +1,6 @@
 import { FieldErrors, SubmitHandler, UseFormRegister } from 'react-hook-form';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
-import './ChangePasswordContent.css';
 import { ChangePasswordModal } from '../../../../schemas/changePasswordSchemas';
 import { toast } from 'react-toastify';
 import { ChangePassword } from '../../../../services/profile.service';

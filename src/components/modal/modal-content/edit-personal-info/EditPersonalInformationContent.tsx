@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
-import './EditPersonalInformationContent.css';
 import { updateCustomerProfile } from '../../../../services/profile.service';
 import { FieldErrors, UseFormRegister, SubmitHandler } from 'react-hook-form';
 import { editPersonalInfoModal } from '../../../../schemas/editPersonalInfoSchema';
@@ -103,7 +102,7 @@ export const EditPersonalInformationContent = ({
           error={errors.email}
         ></Input>
         <Input
-          labelText="Date of birth"
+          labelText="Birth date"
           type="date"
           name="dateOfBirth"
           id="dateOfBirth"
