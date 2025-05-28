@@ -3,7 +3,7 @@ import Button from '../../../button/Button';
 import Input from '../../../input/Input';
 import { ChangePasswordModal } from '../../../../schemas/changePasswordSchemas';
 import { toast } from 'react-toastify';
-import { ChangePassword } from '../../../../services/profile.service';
+import { ChangePassword } from '../../../../services/profilePersonal.service';
 
 interface ChangePasswordFormProps {
   formData: ChangePasswordModal;

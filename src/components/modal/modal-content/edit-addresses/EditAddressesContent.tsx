@@ -5,12 +5,12 @@ import { Address } from '../../../../types/address.types';
 import BillingAddressForm from '../../../address/BillingAddressForm';
 import ShippingAddressForm from '../../../address/ShippingAddressForm';
 import { BillingAddressModal, ShippingAddressModal } from '../../../../schemas/aditAddressSchema';
+import { toast } from 'react-toastify';
 import {
   EditBillingAddress,
   EditShippingAddress,
   deleteAddress,
-} from '../../../../services/profile.service';
-import { toast } from 'react-toastify';
+} from '../../../../services/profileAddresses.service';
 
 interface BaseEditAddressProps {
   addressId: string;

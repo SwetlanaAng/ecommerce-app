@@ -3,8 +3,11 @@ import Button from '../../../button/Button';
 import { BillingAddressModal, ShippingAddressModal } from '../../../../schemas/aditAddressSchema';
 import BillingAddressForm from '../../../address/BillingAddressForm';
 import ShippingAddressForm from '../../../address/ShippingAddressForm';
-import { AddBillingAddress, AddShippingAddress } from '../../../../services/profile.service';
 import { toast } from 'react-toastify';
+import {
+  AddBillingAddress,
+  AddShippingAddress,
+} from '../../../../services/profileAddresses.service';
 
 interface BaseAddressFormProps {
   isDisabled: boolean;

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
-import { updateCustomerProfile } from '../../../../services/profile.service';
 import { FieldErrors, UseFormRegister, SubmitHandler } from 'react-hook-form';
 import { editPersonalInfoModal } from '../../../../schemas/editPersonalInfoSchema';
 import { toast } from 'react-toastify';
+import { updateCustomerProfile } from '../../../../services/profilePersonal.service';
 
 type EditPersonalInfoProps = {
   formData: {
