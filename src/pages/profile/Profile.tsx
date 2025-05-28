@@ -12,9 +12,9 @@ import { useChangePasswordForm } from '../../features/auth/hooks/useChangePasswo
 import { useEditPersonalInfoForm } from '../../features/auth/hooks/useEditPersonalInfoForm';
 import { AddNewAddressContent } from '../../components/modal/modal-content/add-address/AddNewAddressContent';
 import {
-  useBillingAddressForm,
-  useShippingAddressForm,
-} from '../../features/auth/hooks/useEditAddressForm';
+  useAddBillingAddressForm,
+  useAddShippingAddressForm,
+} from '../../features/auth/hooks/useAddAddressForm';
 
 const Profile: React.FC = () => {
   const [customer, setCustomer] = useState<CustomerInfo>({
@@ -71,8 +71,8 @@ const Profile: React.FC = () => {
     handleSubmit: handleSubmitPersonal,
   } = useEditPersonalInfoForm();
 
-  const billingForm = useBillingAddressForm();
-  const shippingForm = useShippingAddressForm();
+  const addBillingForm = useAddBillingAddressForm();
+  const addShippingForm = useAddShippingAddressForm();
 
   function getModalChild() {
     if (modalContent === 'changePassword') {
@@ -111,15 +111,15 @@ const Profile: React.FC = () => {
     if (modalContent === 'billing') {
       return (
         <AddNewAddressContent
-          reset={billingForm.reset}
-          formData={billingForm.formData}
-          isDisabled={billingForm.isSubmitting}
+          reset={addBillingForm.reset}
+          formData={addBillingForm.formData}
+          isDisabled={addBillingForm.isSubmitting}
           type="billing"
-          onChange={billingForm.handleChange}
-          onDefaultAddressChange={billingForm.handleChange}
-          register={billingForm.register}
-          errors={billingForm.errors}
-          handleSubmit={billingForm.handleSubmit}
+          onChange={addBillingForm.handleChange}
+          onDefaultAddressChange={addBillingForm.handleChange}
+          register={addBillingForm.register}
+          errors={addBillingForm.errors}
+          handleSubmit={addBillingForm.handleSubmit}
           onSuccess={() => {
             setModalOpen(false);
             refreshProfileData();
@@ -131,15 +131,15 @@ const Profile: React.FC = () => {
     if (modalContent === 'shipping') {
       return (
         <AddNewAddressContent
-          reset={shippingForm.reset}
-          formData={shippingForm.formData}
-          isDisabled={shippingForm.isSubmitting}
+          reset={addShippingForm.reset}
+          formData={addShippingForm.formData}
+          isDisabled={addShippingForm.isSubmitting}
           type="shipping"
-          onChange={shippingForm.handleChange}
-          onDefaultAddressChange={shippingForm.handleChange}
-          register={shippingForm.register}
-          errors={shippingForm.errors}
-          handleSubmit={shippingForm.handleSubmit}
+          onChange={addShippingForm.handleChange}
+          onDefaultAddressChange={addShippingForm.handleChange}
+          register={addShippingForm.register}
+          errors={addShippingForm.errors}
+          handleSubmit={addShippingForm.handleSubmit}
           onSuccess={() => {
             setModalOpen(false);
             refreshProfileData();
@@ -278,7 +278,14 @@ const Profile: React.FC = () => {
       </Button>
       <Modal
         isOpen={modalIsOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {
+          if (modalContent === 'billing') {
+            addBillingForm.reset();
+          } else if (modalContent === 'shipping') {
+            addShippingForm.reset();
+          }
+          setModalOpen(false);
+        }}
         children={getModalChild()}
       ></Modal>
     </div>

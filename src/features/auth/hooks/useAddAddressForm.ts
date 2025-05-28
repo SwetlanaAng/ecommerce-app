@@ -1,7 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Address } from '../../../types/address.types';
 import {
   BillingAddressSchema,
   ShippingAddressSchema,
@@ -9,13 +8,13 @@ import {
   ShippingAddressModal,
 } from '../../../schemas/aditAddressSchema';
 
-export const useBillingAddressForm = (data?: Address) => {
+export const useAddBillingAddressForm = () => {
   const initialFormData: BillingAddressModal = {
-    billing_country: data?.country || 'US',
-    billing_city: data?.city || '',
-    billing_street: data?.street || '',
-    billing_postalCode: data?.postalCode || '',
-    billing_isDefault: data?.isDefault || false,
+    billing_country: 'US',
+    billing_city: '',
+    billing_street: '',
+    billing_postalCode: '',
+    billing_isDefault: false,
   };
 
   const {
@@ -23,7 +22,7 @@ export const useBillingAddressForm = (data?: Address) => {
     register,
     formState: { errors, isSubmitting },
     setValue,
-    reset,
+    reset: resetForm,
   } = useForm<BillingAddressModal>({
     resolver: zodResolver(BillingAddressSchema),
     mode: 'onTouched',
@@ -54,6 +53,11 @@ export const useBillingAddressForm = (data?: Address) => {
     [setValue]
   );
 
+  const reset = useCallback(() => {
+    resetForm();
+    setFormData(initialFormData);
+  }, [resetForm]);
+
   return {
     formData,
     handleChange,
@@ -65,13 +69,13 @@ export const useBillingAddressForm = (data?: Address) => {
   };
 };
 
-export const useShippingAddressForm = (data?: Address) => {
+export const useAddShippingAddressForm = () => {
   const initialFormData: ShippingAddressModal = {
-    shipping_country: data?.country || 'US',
-    shipping_city: data?.city || '',
-    shipping_street: data?.street || '',
-    shipping_postalCode: data?.postalCode || '',
-    shipping_isDefault: data?.isDefault || false,
+    shipping_country: 'US',
+    shipping_city: '',
+    shipping_street: '',
+    shipping_postalCode: '',
+    shipping_isDefault: false,
   };
 
   const {
@@ -79,7 +83,7 @@ export const useShippingAddressForm = (data?: Address) => {
     register,
     formState: { errors, isSubmitting },
     setValue,
-    reset,
+    reset: resetForm,
   } = useForm<ShippingAddressModal>({
     resolver: zodResolver(ShippingAddressSchema),
     mode: 'onTouched',
@@ -87,12 +91,6 @@ export const useShippingAddressForm = (data?: Address) => {
   });
 
   const [formData, setFormData] = useState<ShippingAddressModal>(initialFormData);
-
-  useEffect(() => {
-    Object.entries(initialFormData).forEach(([key, value]) => {
-      setValue(key as keyof ShippingAddressModal, value, { shouldValidate: true });
-    });
-  }, [setValue]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -115,6 +113,11 @@ export const useShippingAddressForm = (data?: Address) => {
     },
     [setValue]
   );
+
+  const reset = useCallback(() => {
+    resetForm();
+    setFormData(initialFormData);
+  }, [resetForm]);
 
   return {
     formData,

@@ -49,7 +49,7 @@ export const firstNameSchema = z
   .nonempty({ message: 'First name must contain at least one character' })
   .refine(
     value =>
-      /[a-zA-Z]/.test(value) &&
+      /^[a-zA-Z\s]+$/.test(value) &&
       !/\d/.test(value) &&
       !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
     {
@@ -61,7 +61,7 @@ export const lastNameSchema = z
   .nonempty({ message: 'Last name must contain at least one character' })
   .refine(
     value =>
-      /[a-zA-Z]/.test(value) &&
+      /^[a-zA-Z\s]+$/.test(value) &&
       !/\d/.test(value) &&
       !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
     {
@@ -81,7 +81,7 @@ export const citySchema = z
   .nonempty({ message: 'City must contain at least one character' })
   .refine(
     value =>
-      /[a-zA-Z]/.test(value) &&
+      /^[a-zA-Z\s]+$/.test(value) &&
       !/\d/.test(value) &&
       !/[@!#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value),
     {

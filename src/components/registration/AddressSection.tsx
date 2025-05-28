@@ -29,6 +29,7 @@ const AddressSection: React.FC<AddressSectionProps> = ({
   errors,
 }) => {
   const billingFormData: BillingAddressModal = {
+    billing_country: addressData.billingAddress?.country || 'US',
     billing_city: addressData.billingAddress?.city || '',
     billing_street: addressData.billingAddress?.street || '',
     billing_postalCode: addressData.billingAddress?.postalCode || '',
@@ -36,6 +37,7 @@ const AddressSection: React.FC<AddressSectionProps> = ({
   };
 
   const shippingFormData: ShippingAddressModal = {
+    shipping_country: addressData.shippingAddress?.country || 'US',
     shipping_city: addressData.shippingAddress?.city || '',
     shipping_street: addressData.shippingAddress?.street || '',
     shipping_postalCode: addressData.shippingAddress?.postalCode || '',
