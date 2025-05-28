@@ -1,92 +1,96 @@
 .profile-page {
-  width: 100%;
-  max-width: 850px;
-  text-align: start;
-  margin: 0 auto;
-  background-color: var(--bg-color-light);
-  padding: 50px 50px;
-  border-radius: 8px;
-  h1,
-  h2,
-  h3 {
-    text-align: center;
-    padding: 20px 0;
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 50px 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    h3 {
+      margin: 0;
+    }
   }
   .edit {
-    margin-top: 30px;
+    width: fit-content;
+    background-color: transparent;
+    padding: 0;
+    color: var(--accent-color);
+    &:hover {
+      background-color: transparent;
+      color: var(--accent-color-hover);
+    }
   }
-  .personal-information-container {
-    padding: 50px 50px 30px 50px;
-    border: 1px solid var(--color-hover);
-    border-radius: 5px;
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 60px;
+    border-radius: 32px;
     position: relative;
+    background: var(--white);
+    .info-box-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .default {
+      font-size: 14px;
+      background-color: var(--primary-color);
+      color: var(--white);
+      padding: 4px 8px;
+      border-radius: 8px;
+      width: fit-content;
+      margin-top: -20px;
+    }
   }
   .edit-pen,
   .edit-personal-pen {
     position: absolute;
-    text-align: left;
-    color: black;
-    top: 48px;
-    right: 48px;
-    width: 50px;
-    height: 19px;
-    line-height: 13px;
-    padding: 0;
-    border: none;
+    color: var(--accent-color);
     background-color: transparent;
-    background-image: url('../../assets/pencil-edit-button-svgrepo-com.svg');
-    background-repeat: no-repeat;
-    background-position-x: center;
-    background-position-x: right;
-    background-size: 18px;
-  }
-  .edit-personal-pen {
-    top: 28px;
-  }
-  .address-information-container {
-    padding: 30px 50px;
-    border: 1px solid var(--color-hover);
-    border-radius: 5px;
-    position: relative;
-    margin-bottom: 20px;
-    .edit-pen {
-      top: 27px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    top: 40px;
+    right: 60px;
+    padding: 0;
+    &:hover {
+      background-color: transparent;
+      color: var(--accent-color-hover);
     }
   }
 }
-@media (max-width: 850px) {
+
+@media (max-width: 768px) {
   .profile-page {
-    .personal-information-container {
-      padding: 50px 20px 30px 20px;
-    }
-    .address-information-container {
-      padding: 30px 20px;
-    }
-    .edit-pen,
-    .edit-personal-pen {
-      right: 3%;
-    }
-  }
-}
-@media (max-width: 760px) {
-  .profile-page {
-    padding: 20px 10px;
-  }
-}
-@media (max-width: 480px) {
-  .profile-page {
-    .personal-information-container {
-      padding: 50px 10px 30px 10px;
-      .info-box,
+    .card {
+      padding: 30px;
+      .edit-pen,
       .edit-personal-pen {
-        font-size: 13px;
+        top: 30px;
+      }
+      .info-box-wrapper {
+        flex-direction: column;
+        .info-box {
+          width: 100%;
+        }
       }
     }
-    .address-information-container {
-      padding: 30px 10px;
-      font-size: 13px;
-      .info-box {
-        font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-page {
+    .wrapper {
+      margin: 40px 0;
+    }
+    .card {
+      padding: 30px 20px;
+      .edit-pen,
+      .edit-personal-pen {
+        top: 30px;
+        right: 30px;
       }
     }
   }

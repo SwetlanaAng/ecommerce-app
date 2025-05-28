@@ -1,11 +1,9 @@
 import { FieldErrors, SubmitHandler, UseFormRegister } from 'react-hook-form';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
-import './ChangePasswordContent.css';
 import { ChangePasswordModal } from '../../../../schemas/changePasswordSchemas';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { ChangePassword } from '../../../../services/profile.service';
+import { ChangePassword } from '../../../../services/profilePersonal.service';
 
 interface ChangePasswordFormProps {
   formData: ChangePasswordModal;
@@ -31,21 +29,16 @@ export const ChangePasswordContent: React.FC<ChangePasswordFormProps> = ({
   handleSubmit,
   onSuccess,
 }) => {
-  const [error, setError] = useState<string | null>(null);
-
   const onSubmit: SubmitHandler<ChangePasswordModal> = async data => {
     try {
-      setError(null);
       await ChangePassword(data);
       reset();
       if (onSuccess) {
         onSuccess();
         toast.success('Password changed successfully!');
       }
-    } catch (err) {
+    } catch {
       toast.error(`Failed to change password`);
-      setError(`Failed to change password: ${err instanceof Error ? err.message : String(err)}`);
-      console.log(error);
     }
   };
 

@@ -1,19 +1,32 @@
 .edit-billing-form,
 .edit-billing,
 .edit-shipping-form,
-.edit-shipping {
+.edit-shipping,
+.add-address-form,
+.edit-password-form,
+.edit-personal-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-@media (max-width: 480px) {
-  .edit-personal-form {
-    .input {
-      font-size: 10px;
+  gap: 30px;
+  .button-wrapper {
+    display: flex;
+    gap: 20px;
+    .btn {
+      flex: 1;
     }
-    .submit-button {
-      font-size: 13px;
-      padding: 10px 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .edit-billing-form,
+  .edit-billing,
+  .edit-shipping-form,
+  .edit-shipping,
+  .add-address-form,
+  .edit-password-form,
+  .edit-personal-form {
+    .button-wrapper {
+      flex-direction: column;
     }
   }
 }

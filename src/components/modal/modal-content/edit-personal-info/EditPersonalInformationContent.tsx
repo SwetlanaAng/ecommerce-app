@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
-import './EditPersonalInformationContent.css';
-import { updateCustomerProfile } from '../../../../services/profile.service';
 import { FieldErrors, UseFormRegister, SubmitHandler } from 'react-hook-form';
 import { editPersonalInfoModal } from '../../../../schemas/editPersonalInfoSchema';
 import { toast } from 'react-toastify';
+import { updateCustomerProfile } from '../../../../services/profilePersonal.service';
 
 type EditPersonalInfoProps = {
   formData: {
@@ -50,6 +49,7 @@ export const EditPersonalInformationContent = ({
       if (onSuccess) {
         onSuccess();
         toast.success('Profile updated successfully!');
+        document.body.style.overflow = 'auto';
       }
     } catch (err) {
       toast.error(`Failed to update profile`);
@@ -102,7 +102,7 @@ export const EditPersonalInformationContent = ({
           error={errors.email}
         ></Input>
         <Input
-          labelText="Date of birth"
+          labelText="Birth date"
           type="date"
           name="dateOfBirth"
           id="dateOfBirth"

@@ -26,7 +26,7 @@
 
 .modal-content {
   position: relative;
-  margin: 20px;
+  margin: 15px;
   width: 100%;
   max-width: 600px;
   border-radius: 20px;
@@ -75,4 +75,10 @@
 }
 .modal--exiting {
   opacity: 0;
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 20px;
+  }
 }

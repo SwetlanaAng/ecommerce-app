@@ -5,13 +5,20 @@ import { Address } from '../../../../types/address.types';
 import BillingAddressForm from '../../../address/BillingAddressForm';
 import ShippingAddressForm from '../../../address/ShippingAddressForm';
 import { BillingAddressModal, ShippingAddressModal } from '../../../../schemas/aditAddressSchema';
+import { toast } from 'react-toastify';
+import {
+  EditBillingAddress,
+  EditShippingAddress,
+  deleteAddress,
+} from '../../../../services/profileAddresses.service';
 
 interface BaseEditAddressProps {
-  id: number;
+  addressId: string;
   isDisabled: boolean;
   addressData: Address;
   onSuccess?: () => void;
   onCancel?: () => void;
+  refresh: () => Promise<void>;
 }
 
 interface BillingEditAddressProps extends BaseEditAddressProps {
@@ -41,9 +48,40 @@ interface ShippingEditAddressProps extends BaseEditAddressProps {
 type EditAddressProps = BillingEditAddressProps | ShippingEditAddressProps;
 
 export const EditAddressesContent = (props: EditAddressProps) => {
-  const onSubmit = () => {
-    if (props.onSuccess) {
-      props.onSuccess();
+  const onBillingSubmit: SubmitHandler<BillingAddressModal> = async data => {
+    try {
+      await EditBillingAddress(props.addressId, data);
+      if (props.onSuccess) {
+        props.onSuccess();
+        props.refresh();
+        toast.success('Address edited successfully!');
+      }
+    } catch {
+      toast.error(`Failed to edit address`);
+    }
+  };
+  const onShippingSubmit: SubmitHandler<ShippingAddressModal> = async data => {
+    try {
+      await EditShippingAddress(props.addressId, data);
+      if (props.onSuccess) {
+        props.onSuccess();
+        props.refresh();
+        toast.success('Address edited successfully!');
+      }
+    } catch {
+      toast.error(`Failed to edit address`);
+    }
+  };
+  const deleteAddressData = async () => {
+    try {
+      await deleteAddress(props.addressId);
+      if (props.onSuccess) {
+        props.onSuccess();
+        props.refresh();
+        toast.success('Address removed successfully!');
+      }
+    } catch {
+      toast.error(`Failed to remove address`);
     }
   };
 
@@ -52,7 +90,13 @@ export const EditAddressesContent = (props: EditAddressProps) => {
       <h3>{`Edit ${props.addressType} address`}</h3>
       <form
         className={`edit-${props.addressType}-form`}
-        onSubmit={props.handleSubmit ? props.handleSubmit(onSubmit) : e => e.preventDefault()}
+        onSubmit={
+          props.handleSubmit
+            ? props.addressType === 'billing'
+              ? props.handleSubmit(onBillingSubmit)
+              : props.handleSubmit(onShippingSubmit)
+            : e => e.preventDefault()
+        }
       >
         {props.addressType === 'billing' ? (
           <BillingAddressForm
@@ -75,10 +119,14 @@ export const EditAddressesContent = (props: EditAddressProps) => {
             errors={props.errors}
           />
         )}
-        <Button className="submit-button " type="submit">
-          Save changes
-        </Button>
-        <Button children="Delete this address"></Button>
+        <div className="button-wrapper">
+          <Button className="primary" onClick={deleteAddressData}>
+            Delete this address
+          </Button>
+          <Button className="submit-button" type="submit">
+            Save changes
+          </Button>
+        </div>
       </form>
     </div>
   );

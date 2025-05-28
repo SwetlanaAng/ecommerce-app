@@ -1,15 +1,11 @@
 .profile-page {
   .info-box {
-    font-size: 16px;
-    margin: 10px 0;
-    width: 100%;
-    padding: 15px;
-    border-radius: 8px;
-    border: none;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    width: calc((100% - 20px) / 2);
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 16px;
     span {
-      font-weight: 800;
+      font-weight: 700;
     }
   }
 }
