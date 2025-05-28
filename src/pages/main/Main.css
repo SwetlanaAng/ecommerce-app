@@ -434,10 +434,13 @@
           }
         }
       }
+      &.flavors {
+        padding: 20px;
+      }
       &.benefits {
         .benefits-flex {
           .benefit-card {
-            padding: 40px 20px 20px;
+            padding: 20px;
           }
         }
       }
@@ -464,6 +467,7 @@
         .reviews-flex {
           .review-card {
             padding: 20px;
+            flex-direction: column-reverse;
             .review-author-container {
               flex-direction: column;
               align-items: flex-start;

@@ -32,7 +32,9 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
         className="select"
         onChange={onAddressChange}
         name="shipping_country"
+
         value={address?.shipping_country || formData?.shipping_country || 'US'}
+
         required={true}
         disabled={isDisabled}
         optionsList={countryId}

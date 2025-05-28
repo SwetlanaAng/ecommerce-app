@@ -1,7 +1,7 @@
 .filter-panel {
   background-color: #fff;
   border-radius: 20px;
-  padding: 20px;
+  padding: 24px;
   width: 100%;
   .filter-header {
     display: flex;
@@ -17,7 +17,7 @@
       border: none;
       color: var(--accent-color);
       cursor: pointer;
-      font-size: 14px;
+      font-size: 16px;
       text-decoration: underline;
       transition: color 0.3s ease;
       &:hover {
@@ -47,16 +47,16 @@
   .price-range-inputs {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    align-items: flex-end;
+    gap: 12px;
+    align-items: center;
     input {
-      width: 70px;
-      padding: 10px 8px;
+      width: 75px;
+      padding: 10px 14px;
       border: 1px solid #ddd;
     }
     .apply-price-button {
-      padding: 8px 12px;
-      font-size: 14px;
+      padding: 8px 14px;
+      font-size: 16px;
     }
   }
   .flavor-options,
@@ -69,7 +69,7 @@
 
 .filter-panel-loading {
   padding: 20px;
-  color: #666;
+  color: #898989;
 }
 
 /* Active filter styles */
