@@ -131,6 +131,16 @@ export async function ChangePassword(passwordData: {
     }
 
     const data = await response.json();
+
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        ...user,
+        version: data.version,
+      })
+    );
+    localStorage.setItem('login', JSON.stringify(data));
+
     handleLogin(user.email, passwordData.newPassword);
 
     return {
