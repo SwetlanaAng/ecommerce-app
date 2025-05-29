@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
+//import {ReactComponent as Basket}  from '../../assets/basket.svg';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import './Header.css';
+import { CartIcon } from '../../components/cartIcon/CartIcon';
 
 interface HeaderProps {
   isMobileMenuOpen?: boolean;
@@ -15,6 +17,7 @@ interface NavLink {
   path: string;
   text: string;
   isLogout?: boolean;
+  cart?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = () => {
@@ -60,12 +63,21 @@ const Header: React.FC<HeaderProps> = () => {
   const getNavLinks = (): NavLink[] => {
     const navLinks: NavLink[] = [
       {
+        path: AppRouterPaths.CART,
+        text: 'Cart',
+        cart: true,
+      },
+      {
         path: AppRouterPaths.MAIN,
         text: 'Main',
       },
       {
         path: AppRouterPaths.CATALOG,
         text: 'Catalog',
+      },
+      {
+        path: AppRouterPaths.ABOUT_US,
+        text: 'About',
       },
     ];
 
@@ -129,6 +141,10 @@ const Header: React.FC<HeaderProps> = () => {
                     <a onClick={handleLogout} className="logout-link">
                       {link.text}
                     </a>
+                  ) : link.cart ? (
+                    <Link to={link.path} onClick={closeMobileMenu}>
+                      <CartIcon />
+                    </Link>
                   ) : (
                     <Link to={link.path} onClick={closeMobileMenu}>
                       {link.text}

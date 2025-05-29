@@ -8,6 +8,8 @@ import { AppProvider } from '../features/app/context/AppContext';
 import AuthGuard from '../features/auth/guards/AuthGuard';
 import Loader from '../components/loader/Loader';
 import ScrollToTop from './ScrollToTop';
+import AboutUs from '../pages/aboutUs/AboutUs';
+import Cart from '../pages/cart/Cart';
 const Main = lazy(() => import('../pages/main/Main'));
 const Login = lazy(() => import('../pages/login/Login'));
 const Register = lazy(() => import('../pages/register/Register'));
@@ -36,6 +38,8 @@ const AppRouter: React.FC = () => {
                     <Route path={AppRouterPaths.MAIN} element={<Main />} />
                     <Route path={AppRouterPaths.CATALOG} element={<Catalog />} />
                     <Route path={AppRouterPaths.PRODUCT_DETAILS} element={<ProductDetails />} />
+                    <Route path={AppRouterPaths.ABOUT_US} element={<AboutUs />} />
+                    <Route path={AppRouterPaths.CART} element={<Cart />} />
                     <Route
                       path={AppRouterPaths.LOGIN}
                       element={
