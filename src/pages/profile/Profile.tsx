@@ -290,6 +290,8 @@ const Profile: React.FC = () => {
             addBillingForm.reset();
           } else if (modalContent === 'shipping') {
             addShippingForm.reset();
+          } else if (modalContent === 'changePassword') {
+            reset();
           }
           setModalOpen(false);
         }}
