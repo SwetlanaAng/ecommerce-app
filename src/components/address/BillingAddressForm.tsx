@@ -32,9 +32,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
         className="select"
         onChange={onAddressChange}
         name="billing_country"
-
         value={address?.billing_country || formData?.billing_country || 'US'}
-
         required={true}
         disabled={isDisabled}
         optionsList={countryId}
