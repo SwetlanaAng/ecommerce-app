@@ -5,4 +5,6 @@ export enum AppRouterPaths {
   CATALOG = '/catalog',
   PROFILE = '/profile',
   PRODUCT_DETAILS = '/catalog/:slug',
+  ABOUT_US = '/about',
+  BASKET = '/basket',
 }

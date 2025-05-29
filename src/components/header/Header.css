@@ -23,6 +23,15 @@
             border-radius: 20px;
             transition: all 0.3s ease;
             cursor: pointer;
+            .cart {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 2px;
+              svg {
+                stroke: var(--primary-color);
+              }
+            }
           }
           &.active {
             cursor: default;
@@ -30,6 +39,9 @@
               background: var(--primary-color);
               color: var(--white);
               pointer-events: none;
+              svg {
+                stroke: var(--white);
+              }
             }
           }
           &:hover:not(.active) a {
@@ -75,6 +87,9 @@
       display: none;
     }
   }
+}
+.basket:hover {
+  color: white;
 }
 
 @media (max-width: 768px) {
