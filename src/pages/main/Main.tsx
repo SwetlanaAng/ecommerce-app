@@ -22,6 +22,7 @@ import gift1 from '../../assets/gift1.jpg';
 import gift2 from '../../assets/gift2.jpg';
 import gift3 from '../../assets/gift3.jpg';
 import gift4 from '../../assets/gift4.jpg';
+import macaronsSweetDecorativeCandy from '../../assets/macarons-sweet-decorative-candy.mp4';
 import './Main.css';
 
 const Main = () => {
@@ -172,13 +173,7 @@ const Main = () => {
             <p className="customers-text">Trusted by 10 000+ happy customers worldwide</p>
           </div>
         </div>
-        <video
-          src="src/assets/macarons-sweet-decorative-candy.mp4"
-          autoPlay
-          muted
-          loop
-          className="hero-video"
-        />
+        <video src={macaronsSweetDecorativeCandy} autoPlay muted loop className="hero-video" />
       </section>
 
       <section className="section numbers">
