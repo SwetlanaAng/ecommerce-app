@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ProductFilters } from '../../types/interfaces';
 import Button from '../button/Button';
 import Input from '../input/Input';
@@ -19,6 +19,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
   const [maxPrice, setMaxPrice] = useState<number | undefined>(
     filters.priceRange?.max ?? priceRange.max
   );
+
+  useEffect(() => {
+    setMinPrice(filters.priceRange?.min ?? priceRange.min);
+    setMaxPrice(filters.priceRange?.max ?? priceRange.max);
+  }, [filters.priceRange, priceRange.min, priceRange.max]);
 
   const handleFlavorChange = (flavor: string) => {
     onFilterChange({

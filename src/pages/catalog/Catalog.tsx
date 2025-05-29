@@ -29,7 +29,10 @@ const Catalog: React.FC = () => {
   const [currentCategoryName, setCurrentCategoryName] = useState<string | undefined>(undefined);
   const [filters, setFilters] = useState<ProductFilters>({
     flavors: [],
-    priceRange: undefined,
+    priceRange: {
+      min: undefined,
+      max: undefined,
+    },
     isBestSeller: undefined,
     categoryId: undefined,
   });
@@ -132,7 +135,10 @@ const Catalog: React.FC = () => {
   const handleResetFilters = () => {
     setFilters({
       flavors: [],
-      priceRange: undefined,
+      priceRange: {
+        min: undefined,
+        max: undefined,
+      },
       isBestSeller: undefined,
       categoryId: filters.categoryId,
     });
