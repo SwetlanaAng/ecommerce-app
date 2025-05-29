@@ -94,7 +94,6 @@ const Profile: React.FC = () => {
       );
     }
     if (modalContent === 'changePersonalInfo') {
-      console.log(formDataPersonal);
       return (
         <EditPersonalInformationContent
           formData={formDataPersonal}
