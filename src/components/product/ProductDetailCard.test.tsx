@@ -117,8 +117,8 @@ describe('ProductDetailCard', () => {
   it('changes image on next and prev buttons', () => {
     render(<ProductDetailCard product={mockProduct} />);
 
-    const nextBtn = screen.getByRole('button', { name: '›' });
-    const prevBtn = screen.getByRole('button', { name: '‹' });
+    const nextBtn = screen.getByRole('button', { name: '⟩' });
+    const prevBtn = screen.getByRole('button', { name: '⟨' });
 
     expect((screen.getByAltText('Test Product image 1') as HTMLImageElement).src).toBe(
       'https://example.com/image1.jpg'
