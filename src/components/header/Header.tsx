@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
-import './Header.css';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { useAuth } from '../../features/auth/hooks/useAuth';
+import './Header.css';
 
 interface HeaderProps {
   isMobileMenuOpen?: boolean;
@@ -63,14 +63,24 @@ const Header: React.FC<HeaderProps> = () => {
         path: AppRouterPaths.MAIN,
         text: 'Main',
       },
+      {
+        path: AppRouterPaths.CATALOG,
+        text: 'Catalog',
+      },
     ];
 
     if (isAuthenticated) {
-      navLinks.push({
-        path: '#',
-        text: 'Log out',
-        isLogout: true,
-      });
+      navLinks.push(
+        {
+          path: AppRouterPaths.PROFILE,
+          text: 'Profile',
+        },
+        {
+          path: '#',
+          text: 'Log out',
+          isLogout: true,
+        }
+      );
     } else {
       navLinks.push(
         {
@@ -99,7 +109,11 @@ const Header: React.FC<HeaderProps> = () => {
             </Link>
           </div>
 
-          <div className={`hamburger ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
+          <div
+            className={`hamburger ${mobileMenuOpen ? 'active' : ''}`}
+            onClick={toggleMobileMenu}
+            role="button"
+          >
             <span></span>
             <span></span>
             <span></span>

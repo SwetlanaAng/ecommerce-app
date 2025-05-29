@@ -19,8 +19,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.56.2",
+    "react-modal": "^3.16.3",
     "react-router-dom": "^6.30.0",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "swiper": "^11.2.6"
   },
   "devDependencies": {
     "@commercetools/platform-sdk": "^8.8.0",
@@ -32,6 +34,7 @@
     "@types/jest": "^29.5.12",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
+    "@types/react-modal": "^3.16.3",
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.22.0",

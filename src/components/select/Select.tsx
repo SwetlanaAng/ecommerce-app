@@ -1,13 +1,13 @@
 import './Select.css';
 
 interface SelectProps {
-  labelText: string;
+  labelText?: string;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   name: string;
-  value: string;
-  required: boolean;
-  disabled: boolean;
+  value?: string;
+  required?: boolean;
+  disabled?: boolean;
   optionsList: { [key: string]: string };
   autoComplete?: 'country' | 'country-name';
 }
@@ -26,10 +26,10 @@ const Select = ({
   return (
     <div className="form-group">
       <label htmlFor={name} className="label">
-        <p className="label-text">{labelText}</p>
+        {labelText && <p className="label-text">{labelText}</p>}
         <div className="select-wrapper">
           <select
-            className={className}
+            className={`select ${className}`}
             id={name}
             name={name}
             onChange={onChange}
@@ -38,9 +38,9 @@ const Select = ({
             disabled={disabled}
             autoComplete={autoComplete}
           >
-            {Object.keys(optionsList).map(option => (
-              <option key={option} value={option}>
-                {option}
+            {Object.entries(optionsList).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value}
               </option>
             ))}
           </select>

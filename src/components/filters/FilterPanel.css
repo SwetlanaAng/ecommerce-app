@@ -1,0 +1,127 @@
+.filter-panel {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+    .reset-button {
+      background: none;
+      border: none;
+      color: var(--accent-color);
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: underline;
+      transition: color 0.3s ease;
+      &:hover {
+        color: var(--accent-color-hover);
+      }
+    }
+  }
+  .filter-section {
+    margin-bottom: 24px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 20px;
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    h4 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    .label {
+      font-size: 18px;
+    }
+  }
+  .price-range-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    input {
+      width: 75px;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+    }
+    .apply-price-button {
+      padding: 8px 14px;
+      font-size: 16px;
+    }
+  }
+  .flavor-options,
+  .best-seller-option {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.filter-panel-loading {
+  padding: 20px;
+  color: #898989;
+}
+
+/* Active filter styles */
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  .active-filter-tag {
+    background-color: rgba(242, 109, 138, 0.1);
+    color: var(--primary-color);
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    button {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      padding: 0;
+    }
+    &.clear-all {
+      background-color: var(--accent-color);
+      transition: background-color 0.3s ease;
+      button {
+        color: var(--white);
+      }
+      &:hover {
+        background-color: var(--accent-color-hover);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-panel {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-panel {
+    .filter-section {
+      .label {
+        font-size: 16px;
+      }
+    }
+  }
+}

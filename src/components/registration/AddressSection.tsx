@@ -2,8 +2,10 @@ import React from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 import { AddressData } from '../../types/address.types';
 import Input from '../input/Input';
-import AddressForm from '../address/AddressForm';
 import { FormFields } from '../../schemas/signInSchema';
+import { BillingAddressModal, ShippingAddressModal } from '../../schemas/aditAddressSchema';
+import BillingAddressForm from '../address/BillingAddressForm';
+import ShippingAddressForm from '../address/ShippingAddressForm';
 
 interface AddressSectionProps {
   addressData: AddressData;
@@ -26,44 +28,58 @@ const AddressSection: React.FC<AddressSectionProps> = ({
   register,
   errors,
 }) => {
+  const billingFormData: BillingAddressModal = {
+    billing_country: addressData.billingAddress?.country || 'US',
+    billing_city: addressData.billingAddress?.city || '',
+    billing_street: addressData.billingAddress?.street || '',
+    billing_postalCode: addressData.billingAddress?.postalCode || '',
+    billing_isDefault: addressData.billingAddress?.isDefault || false,
+  };
+
+  const shippingFormData: ShippingAddressModal = {
+    shipping_country: addressData.shippingAddress?.country || 'US',
+    shipping_city: addressData.shippingAddress?.city || '',
+    shipping_street: addressData.shippingAddress?.street || '',
+    shipping_postalCode: addressData.shippingAddress?.postalCode || '',
+    shipping_isDefault: addressData.shippingAddress?.isDefault || false,
+  };
+
   return (
     <>
-      <h2>Billing Address</h2>
-      <AddressForm
-        type="billing"
-        address={addressData.billingAddress}
-        isDisabled={isDisabled}
-        onAddressChange={onAddressChange}
-        onDefaultAddressChange={onDefaultAddressChange}
-        register={register}
-        errors={errors}
-      />
-
-      <Input
-        labelText="Use same address for shipping"
-        type="checkbox"
-        name="sameAsShipping"
-        id="sameAsShipping"
-        checked={sameAsShipping}
-        onChange={onSameAddressChange}
-        disabled={isDisabled}
-        register={register}
-        error={errors.sameAsShipping}
-      />
-
+      <div className="form-card">
+        <h4>Billing Address</h4>
+        <BillingAddressForm
+          formData={billingFormData}
+          isDisabled={isDisabled}
+          onAddressChange={onAddressChange}
+          onDefaultAddressChange={onDefaultAddressChange}
+          register={register as unknown as UseFormRegister<BillingAddressModal>}
+          errors={errors as unknown as FieldErrors<BillingAddressModal>}
+        />
+        <Input
+          labelText="Use same address for shipping"
+          type="checkbox"
+          name="sameAsShipping"
+          id="sameAsShipping"
+          checked={sameAsShipping}
+          onChange={onSameAddressChange}
+          disabled={isDisabled}
+          register={register}
+          error={errors.sameAsShipping}
+        />
+      </div>
       {!sameAsShipping && (
-        <>
-          <h2>Shipping Address</h2>
-          <AddressForm
-            type="shipping"
-            address={addressData.shippingAddress}
+        <div className="form-card">
+          <h4>Shipping Address</h4>
+          <ShippingAddressForm
+            formData={shippingFormData}
             isDisabled={isDisabled || sameAsShipping}
             onAddressChange={onAddressChange}
             onDefaultAddressChange={onDefaultAddressChange}
-            register={register}
-            errors={errors}
+            register={register as unknown as UseFormRegister<ShippingAddressModal>}
+            errors={errors as unknown as FieldErrors<ShippingAddressModal>}
           />
-        </>
+        </div>
       )}
     </>
   );

@@ -25,7 +25,8 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
   errors,
 }) => {
   return (
-    <>
+    <div className="form-card">
+      <h4>Personal Information</h4>
       <Input
         labelText="Email"
         name="email"
@@ -93,7 +94,7 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         register={register}
         error={errors.dateOfBirth}
       />
-    </>
+    </div>
   );
 };
 

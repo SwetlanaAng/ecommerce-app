@@ -1,0 +1,76 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  .modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: transparent;
+    max-width: 100%;
+    height: 100%;
+    overflow: hidden;
+    .modal-image {
+      max-width: 85vw;
+      max-height: 85vh;
+      display: block;
+      margin: auto;
+      box-sizing: border-box;
+    }
+    .modal-close {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 2.5rem;
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.75);
+      cursor: pointer;
+      transition: ease-in-out 0.3s;
+      z-index: 10;
+    }
+    .modal-close:hover {
+      color: white;
+    }
+    .modal-swiper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      .swiper-slide {
+        display: flex;
+        height: 100%;
+      }
+    }
+    .swiper-button-prev,
+    .swiper-button-next {
+      color: rgba(255, 255, 255, 0.75);
+      transition: ease-in-out 0.3s;
+    }
+    .swiper-button-prev:hover,
+    .swiper-button-next:hover {
+      color: white;
+    }
+    .swiper-button-prev::after,
+    .swiper-button-next::after {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .swiper-button-prev {
+    left: 4px;
+  }
+  .swiper-button-next {
+    right: 4px;
+  }
+}

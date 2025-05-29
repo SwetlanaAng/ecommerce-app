@@ -2,7 +2,7 @@ import './Button.css';
 
 interface ButtonProps {
   className?: string;
-  onClick?: () => void;
+  onClick?: (() => void) | (() => Promise<void>);
   children: React.ReactNode;
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';

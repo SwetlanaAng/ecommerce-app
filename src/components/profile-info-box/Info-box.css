@@ -1,0 +1,11 @@
+.profile-page {
+  .info-box {
+    width: calc((100% - 20px) / 2);
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 16px;
+    span {
+      font-weight: 700;
+    }
+  }
+}

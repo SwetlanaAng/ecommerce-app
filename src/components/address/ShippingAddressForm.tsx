@@ -1,23 +1,23 @@
 import React from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
-import { Address } from '../../types/address.types';
+import { EditAddress } from '../../types/address.types';
 import Input from '../input/Input';
 import Select from '../select/Select';
 import { countryId } from '../../services/registration.service';
-import { FormFields } from '../../schemas/signInSchema';
+import { ShippingAddressModal } from '../../schemas/aditAddressSchema';
 
-interface AddressFormProps {
-  type: 'billing' | 'shipping';
-  address: Address;
+interface ShippingAddressFormProps {
+  formData?: EditAddress;
+  address?: EditAddress;
   isDisabled: boolean;
   onAddressChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onDefaultAddressChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  register: UseFormRegister<FormFields>;
-  errors: FieldErrors<FormFields>;
+  register: UseFormRegister<ShippingAddressModal>;
+  errors: FieldErrors<ShippingAddressModal>;
 }
 
-const AddressForm: React.FC<AddressFormProps> = ({
-  type,
+const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
+  formData,
   address,
   isDisabled,
   onAddressChange,
@@ -31,8 +31,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
         labelText="Country"
         className="select"
         onChange={onAddressChange}
-        name={`${type}_country`}
-        value={address.country}
+        name="shipping_country"
+        value={address?.shipping_country || formData?.shipping_country || 'US'}
         required={true}
         disabled={isDisabled}
         optionsList={countryId}
@@ -41,56 +41,58 @@ const AddressForm: React.FC<AddressFormProps> = ({
 
       <Input
         labelText="City"
-        name={`${type}_city`}
-        id={`${type}_city`}
+        name="shipping_city"
+        id="shipping_city"
         onChange={onAddressChange}
         placeholder="New York"
-        value={address.city}
+        value={address ? address.shipping_city : formData ? formData.shipping_city : ''}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_city`]}
+        error={errors.shipping_city}
         autoComplete="address-level2"
       />
 
       <Input
         labelText="Street"
-        name={`${type}_street`}
-        id={`${type}_street`}
+        name="shipping_street"
+        id="shipping_street"
         onChange={onAddressChange}
         placeholder="123 Main St"
-        value={address.street}
+        value={address ? address.shipping_street : formData ? formData.shipping_street : ''}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_street`]}
+        error={errors.shipping_street}
         autoComplete="street-address"
       />
 
       <Input
         labelText="Postal Code"
-        name={`${type}_postalCode`}
-        id={`${type}_postalCode`}
+        name="shipping_postalCode"
+        id="shipping_postalCode"
         onChange={onAddressChange}
         placeholder="10001"
-        value={address.postalCode}
+        value={address ? address.shipping_postalCode : formData ? formData.shipping_postalCode : ''}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_postalCode`]}
+        error={errors.shipping_postalCode}
         autoComplete="postal-code"
       />
 
       <Input
-        labelText={`Set as default ${type} address for future orders`}
+        labelText="Set as default shipping address for future orders"
         type="checkbox"
-        id={`default_${type}`}
-        name={`${type}_isDefault`}
-        checked={address.isDefault}
+        id="default_shipping"
+        name="shipping_isDefault"
+        checked={
+          address ? address.shipping_isDefault : formData ? formData.shipping_isDefault : false
+        }
         onChange={onDefaultAddressChange}
         disabled={isDisabled}
         register={register}
-        error={errors[`${type}_isDefault`]}
+        error={errors.shipping_isDefault}
       />
     </>
   );
 };
 
-export default AddressForm;
+export default ShippingAddressForm;

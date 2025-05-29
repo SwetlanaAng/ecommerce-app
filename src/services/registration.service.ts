@@ -1,9 +1,9 @@
 import { KEYS } from './keys';
 import { RegistrationData, ResultProps } from '../types/interfaces';
 
-export const countryId = {
-  'United States': 'US',
-  Germany: 'DE',
+export const countryId: Record<string, string> = {
+  US: 'United States',
+  DE: 'Germany',
 };
 
 export async function getBasicToken(): Promise<string> {
@@ -29,15 +29,14 @@ export async function getBasicToken(): Promise<string> {
 
 export function dataAdapter(data: RegistrationData): RegistrationData {
   try {
-    const billingKey = data.billingAddress.country as keyof typeof countryId;
-    const shippingKey = data.shippingAddress.country as keyof typeof countryId;
-
     const adaptedData = { ...data };
     adaptedData.billingAddress = { ...data.billingAddress };
     adaptedData.shippingAddress = { ...data.shippingAddress };
 
-    adaptedData.billingAddress.country = countryId[billingKey] || data.billingAddress.country;
-    adaptedData.shippingAddress.country = countryId[shippingKey] || data.shippingAddress.country;
+    adaptedData.billingAddress.country =
+      countryId[data.billingAddress.country] || data.billingAddress.country;
+    adaptedData.shippingAddress.country =
+      countryId[data.shippingAddress.country] || data.shippingAddress.country;
 
     return adaptedData;
   } catch (error) {
@@ -51,6 +50,13 @@ export async function createCustomer(data: RegistrationData): Promise<ResultProp
     const token = await getBasicToken();
     const billingDefaultIndex = data.billingAddress.isDefault ? 0 : undefined;
     const shippingDefaultIndex = data.shippingAddress.isDefault ? 1 : undefined;
+
+    const billingCountryCode =
+      Object.entries(countryId).find(([, name]) => name === data.billingAddress.country)?.[0] ||
+      data.billingAddress.country;
+    const shippingCountryCode =
+      Object.entries(countryId).find(([, name]) => name === data.shippingAddress.country)?.[0] ||
+      data.shippingAddress.country;
 
     const response = await fetch(`${KEYS.API_URL}/${KEYS.PROJECT_KEY}/customers`, {
       method: 'POST',
@@ -66,13 +72,13 @@ export async function createCustomer(data: RegistrationData): Promise<ResultProp
         dateOfBirth: data.date,
         addresses: [
           {
-            country: data.billingAddress.country,
+            country: billingCountryCode,
             city: data.billingAddress.city,
             streetName: data.billingAddress.street,
             postalCode: data.billingAddress.postalCode,
           },
           {
-            country: data.shippingAddress.country,
+            country: shippingCountryCode,
             city: data.shippingAddress.city,
             streetName: data.shippingAddress.street,
             postalCode: data.shippingAddress.postalCode,

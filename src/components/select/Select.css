@@ -1,13 +1,100 @@
 .select {
-  font-size: 16px;
   cursor: pointer;
   width: 100%;
+  min-width: 200px;
   padding: 15px;
-  border-radius: 0.2rem;
-  border: none;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
   color: var(--text-color);
   transition: all 0.3s ease;
   &:hover {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   }
+}
+
+select,
+::picker(select) {
+  appearance: base-select;
+}
+
+select {
+  background: #fff;
+  padding: 10px;
+  transition: 0.4s;
+}
+
+select:hover,
+select:focus {
+  background: #fff;
+}
+
+select::picker-icon {
+  color: var(--text-color);
+  transition: 0.4s rotate;
+}
+
+select:open::picker-icon {
+  rotate: 180deg;
+}
+
+::picker(select) {
+  margin-top: 3px;
+  border: none;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 8px;
+}
+
+option {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  background: #fff;
+  padding: 15px;
+  transition: 0.4s;
+}
+
+option:hover {
+  color: var(--accent-color);
+}
+
+option .icon {
+  font-size: 1.6rem;
+  text-box: trim-both cap alphabetic;
+}
+
+selectedcontent .icon {
+  display: none;
+}
+
+option::checkmark {
+  order: 1;
+  margin-left: auto;
+  content: url('../../assets/tick.svg');
+  background-color: var(--accent-color);
+  border-radius: 4px;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::picker(select) {
+  opacity: 0;
+  transition: all 0.4s allow-discrete;
+}
+
+::picker(select):popover-open {
+  opacity: 1;
+}
+
+@starting-style {
+  ::picker(select):popover-open {
+    opacity: 0;
+  }
+}
+
+::picker(select) {
+  top: calc(anchor(bottom) + 1px);
+  left: anchor(10%);
 }

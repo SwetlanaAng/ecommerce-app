@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import view from '../../assets/view.png';
-import hide from '../../assets/hide.png';
+import view from '../../assets/view.svg';
+import hide from '../../assets/hide.svg';
+import searchIcon from '../../assets/search.png';
 import './Input.css';
 import { UseFormRegister, FieldError, Path } from 'react-hook-form';
 
 export type InputName =
   | 'email'
   | 'password'
+  | 'currentPassword'
+  | 'newPassword'
   | 'dateOfBirth'
   | 'firstName'
   | 'lastName'
@@ -21,10 +24,10 @@ export type InputName =
   | 'shipping_isDefault';
 
 interface InputProps<T extends Record<string, unknown>> {
-  labelText: string;
+  labelText?: string;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: 'text' | 'email' | 'password' | 'date' | 'checkbox';
+  type?: 'text' | 'email' | 'password' | 'date' | 'number' | 'checkbox';
   placeholder?: string;
   name: Path<T>;
   value?: string;
@@ -32,6 +35,7 @@ interface InputProps<T extends Record<string, unknown>> {
   required?: boolean;
   disabled?: boolean;
   minLength?: number;
+  min?: string;
   autoComplete?:
     | 'off'
     | 'on'
@@ -49,8 +53,11 @@ interface InputProps<T extends Record<string, unknown>> {
     | 'family-name'
     | 'bday';
   checked?: boolean;
-  register: UseFormRegister<T>;
+  register?: UseFormRegister<T>;
   error?: FieldError;
+  defaultValue?: string;
+
+  isSearchField?: boolean;
 }
 
 const Input = <T extends Record<string, unknown>>({
@@ -65,10 +72,12 @@ const Input = <T extends Record<string, unknown>>({
   required,
   disabled,
   minLength,
+  min,
   autoComplete,
   id,
   checked,
   error,
+  isSearchField,
 }: InputProps<T>) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -82,7 +91,7 @@ const Input = <T extends Record<string, unknown>>({
           type={type}
           className={className}
           id={id}
-          {...register(name)}
+          {...register?.(name)}
           onChange={onChange}
           disabled={disabled}
           checked={checked}
@@ -97,11 +106,12 @@ const Input = <T extends Record<string, unknown>>({
   return (
     <div className="form-group">
       <label htmlFor={id} className="label">
-        <p className="label-text">{labelText}</p>
-        <div className="input-wrapper">
+        {labelText && <p className="label-text">{labelText}</p>}
+        <div className={`input-wrapper ${isSearchField ? 'search-input-wrapper' : ''}`}>
+          {isSearchField && <img src={searchIcon} alt="search" className="search-icon" />}
           <input
-            {...register(name)}
-            className={`${className ? className : ''} input ${error ? 'error' : ''}`}
+            {...register?.(name)}
+            className={`${className ? className : ''} input ${error ? 'error' : ''} ${isSearchField ? 'search-input' : ''}`}
             id={id}
             name={name}
             onChange={onChange}
@@ -110,6 +120,7 @@ const Input = <T extends Record<string, unknown>>({
             value={value}
             required={required}
             disabled={disabled}
+            min={min}
             minLength={minLength}
             autoComplete={autoComplete}
             aria-invalid={error ? 'true' : 'false'}

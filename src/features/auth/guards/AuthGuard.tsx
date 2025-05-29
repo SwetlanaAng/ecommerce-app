@@ -1,23 +1,27 @@
-import React, { ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { AppRouterPaths } from '../../../routes/AppRouterPathsEnums';
+import Loader from '../../../components/loader/Loader';
 
 interface AuthGuardProps {
-  children: ReactNode;
-  requireAuth?: boolean;
+  children: React.ReactNode;
+  requireAuth: boolean;
 }
 
-const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAuth = false }) => {
-  const { isAuthenticated } = useAuth();
-  const location = useLocation();
+const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAuth }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <Loader />;
+  }
 
   if (requireAuth && !isAuthenticated) {
-    return <Navigate to={AppRouterPaths.LOGIN} state={{ from: location }} replace />;
+    return <Navigate to={AppRouterPaths.LOGIN} />;
   }
 
   if (!requireAuth && isAuthenticated) {
-    return <Navigate to={AppRouterPaths.MAIN} replace />;
+    return <Navigate to={AppRouterPaths.MAIN} />;
   }
 
   return <>{children}</>;
