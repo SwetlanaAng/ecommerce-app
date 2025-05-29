@@ -12,7 +12,7 @@ export const useChangePasswordForm = () => {
   const {
     handleSubmit,
     register,
-    reset,
+    reset: resetForm,
     formState: { errors, isSubmitting },
     setValue,
   } = useForm<ChangePasswordModal>({
@@ -32,6 +32,13 @@ export const useChangePasswordForm = () => {
     },
     [setValue]
   );
+  const reset = useCallback(() => {
+    resetForm();
+    setFormData({
+      currentPassword: '',
+      newPassword: '',
+    });
+  }, [resetForm]);
 
   return {
     formData,
