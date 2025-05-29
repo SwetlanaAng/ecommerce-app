@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
-//import {ReactComponent as Basket}  from '../../assets/basket.svg';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import './Header.css';
@@ -63,8 +62,8 @@ const Header: React.FC<HeaderProps> = () => {
   const getNavLinks = (): NavLink[] => {
     const navLinks: NavLink[] = [
       {
-        path: AppRouterPaths.CART,
-        text: 'Cart',
+        path: AppRouterPaths.BASKET,
+        text: 'Basket',
         cart: true,
       },
       {

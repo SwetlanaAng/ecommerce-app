@@ -6,13 +6,7 @@ const renderCartIcon = () => {
 };
 
 describe('CartIcon component', () => {
-  /* beforeEach(() => {
-        jest.clearAllMocks();
-    }); */
-
   it('renders correctly for unauthenticated users', () => {
-    /* mockedUseAuth.mockReturnValue({ isAuthenticated: false }); */
-
     renderCartIcon();
 
     expect(screen.getByTitle(/cart/i)).toBeInTheDocument();

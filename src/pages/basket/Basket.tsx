@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Cart: React.FC = () => {
+const Basket: React.FC = () => {
   return (
     <div className="cart-page">
-      <h1>Cart</h1>
+      <h1>Basket</h1>
     </div>
   );
 };
 
-export default Cart;
+export default Basket;
