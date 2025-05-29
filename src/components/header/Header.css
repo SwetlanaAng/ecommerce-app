@@ -23,8 +23,14 @@
             border-radius: 20px;
             transition: all 0.3s ease;
             cursor: pointer;
-            svg {
-              stroke: var(--primary-color);
+            .cart {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 2px;
+              svg {
+                stroke: var(--primary-color);
+              }
             }
           }
           &.active {

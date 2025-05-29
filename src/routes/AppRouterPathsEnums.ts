@@ -6,5 +6,5 @@ export enum AppRouterPaths {
   PROFILE = '/profile',
   PRODUCT_DETAILS = '/catalog/:slug',
   ABOUT_US = '/about',
-  CART = '/cart',
+  BASKET = '/basket',
 }

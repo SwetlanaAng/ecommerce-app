@@ -4,11 +4,11 @@ type CartIconProps = {
 };
 export const CartIcon: FC<CartIconProps> = ({ title }) => {
   return (
-    <div title={title}>
+    <div title={title} className="cart">
       <svg
         width="18"
         height="18"
-        viewBox="0 0 18 18"
+        viewBox="0 0 19 19"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
