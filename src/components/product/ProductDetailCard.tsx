@@ -79,10 +79,10 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
             {images.length > 1 && (
               <>
                 <button className="slider-btn prev" onClick={handlePrev}>
-                  ‹
+                  ⟨
                 </button>
                 <button className="slider-btn next" onClick={handleNext}>
-                  ›
+                  ⟩
                 </button>
               </>
             )}
