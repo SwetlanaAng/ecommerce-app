@@ -31,6 +31,8 @@ describe('Header component', () => {
     expect(screen.getByText(/main/i)).toBeInTheDocument();
     expect(screen.getByText(/catalog/i)).toBeInTheDocument();
     expect(screen.getByText(/register/i)).toBeInTheDocument();
+    expect(screen.getByText(/about/i)).toBeInTheDocument();
+    expect(screen.getByTitle(/cart/i)).toBeInTheDocument();
     expect(screen.getByText(/log in/i)).toBeInTheDocument();
   });
 

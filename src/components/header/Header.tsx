@@ -143,7 +143,7 @@ const Header: React.FC<HeaderProps> = () => {
                     </a>
                   ) : link.cart ? (
                     <Link to={link.path} onClick={closeMobileMenu}>
-                      <CartIcon />
+                      <CartIcon title="cart" />
                     </Link>
                   ) : (
                     <Link to={link.path} onClick={closeMobileMenu}>

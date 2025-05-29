@@ -1,31 +1,43 @@
-export const CartIcon = () => {
+import type { FC } from 'react';
+type CartIconProps = {
+  title: string;
+};
+export const CartIcon: FC<CartIconProps> = ({ title }) => {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_85_3211)">
-        <path
-          d="M6.93066 17.2875C7.34488 17.2875 7.68066 16.9517 7.68066 16.5375C7.68066 16.1233 7.34488 15.7875 6.93066 15.7875C6.51645 15.7875 6.18066 16.1233 6.18066 16.5375C6.18066 16.9517 6.51645 17.2875 6.93066 17.2875Z"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M15.1807 17.2875C15.5949 17.2875 15.9307 16.9517 15.9307 16.5375C15.9307 16.1233 15.5949 15.7875 15.1807 15.7875C14.7665 15.7875 14.4307 16.1233 14.4307 16.5375C14.4307 16.9517 14.7665 17.2875 15.1807 17.2875Z"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M0.930664 1.53748H3.93066L5.94066 11.58C6.00925 11.9253 6.1971 12.2354 6.47132 12.4562C6.74555 12.677 7.08869 12.7942 7.44066 12.7875H14.7307C15.0826 12.7942 15.4258 12.677 15.7 12.4562C15.9742 12.2354 16.1621 11.9253 16.2307 11.58L17.4307 5.28748H4.68066"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </g>
-      <defs>
-        <clipPath id="clip0_85_3211">
-          <rect width="18" height="18" fill="white" />
-        </clipPath>
-      </defs>
-    </svg>
+    <div title={title}>
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clipPath="url(#clip0_85_3211)">
+          <path
+            d="M6.93066 17.2875C7.34488 17.2875 7.68066 16.9517 7.68066 16.5375C7.68066 16.1233 7.34488 15.7875 6.93066 15.7875C6.51645 15.7875 6.18066 16.1233 6.18066 16.5375C6.18066 16.9517 6.51645 17.2875 6.93066 17.2875Z"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M15.1807 17.2875C15.5949 17.2875 15.9307 16.9517 15.9307 16.5375C15.9307 16.1233 15.5949 15.7875 15.1807 15.7875C14.7665 15.7875 14.4307 16.1233 14.4307 16.5375C14.4307 16.9517 14.7665 17.2875 15.1807 17.2875Z"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M0.930664 1.53748H3.93066L5.94066 11.58C6.00925 11.9253 6.1971 12.2354 6.47132 12.4562C6.74555 12.677 7.08869 12.7942 7.44066 12.7875H14.7307C15.0826 12.7942 15.4258 12.677 15.7 12.4562C15.9742 12.2354 16.1621 11.9253 16.2307 11.58L17.4307 5.28748H4.68066"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_85_3211">
+            <rect width="18" height="18" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+    </div>
   );
 };
