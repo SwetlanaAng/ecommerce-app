@@ -12,6 +12,7 @@ describe('ProductCard', () => {
     imageUrl: 'https://example.com/image.jpg',
     description: 'This is a test product',
     slug: 'test-product',
+    category: 'test-category',
   };
 
   const renderComponent = (props = {}) => {

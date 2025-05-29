@@ -78,7 +78,7 @@ const mockProduct: Product = {
     ],
   },
   slug: {
-    en: 'test-product',
+    'en-US': 'test-product',
   },
   metaTitle: {
     en: 'Meta Title',
