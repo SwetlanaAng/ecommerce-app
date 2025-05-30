@@ -1,9 +1,214 @@
 import React from 'react';
+import { useCart } from '../../features/cart/hooks/useCart';
+import { Link } from 'react-router-dom';
+import { CartItem } from '../../types/interfaces';
+import Loader from '../../components/loader/Loader';
+import Button from '../../components/button/Button';
+import Input from '../../components/input/Input';
+import './Basket.css';
 
 const Basket: React.FC = () => {
+  const {
+    cart,
+    cartItemsCount,
+    isLoading,
+    error,
+    removeFromCart,
+    updateCartItemQuantity,
+    clearCart,
+    applyPromoCode,
+    removePromoCode,
+  } = useCart();
+
+  const [promoCode, setPromoCode] = React.useState('');
+  const [promoError, setPromoError] = React.useState<string | null>(null);
+  const [isApplyingPromo, setIsApplyingPromo] = React.useState(false);
+
+  const handleQuantityChange = async (lineItemId: string, newQuantity: number) => {
+    if (newQuantity <= 0) {
+      await removeFromCart(lineItemId);
+    } else {
+      await updateCartItemQuantity(lineItemId, newQuantity);
+    }
+  };
+
+  const handleApplyPromoCode = async () => {
+    if (!promoCode.trim()) return;
+
+    setIsApplyingPromo(true);
+    setPromoError(null);
+
+    try {
+      const result = await applyPromoCode(promoCode.trim());
+      if (result) {
+        setPromoError(result);
+      } else {
+        setPromoCode('');
+      }
+    } catch {
+      setPromoError('Failed to apply promo code');
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  };
+
+  const handleRemovePromoCode = async (discountCodeId: string) => {
+    await removePromoCode(discountCodeId);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="basket-page">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="basket-page">
+        <div className="basket-error">Error: {error}</div>
+      </div>
+    );
+  }
+
+  if (!cart || cart.lineItems.length === 0) {
+    return (
+      <div className="basket-page">
+        <h1 className="basket-title">Shopping Cart</h1>
+        <div className="empty-cart">
+          <h4>Your cart is empty</h4>
+          <Link to="/catalog" className="continue-shopping-btn">
+            Continue Shopping
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const totalAmount = cart.totalPrice.centAmount / Math.pow(10, cart.totalPrice.fractionDigits);
+
   return (
-    <div className="cart-page">
-      <h1>Basket</h1>
+    <div className="basket-page">
+      <h1>Shopping Cart ({cartItemsCount} items)</h1>
+
+      <div className="basket-content">
+        <div className="cart-items">
+          {cart.lineItems.map((item: CartItem) => (
+            <div key={item.id} className="cart-item">
+              <div className="cart-item-image">
+                <img src={item.imageUrl} alt={item.name} />
+              </div>
+
+              <div className="cart-item-details">
+                <h3 className="cart-item-name">{item.name}</h3>
+                <div className="cart-item-price">
+                  {item.originalPrice && item.originalPrice !== item.price && (
+                    <span className="cart-item-original-price">
+                      ${item.originalPrice.toFixed(2)}
+                    </span>
+                  )}
+                  <span className="cart-item-current-price">${item.price.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <div className="cart-item-quantity">
+                <button
+                  className="quantity-btn"
+                  onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                  disabled={isLoading}
+                >
+                  -
+                </button>
+                <span className="quantity-display">{item.quantity}</span>
+                <button
+                  className="quantity-btn"
+                  onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                  disabled={isLoading}
+                >
+                  +
+                </button>
+              </div>
+
+              <div className="cart-item-total">${(item.price * item.quantity).toFixed(2)}</div>
+
+              <button
+                className="remove-item-btn"
+                onClick={() => removeFromCart(item.id)}
+                disabled={isLoading}
+                title="Remove item"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="cart-summary">
+          <div className="promo-section">
+            <h4>Promo Code</h4>
+            {cart.discountCodes && cart.discountCodes.length > 0 && (
+              <div className="applied-promos">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {cart.discountCodes.map((discount: any) => (
+                  <div key={discount.discountCode.id} className="applied-promo">
+                    <span>{discount.discountCode.obj?.name || 'Discount Applied'}</span>
+                    <button
+                      onClick={() => handleRemovePromoCode(discount.discountCode.id)}
+                      className="remove-promo-btn"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="promo-input">
+              <Input
+                name="promoCode"
+                id="promoCode"
+                type="text"
+                placeholder="Enter promo code"
+                value={promoCode}
+                onChange={e => setPromoCode(e.target.value)}
+                disabled={isApplyingPromo}
+              />
+              <Button
+                onClick={handleApplyPromoCode}
+                disabled={isApplyingPromo || !promoCode.trim()}
+                className="apply-promo-btn"
+              >
+                {isApplyingPromo ? 'Applying...' : 'Apply'}
+              </Button>
+            </div>
+            {promoError && <div className="promo-error">{promoError}</div>}
+          </div>
+
+          <div className="cart-total">
+            <div className="total-line">
+              <span>Subtotal:</span>
+              <span>${totalAmount.toFixed(2)}</span>
+            </div>
+            <div className="total-line total-final">
+              <span>Total:</span>
+              <span>${totalAmount.toFixed(2)}</span>
+            </div>
+          </div>
+
+          <div className="cart-actions">
+            <Button className="clear-cart-btn primary" onClick={clearCart} disabled={isLoading}>
+              Clear Cart
+            </Button>
+            <Button className="checkout-btn" disabled={isLoading}>
+              Proceed to Checkout
+            </Button>
+            <Link to="/catalog" className="continue-shopping-btn">
+              Continue Shopping
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

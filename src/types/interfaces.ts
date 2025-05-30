@@ -190,3 +190,47 @@ export interface PersonalInfo {
 export interface CategoryWithChildren extends CategoryData {
   children: CategoryWithChildren[];
 }
+
+export interface CartItem {
+  id: string;
+  productId: string;
+  name: string;
+  price: number;
+  originalPrice?: number;
+  quantity: number;
+  imageUrl: string;
+  variant: {
+    id: number;
+    attributes: Array<{
+      name: string;
+      value: unknown;
+    }>;
+  };
+}
+
+export interface Cart {
+  id: string;
+  version: number;
+  lineItems: CartItem[];
+  totalPrice: {
+    currencyCode: string;
+    centAmount: number;
+    fractionDigits: number;
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  discountCodes?: any[];
+}
+
+export interface CartContextType {
+  cart: Cart | null;
+  cartItemsCount: number;
+  isLoading: boolean;
+  error: string | null;
+  addToCart: (productId: string) => Promise<void>;
+  removeFromCart: (lineItemId: string) => Promise<void>;
+  updateCartItemQuantity: (lineItemId: string, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
+  fetchCart: () => Promise<void>;
+  applyPromoCode: (code: string) => Promise<string | null>;
+  removePromoCode: (promocodeId: string) => Promise<void>;
+}

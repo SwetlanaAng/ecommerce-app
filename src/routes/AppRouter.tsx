@@ -4,6 +4,7 @@ import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
 import { AppRouterPaths } from './AppRouterPathsEnums';
 import { AuthProvider } from '../features/auth/context/AuthContext';
+import { CartProvider } from '../features/cart/context/CartContext';
 import { AppProvider } from '../features/app/context/AppContext';
 import AuthGuard from '../features/auth/guards/AuthGuard';
 import Loader from '../components/loader/Loader';
@@ -28,50 +29,52 @@ const AppRouter: React.FC = () => {
     >
       <ScrollToTop />
       <AuthProvider>
-        <AppProvider>
-          <div className="app-container">
-            <Header />
-            <main className="main-content">
-              <div className="container">
-                <Suspense fallback={<Loader size="large" />}>
-                  <Routes>
-                    <Route path={AppRouterPaths.MAIN} element={<Main />} />
-                    <Route path={AppRouterPaths.CATALOG} element={<Catalog />} />
-                    <Route path={AppRouterPaths.PRODUCT_DETAILS} element={<ProductDetails />} />
-                    <Route path={AppRouterPaths.ABOUT_US} element={<AboutUs />} />
-                    <Route path={AppRouterPaths.BASKET} element={<Basket />} />
-                    <Route
-                      path={AppRouterPaths.LOGIN}
-                      element={
-                        <AuthGuard requireAuth={false}>
-                          <Login />
-                        </AuthGuard>
-                      }
-                    />
-                    <Route
-                      path={AppRouterPaths.REGISTER}
-                      element={
-                        <AuthGuard requireAuth={false}>
-                          <Register />
-                        </AuthGuard>
-                      }
-                    />
-                    <Route
-                      path={AppRouterPaths.PROFILE}
-                      element={
-                        <AuthGuard requireAuth={true}>
-                          <Profile />
-                        </AuthGuard>
-                      }
-                    />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
-              </div>
-            </main>
-            <Footer />
-          </div>
-        </AppProvider>
+        <CartProvider>
+          <AppProvider>
+            <div className="app-container">
+              <Header />
+              <main className="main-content">
+                <div className="container">
+                  <Suspense fallback={<Loader size="large" />}>
+                    <Routes>
+                      <Route path={AppRouterPaths.MAIN} element={<Main />} />
+                      <Route path={AppRouterPaths.CATALOG} element={<Catalog />} />
+                      <Route path={AppRouterPaths.PRODUCT_DETAILS} element={<ProductDetails />} />
+                      <Route path={AppRouterPaths.ABOUT_US} element={<AboutUs />} />
+                      <Route path={AppRouterPaths.BASKET} element={<Basket />} />
+                      <Route
+                        path={AppRouterPaths.LOGIN}
+                        element={
+                          <AuthGuard requireAuth={false}>
+                            <Login />
+                          </AuthGuard>
+                        }
+                      />
+                      <Route
+                        path={AppRouterPaths.REGISTER}
+                        element={
+                          <AuthGuard requireAuth={false}>
+                            <Register />
+                          </AuthGuard>
+                        }
+                      />
+                      <Route
+                        path={AppRouterPaths.PROFILE}
+                        element={
+                          <AuthGuard requireAuth={true}>
+                            <Profile />
+                          </AuthGuard>
+                        }
+                      />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                </div>
+              </main>
+              <Footer />
+            </div>
+          </AppProvider>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   );
