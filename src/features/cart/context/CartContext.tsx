@@ -70,22 +70,13 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const removeFromCart = async (lineItemId: string) => {
     if (!cart) return;
 
+    setError(null);
+
     const optimisticCart = {
       ...cart,
       lineItems: cart.lineItems.filter(item => item.id !== lineItemId),
-      totalPrice: {
-        ...cart.totalPrice,
-        centAmount: cart.lineItems
-          .filter(item => item.id !== lineItemId)
-          .reduce(
-            (total, item) =>
-              total + item.price * item.quantity * Math.pow(10, cart.totalPrice.fractionDigits),
-            0
-          ),
-      },
     };
     setCart(optimisticCart);
-    setError(null);
 
     try {
       const updatedCart = await removeLineItemFromCart(lineItemId);
@@ -101,6 +92,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const updateCartItemQuantity = async (lineItemId: string, quantity: number) => {
     if (!cart) return;
 
+    setError(null);
+
     const optimisticCart = {
       ...cart,
       lineItems: cart.lineItems.map(item =>
@@ -108,17 +101,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       ),
     };
 
-    optimisticCart.totalPrice = {
-      ...cart.totalPrice,
-      centAmount: optimisticCart.lineItems.reduce(
-        (total, item) =>
-          total + item.price * item.quantity * Math.pow(10, cart.totalPrice.fractionDigits),
-        0
-      ),
-    };
-
     setCart(optimisticCart);
-    setError(null);
 
     try {
       const updatedCart = await updateLineItemQuantity(lineItemId, quantity);
