@@ -197,6 +197,7 @@ export interface CartItem {
   name: string;
   price: number;
   originalPrice?: number;
+  isOnSale?: boolean;
   quantity: number;
   imageUrl: string;
   variant: {
@@ -213,24 +214,14 @@ export interface Cart {
   version: number;
   lineItems: CartItem[];
   totalPrice: {
-    currencyCode: string;
     centAmount: number;
     fractionDigits: number;
+    currencyCode: string;
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  discountCodes?: any[];
-}
-
-export interface CartContextType {
-  cart: Cart | null;
-  cartItemsCount: number;
-  isLoading: boolean;
-  error: string | null;
-  addToCart: (productId: string) => Promise<void>;
-  removeFromCart: (lineItemId: string) => Promise<void>;
-  updateCartItemQuantity: (lineItemId: string, quantity: number) => Promise<void>;
-  clearCart: () => Promise<void>;
-  fetchCart: () => Promise<void>;
-  applyPromoCode: (code: string) => Promise<string | null>;
-  removePromoCode: (promocodeId: string) => Promise<void>;
+  discountCodes?: Array<{
+    discountCode: {
+      id: string;
+      typeId: string;
+    };
+  }>;
 }

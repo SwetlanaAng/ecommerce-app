@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ProductCardProps } from '../../types/interfaces';
 import { useCart } from '../../features/cart/hooks/useCart';
 import addToCartIcon from '../../assets/basket.svg';
+import { toast } from 'react-toastify';
 import './ProductCard.css';
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -17,14 +18,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
   filters,
   category,
 }) => {
-  const { addToCart, isLoading } = useCart();
+  const { addToCart, cart } = useCart();
+
+  const isInCart = cart?.lineItems.some(item => item.productId === id) || false;
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (id && !isLoading) {
-      await addToCart(id);
+    if (id && !isInCart) {
+      try {
+        await addToCart(id, name, price, imageUrl, originalPrice, isOnSale);
+        toast.success('Product added to cart');
+      } catch {
+        toast.error('Failed to add product to cart');
+      }
     }
   };
 
@@ -48,12 +56,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </span>
           </div>
           <button
-            className={`add-to-cart-button ${isLoading ? 'loading' : ''}`}
+            className={`add-to-cart-button ${isInCart ? 'in-cart' : ''}`}
             onClick={handleAddToCart}
-            disabled={isLoading || !id}
-            title={!id ? 'Product ID required' : isLoading ? 'Adding...' : 'Add to cart'}
+            disabled={!id || isInCart}
           >
-            <img src={addToCartIcon} alt="add to cart" />
+            {isInCart ? <span>✓</span> : <img src={addToCartIcon} alt="add to cart" />}
           </button>
         </div>
       </div>

@@ -1,8 +1,12 @@
 import type { FC } from 'react';
+import './CartIcon.css';
+
 type CartIconProps = {
   title: string;
+  count?: number;
 };
-export const CartIcon: FC<CartIconProps> = ({ title }) => {
+
+export const CartIcon: FC<CartIconProps> = ({ title, count = 0 }) => {
   return (
     <div title={title} className="cart">
       <svg
@@ -38,6 +42,7 @@ export const CartIcon: FC<CartIconProps> = ({ title }) => {
           </clipPath>
         </defs>
       </svg>
+      {count > 0 && <span className="cart-badge">{count}</span>}
     </div>
   );
 };

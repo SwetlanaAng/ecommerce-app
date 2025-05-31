@@ -3,8 +3,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { useAuth } from '../../features/auth/hooks/useAuth';
-import './Header.css';
+import { useCart } from '../../features/cart/hooks/useCart';
 import { CartIcon } from '../../components/cartIcon/CartIcon';
+import './Header.css';
 
 interface HeaderProps {
   isMobileMenuOpen?: boolean;
@@ -23,6 +24,7 @@ const Header: React.FC<HeaderProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
+  const { cartItemsCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
@@ -142,7 +144,7 @@ const Header: React.FC<HeaderProps> = () => {
                     </a>
                   ) : link.cart ? (
                     <Link to={link.path} onClick={closeMobileMenu}>
-                      <CartIcon title="cart" />
+                      <CartIcon title="cart" count={cartItemsCount} />
                     </Link>
                   ) : (
                     <Link to={link.path} onClick={closeMobileMenu}>

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Product } from '../../types/interfaces';
-import { useCart } from '../../features/cart/hooks/useCart';
 import ImageModal from '../image/ImageModal';
-import addToCartIcon from '../../assets/basket.svg';
-import Button from '../button/Button';
 import './ProductDetailCard.css';
 
 interface Props {
@@ -11,7 +8,7 @@ interface Props {
 }
 
 const ProductDetailCard: React.FC<Props> = ({ product }) => {
-  const { name, description, masterVariant, id } = product;
+  const { name, description, masterVariant } = product;
   const title = name['en-US'];
   const desc = description?.['en-US'] || 'No description.';
   const images = masterVariant.images;
@@ -25,14 +22,6 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalIndex, setModalIndex] = useState(0);
-
-  const { addToCart, isLoading } = useCart();
-
-  const handleAddToCart = async () => {
-    if (id && !isLoading) {
-      await addToCart(id);
-    }
-  };
 
   useEffect(() => {
     if (isModalOpen) {
@@ -72,15 +61,6 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
             </span>
           )}
         </div>
-
-        <Button
-          className={`detail-add-to-cart-btn primary ${isLoading ? 'loading' : ''}`}
-          onClick={handleAddToCart}
-          disabled={isLoading || !id}
-        >
-          <img src={addToCartIcon} alt="add to cart" />
-          <span>{isLoading ? 'Adding...' : 'Add to Cart'}</span>
-        </Button>
       </div>
 
       <div className="detail-images">
