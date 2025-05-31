@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
     if (id && !isInCart) {
       try {
-        await addToCart(id, name, price, imageUrl, originalPrice, isOnSale);
+        await addToCart(id);
         toast.success('Product added to cart');
       } catch {
         toast.error('Failed to add product to cart');

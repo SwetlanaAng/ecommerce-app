@@ -72,13 +72,15 @@ const Basket: React.FC = () => {
               <div className="cart-item-details">
                 <h3 className="cart-item-name">{item.name}</h3>
                 <div className="cart-item-price">
-                  {item.isOnSale && item.originalPrice && (
-                    <span className="cart-item-original-price">
-                      ${item.originalPrice.toFixed(2)}
-                    </span>
-                  )}
+                  {item.isOnSale &&
+                    item.originalPrice &&
+                    typeof item.originalPrice === 'number' && (
+                      <span className="cart-item-original-price">
+                        ${item.originalPrice.toFixed(2)}
+                      </span>
+                    )}
                   <span className={`cart-item-current-price ${item.isOnSale ? 'discounted' : ''}`}>
-                    ${item.price.toFixed(2)}
+                    ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}
                   </span>
                 </div>
               </div>
@@ -103,7 +105,9 @@ const Basket: React.FC = () => {
                 </button>
               </div>
 
-              <div className="cart-item-total">${(item.price * item.quantity).toFixed(2)}</div>
+              <div className="cart-item-total">
+                ${typeof item.price === 'number' ? (item.price * item.quantity).toFixed(2) : '0.00'}
+              </div>
 
               <button
                 className="remove-item-btn"

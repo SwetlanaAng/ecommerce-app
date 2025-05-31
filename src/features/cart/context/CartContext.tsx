@@ -1,160 +1,65 @@
 import React, { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { Cart, CartItem } from '../../../types/interfaces';
-import { useAuth } from '../../auth/hooks/useAuth';
+import { Cart } from '../../../types/interfaces';
+import {
+  getCart,
+  sendToCart,
+  removeLineItemFromCart,
+  updateLineItemQuantity,
+  clearCart as clearCartLogic,
+} from '../../../services/cart.logic';
 
 export interface CartContextType {
   cart: Cart | null;
   cartItemsCount: number;
   isLoading: boolean;
   error: string | null;
-  addToCart: (
-    productId: string,
-    productName?: string,
-    productPrice?: number,
-    productImage?: string,
-    originalPrice?: number,
-    isOnSale?: boolean
-  ) => Promise<void>;
+  addToCart: (productId: string) => Promise<void>;
   removeFromCart: (lineItemId: string) => Promise<void>;
   updateCartItemQuantity: (lineItemId: string, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
+  refreshCart: () => Promise<void>;
 }
 
 export const CartContext = createContext<CartContextType | undefined>(undefined);
-
 interface CartProviderProps {
   children: ReactNode;
 }
-
-interface LocalCartItem {
-  productId: string;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  isOnSale?: boolean;
-  quantity: number;
-  imageUrl: string;
-}
-
-const createLocalCart = (localItems: LocalCartItem[]): Cart => {
-  const totalCentAmount = localItems.reduce(
-    (total, item) => total + item.price * 100 * item.quantity,
-    0
-  );
-
-  return {
-    id: 'local-cart',
-    version: 1,
-    lineItems: localItems.map(
-      (item, index): CartItem => ({
-        id: `local-${index}`,
-        productId: item.productId,
-        name: item.name,
-        price: item.price,
-        originalPrice: item.originalPrice,
-        isOnSale: item.isOnSale,
-        quantity: item.quantity,
-        imageUrl: item.imageUrl,
-        variant: {
-          id: 1,
-          attributes: [],
-        },
-      })
-    ),
-    totalPrice: {
-      centAmount: totalCentAmount,
-      fractionDigits: 2,
-      currencyCode: 'USD',
-    },
-  };
-};
-
-const LOCAL_CART_KEY = 'local-cart-items';
-
-const getLocalCartItems = (): LocalCartItem[] => {
-  try {
-    const items = localStorage.getItem(LOCAL_CART_KEY);
-    return items ? JSON.parse(items) : [];
-  } catch {
-    return [];
-  }
-};
-
-const setLocalCartItems = (items: LocalCartItem[]) => {
-  localStorage.setItem(LOCAL_CART_KEY, JSON.stringify(items));
-};
-
-const clearLocalCartItems = () => {
-  localStorage.removeItem(LOCAL_CART_KEY);
-};
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<Cart | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { isAuthenticated } = useAuth();
 
-  const syncCartWithServer = useCallback(async () => {
-    const localItems = getLocalCartItems();
-
-    if (localItems.length === 0) {
-      return;
-    }
-
-    setCart(createLocalCart(localItems));
-  }, []);
-
-  const loadCart = useCallback(() => {
-    const localItems = getLocalCartItems();
-
-    if (localItems.length > 0) {
-      setCart(createLocalCart(localItems));
-    } else {
-      setCart(null);
-    }
-  }, []);
-
-  useEffect(() => {
-    setError(null);
-
-    loadCart();
-
-    if (isAuthenticated) {
-      syncCartWithServer();
-    }
-  }, [isAuthenticated, loadCart, syncCartWithServer]);
-
-  const addToCart = async (
-    productId: string,
-    productName = 'Unknown Product',
-    productPrice = 0,
-    productImage = '',
-    originalPrice?: number,
-    isOnSale?: boolean
-  ) => {
+  const refreshCart = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const localItems = getLocalCartItems();
-      const existingItemIndex = localItems.findIndex(item => item.productId === productId);
+      const cartData = await getCart();
+      setCart(cartData);
+    } catch {
+      setError('Failed to load cart');
+      setCart(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-      if (existingItemIndex >= 0) {
-        localItems[existingItemIndex].quantity += 1;
+  useEffect(() => {
+    refreshCart();
+  }, [refreshCart]);
+
+  const addToCart = async (productId: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const updatedCart = await sendToCart(productId);
+      if (updatedCart) {
+        setCart(updatedCart);
       } else {
-        localItems.push({
-          productId,
-          name: productName,
-          price: productPrice,
-          originalPrice,
-          isOnSale,
-          quantity: 1,
-          imageUrl: productImage,
-        });
+        await refreshCart();
       }
-
-      setLocalCartItems(localItems);
-      setCart(createLocalCart(localItems));
     } catch {
       setError('Failed to add item to cart');
     } finally {
@@ -167,13 +72,11 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     setError(null);
 
     try {
-      const localItems = getLocalCartItems();
-      const itemIndex = parseInt(lineItemId.replace('local-', ''));
-
-      if (itemIndex >= 0 && itemIndex < localItems.length) {
-        localItems.splice(itemIndex, 1);
-        setLocalCartItems(localItems);
-        setCart(localItems.length > 0 ? createLocalCart(localItems) : null);
+      const updatedCart = await removeLineItemFromCart(lineItemId);
+      if (updatedCart) {
+        setCart(updatedCart);
+      } else {
+        await refreshCart();
       }
     } catch {
       setError('Failed to remove item from cart');
@@ -187,18 +90,11 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     setError(null);
 
     try {
-      const localItems = getLocalCartItems();
-      const itemIndex = parseInt(lineItemId.replace('local-', ''));
-
-      if (itemIndex >= 0 && itemIndex < localItems.length) {
-        if (quantity <= 0) {
-          localItems.splice(itemIndex, 1);
-        } else {
-          localItems[itemIndex].quantity = quantity;
-        }
-
-        setLocalCartItems(localItems);
-        setCart(localItems.length > 0 ? createLocalCart(localItems) : null);
+      const updatedCart = await updateLineItemQuantity(lineItemId, quantity);
+      if (updatedCart) {
+        setCart(updatedCart);
+      } else {
+        await refreshCart();
       }
     } catch {
       setError('Failed to update item quantity');
@@ -212,7 +108,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     setError(null);
 
     try {
-      clearLocalCartItems();
+      await clearCartLogic();
       setCart(null);
     } catch {
       setError('Failed to clear cart');
@@ -232,6 +128,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     removeFromCart,
     updateCartItemQuantity,
     clearCart,
+    refreshCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
