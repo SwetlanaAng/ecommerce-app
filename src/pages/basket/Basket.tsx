@@ -7,15 +7,7 @@ import Button from '../../components/button/Button';
 import './Basket.css';
 
 const Basket: React.FC = () => {
-  const {
-    cart,
-    cartItemsCount,
-    isLoading,
-    error,
-    removeFromCart,
-    updateCartItemQuantity,
-    clearCart,
-  } = useCart();
+  const { cart, isLoading, error, removeFromCart, updateCartItemQuantity, clearCart } = useCart();
 
   const handleQuantityChange = async (lineItemId: string, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -59,7 +51,7 @@ const Basket: React.FC = () => {
 
   return (
     <div className="basket-page">
-      <h1>Shopping Cart ({cartItemsCount} items)</h1>
+      <h1>Shopping Cart</h1>
 
       <div className="basket-content">
         <div className="cart-items">
