@@ -89,7 +89,6 @@ const Basket: React.FC = () => {
                 <button
                   className="quantity-btn"
                   onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                  disabled={isLoading}
                   title="Decrease quantity"
                 >
                   -
@@ -98,7 +97,6 @@ const Basket: React.FC = () => {
                 <button
                   className="quantity-btn"
                   onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                  disabled={isLoading}
                   title="Increase quantity"
                 >
                   +
@@ -112,7 +110,6 @@ const Basket: React.FC = () => {
               <button
                 className="remove-item-btn"
                 onClick={() => removeFromCart(item.id)}
-                disabled={isLoading}
                 title="Remove item"
               >
                 ×

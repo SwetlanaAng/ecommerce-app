@@ -68,38 +68,66 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   };
 
   const removeFromCart = async (lineItemId: string) => {
-    setIsLoading(true);
+    if (!cart) return;
+
+    const optimisticCart = {
+      ...cart,
+      lineItems: cart.lineItems.filter(item => item.id !== lineItemId),
+      totalPrice: {
+        ...cart.totalPrice,
+        centAmount: cart.lineItems
+          .filter(item => item.id !== lineItemId)
+          .reduce(
+            (total, item) =>
+              total + item.price * item.quantity * Math.pow(10, cart.totalPrice.fractionDigits),
+            0
+          ),
+      },
+    };
+    setCart(optimisticCart);
     setError(null);
 
     try {
       const updatedCart = await removeLineItemFromCart(lineItemId);
       if (updatedCart) {
         setCart(updatedCart);
-      } else {
-        await refreshCart();
       }
     } catch {
       setError('Failed to remove item from cart');
-    } finally {
-      setIsLoading(false);
+      setCart(cart);
     }
   };
 
   const updateCartItemQuantity = async (lineItemId: string, quantity: number) => {
-    setIsLoading(true);
+    if (!cart) return;
+
+    const optimisticCart = {
+      ...cart,
+      lineItems: cart.lineItems.map(item =>
+        item.id === lineItemId ? { ...item, quantity } : item
+      ),
+    };
+
+    optimisticCart.totalPrice = {
+      ...cart.totalPrice,
+      centAmount: optimisticCart.lineItems.reduce(
+        (total, item) =>
+          total + item.price * item.quantity * Math.pow(10, cart.totalPrice.fractionDigits),
+        0
+      ),
+    };
+
+    setCart(optimisticCart);
     setError(null);
 
     try {
       const updatedCart = await updateLineItemQuantity(lineItemId, quantity);
       if (updatedCart) {
         setCart(updatedCart);
-      } else {
-        await refreshCart();
       }
     } catch {
       setError('Failed to update item quantity');
-    } finally {
-      setIsLoading(false);
+      setCart(cart);
     }
   };
 
