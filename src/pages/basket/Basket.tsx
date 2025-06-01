@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { CartItem } from '../../types/interfaces';
 import Loader from '../../components/loader/Loader';
 import Button from '../../components/button/Button';
+import deleteIcon from '../../assets/delete.svg';
 import './Basket.css';
 
 const Basket: React.FC = () => {
@@ -104,7 +105,7 @@ const Basket: React.FC = () => {
                 onClick={() => removeFromCart(item.id)}
                 title="Remove item"
               >
-                ×
+                <img src={deleteIcon} alt="Delete" />
               </button>
             </div>
           ))}
