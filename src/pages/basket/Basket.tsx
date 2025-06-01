@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../../features/cart/hooks/useCart';
 import { Link } from 'react-router-dom';
 import { CartItem } from '../../types/interfaces';
 import Loader from '../../components/loader/Loader';
 import Button from '../../components/button/Button';
+import AnimatedPrice from '../../components/AnimatedPrice/AnimatedPrice';
 import deleteIcon from '../../assets/delete.svg';
 import './Basket.css';
 
 const Basket: React.FC = () => {
   const { cart, isLoading, error, removeFromCart, updateCartItemQuantity, clearCart } = useCart();
+  const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
 
   const handleQuantityChange = async (lineItemId: string, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      await removeFromCart(lineItemId);
-    } else {
-      await updateCartItemQuantity(lineItemId, newQuantity);
+    setUpdatingItems(prev => new Set(prev).add(lineItemId));
+
+    try {
+      if (newQuantity <= 0) {
+        await removeFromCart(lineItemId);
+      } else {
+        await updateCartItemQuantity(lineItemId, newQuantity);
+      }
+    } finally {
+      setUpdatingItems(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(lineItemId);
+        return newSet;
+      });
     }
   };
 
@@ -56,70 +68,81 @@ const Basket: React.FC = () => {
 
       <div className="basket-content">
         <div className="cart-items">
-          {cart.lineItems.map((item: CartItem) => (
-            <div key={item.id} className="cart-item">
-              <div className="cart-item-image">
-                <img src={item.imageUrl} alt={item.name} />
-              </div>
+          {cart.lineItems.map((item: CartItem) => {
+            const isUpdating = updatingItems.has(item.id);
 
-              <div className="cart-item-details">
-                <h3 className="cart-item-name">{item.name}</h3>
-                <div className="cart-item-price">
-                  {item.isOnSale &&
-                    item.originalPrice &&
-                    typeof item.originalPrice === 'number' && (
-                      <span className="cart-item-original-price">
-                        ${item.originalPrice.toFixed(2)}
-                      </span>
-                    )}
-                  <span className={`cart-item-current-price ${item.isOnSale ? 'discounted' : ''}`}>
-                    ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}
-                  </span>
+            return (
+              <div key={item.id} className={`cart-item ${isUpdating ? 'updating' : ''}`}>
+                <div className="cart-item-image">
+                  <img src={item.imageUrl} alt={item.name} />
                 </div>
-              </div>
 
-              <div className="cart-item-quantity">
+                <div className="cart-item-details">
+                  <h3 className="cart-item-name">{item.name}</h3>
+                  <div className="cart-item-price">
+                    {item.isOnSale &&
+                      item.originalPrice &&
+                      typeof item.originalPrice === 'number' && (
+                        <AnimatedPrice
+                          value={item.originalPrice}
+                          className="cart-item-original-price"
+                        />
+                      )}
+                    <AnimatedPrice
+                      value={typeof item.price === 'number' ? item.price : 0}
+                      className={`cart-item-current-price ${item.isOnSale ? 'discounted' : ''}`}
+                    />
+                  </div>
+                </div>
+
+                <div className="cart-item-quantity">
+                  <button
+                    className="quantity-btn"
+                    onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                    disabled={isUpdating}
+                    title="Decrease quantity"
+                  >
+                    -
+                  </button>
+                  <span className="quantity-display">{item.quantity}</span>
+                  <button
+                    className="quantity-btn"
+                    onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                    disabled={isUpdating}
+                    title="Increase quantity"
+                  >
+                    +
+                  </button>
+                </div>
+
+                <div className="cart-item-total">
+                  <AnimatedPrice
+                    value={typeof item.price === 'number' ? item.price * item.quantity : 0}
+                  />
+                </div>
+
                 <button
-                  className="quantity-btn"
-                  onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                  title="Decrease quantity"
+                  className="remove-item-btn"
+                  onClick={() => removeFromCart(item.id)}
+                  disabled={isUpdating}
+                  title="Remove item"
                 >
-                  -
-                </button>
-                <span className="quantity-display">{item.quantity}</span>
-                <button
-                  className="quantity-btn"
-                  onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                  title="Increase quantity"
-                >
-                  +
+                  <img src={deleteIcon} alt="Delete" />
                 </button>
               </div>
-
-              <div className="cart-item-total">
-                ${typeof item.price === 'number' ? (item.price * item.quantity).toFixed(2) : '0.00'}
-              </div>
-
-              <button
-                className="remove-item-btn"
-                onClick={() => removeFromCart(item.id)}
-                title="Remove item"
-              >
-                <img src={deleteIcon} alt="Delete" />
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="cart-summary">
           <div className="cart-total">
             <div className="total-line">
               <span>Subtotal:</span>
-              <span>${totalAmount.toFixed(2)}</span>
+              <AnimatedPrice value={totalAmount} />
             </div>
             <div className="total-line total-final">
               <span>Total:</span>
-              <span>${totalAmount.toFixed(2)}</span>
+              <AnimatedPrice value={totalAmount} />
             </div>
           </div>
 

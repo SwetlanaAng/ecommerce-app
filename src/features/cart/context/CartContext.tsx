@@ -101,6 +101,16 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       ),
     };
 
+    const newTotalCentAmount = optimisticCart.lineItems.reduce((total, item) => {
+      const itemPriceCents = Math.round(item.price * Math.pow(10, cart.totalPrice.fractionDigits));
+      return total + itemPriceCents * item.quantity;
+    }, 0);
+
+    optimisticCart.totalPrice = {
+      ...cart.totalPrice,
+      centAmount: newTotalCentAmount,
+    };
+
     setCart(optimisticCart);
 
     try {

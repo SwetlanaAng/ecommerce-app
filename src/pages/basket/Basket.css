@@ -30,8 +30,13 @@
         align-items: center;
         padding: 20px 0;
         border-bottom: 1px solid #f0f0f0;
+        transition: all 0.3s ease;
         &:last-child {
           border-bottom: none;
+        }
+        &.updating {
+          opacity: 0.8;
+          transform: scale(0.98);
         }
         .cart-item-image {
           width: 100px;
@@ -62,11 +67,13 @@
             font-size: 0.9rem;
             color: #898989;
             text-decoration: line-through;
+            transition: all 0.3s ease;
           }
           .cart-item-current-price {
             font-size: 1rem;
             font-weight: 600;
             color: var(--text-color);
+            transition: all 0.3s ease;
           }
           .cart-item-current-price.discounted {
             color: #e74c3c;
@@ -96,8 +103,9 @@
             transform: scale(1.05);
           }
           &:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
           }
         }
         .quantity-display {
@@ -105,12 +113,14 @@
           font-weight: 600;
           min-width: 30px;
           text-align: center;
+          transition: all 0.3s ease;
         }
         .cart-item-total {
           font-size: 1.2rem;
           font-weight: 700;
           min-width: 80px;
           text-align: right;
+          transition: all 0.3s ease;
         }
         .remove-item-btn {
           border: none;
@@ -124,8 +134,9 @@
             transform: scale(1.1);
           }
           &:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
           }
         }
       }
@@ -166,6 +177,7 @@
         justify-content: space-between;
         padding: 8px 0;
         font-size: 1rem;
+        transition: all 0.3s ease;
       }
       .total-final {
         font-size: 1.3rem;
@@ -173,6 +185,7 @@
         border-top: 1px solid var(--accent-color);
         padding-top: 16px;
         margin-top: 8px;
+        transition: all 0.3s ease;
       }
       .cart-actions {
         display: flex;
