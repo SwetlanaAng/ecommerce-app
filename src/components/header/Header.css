@@ -50,6 +50,45 @@
         }
       }
     }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      .header-actions-item {
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 46px;
+          height: 46px;
+          border-radius: 50%;
+          background-color: transparent;
+          border: 1px solid var(--primary-color);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          .cart {
+            height: 18px;
+          }
+        }
+        &:hover {
+          a {
+            background-color: var(--primary-color);
+            svg {
+              stroke: var(--white);
+            }
+          }
+        }
+      }
+      .logout-link,
+      .login-link {
+        color: var(--primary-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover {
+          color: var(--accent-color-hover);
+        }
+      }
+    }
     .hamburger {
       display: none;
       flex-direction: column;
@@ -87,9 +126,6 @@
       display: none;
     }
   }
-}
-.basket:hover {
-  color: white;
 }
 
 @media (max-width: 768px) {

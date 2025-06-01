@@ -64,11 +64,6 @@ const Header: React.FC<HeaderProps> = () => {
   const getNavLinks = (): NavLink[] => {
     const navLinks: NavLink[] = [
       {
-        path: AppRouterPaths.BASKET,
-        text: 'Basket',
-        cart: true,
-      },
-      {
         path: AppRouterPaths.MAIN,
         text: 'Main',
       },
@@ -83,28 +78,15 @@ const Header: React.FC<HeaderProps> = () => {
     ];
 
     if (isAuthenticated) {
-      navLinks.push(
-        {
-          path: AppRouterPaths.PROFILE,
-          text: 'Profile',
-        },
-        {
-          path: '#',
-          text: 'Log out',
-          isLogout: true,
-        }
-      );
+      navLinks.push({
+        path: AppRouterPaths.PROFILE,
+        text: 'Profile',
+      });
     } else {
-      navLinks.push(
-        {
-          path: AppRouterPaths.REGISTER,
-          text: 'Register',
-        },
-        {
-          path: AppRouterPaths.LOGIN,
-          text: 'Log in',
-        }
-      );
+      navLinks.push({
+        path: AppRouterPaths.REGISTER,
+        text: 'Register',
+      });
     }
 
     return navLinks;
@@ -121,18 +103,6 @@ const Header: React.FC<HeaderProps> = () => {
               <img src={logo} alt="logo" />
             </Link>
           </div>
-
-          <div
-            className={`hamburger ${mobileMenuOpen ? 'active' : ''}`}
-            onClick={toggleMobileMenu}
-            role="button"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-
-          {mobileMenuOpen && <div className="menu-overlay" onClick={closeMobileMenu}></div>}
 
           <nav className={`nav ${mobileMenuOpen ? 'active' : ''}`}>
             <ul>
@@ -155,6 +125,34 @@ const Header: React.FC<HeaderProps> = () => {
               ))}
             </ul>
           </nav>
+
+          <div className="header-actions">
+            <div className="header-actions-item">
+              <Link to={AppRouterPaths.BASKET}>
+                <CartIcon title="cart" count={cartItemsCount} />
+              </Link>
+            </div>
+            {isAuthenticated ? (
+              <a onClick={handleLogout} className="logout-link">
+                Log out
+              </a>
+            ) : (
+              <Link to={AppRouterPaths.LOGIN} className="login-link">
+                Log in
+              </Link>
+            )}
+          </div>
+
+          {mobileMenuOpen && <div className="menu-overlay" onClick={closeMobileMenu}></div>}
+          <div
+            className={`hamburger ${mobileMenuOpen ? 'active' : ''}`}
+            onClick={toggleMobileMenu}
+            role="button"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
       </div>
     </header>

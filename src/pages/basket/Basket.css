@@ -228,3 +228,18 @@
     }
   }
 }
+
+
+@media (max-width: 768px) {
+  .basket-page {
+    .basket-content {
+      flex-direction: column;
+      .cart-items {
+        width: 100%;
+      }
+      .cart-summary {
+        max-width: 100%;
+      }
+    }
+  }
+}
