@@ -4,6 +4,7 @@ import { ProductCardProps } from '../../types/interfaces';
 import { useCart } from '../../features/cart/hooks/useCart';
 import addToCartIcon from '../../assets/basket.svg';
 import { toast } from 'react-toastify';
+import tickIcon from '../../assets/tick.svg';
 import './ProductCard.css';
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -65,7 +66,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
             onClick={handleAddToCart}
             disabled={isButtonDisabled}
           >
-            {isInCart ? <span>✓</span> : <img src={addToCartIcon} alt="add to cart" />}
+            {isInCart ? (
+              <img src={tickIcon} alt="add to cart" />
+            ) : (
+              <img src={addToCartIcon} alt="add to cart" />
+            )}
           </button>
         </div>
       </div>
