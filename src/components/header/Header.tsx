@@ -108,19 +108,9 @@ const Header: React.FC<HeaderProps> = () => {
             <ul>
               {navLinks.map((link, index) => (
                 <li className={isActive(link.path)} key={index}>
-                  {link.isLogout ? (
-                    <a onClick={handleLogout} className="logout-link">
-                      {link.text}
-                    </a>
-                  ) : link.cart ? (
-                    <Link to={link.path} onClick={closeMobileMenu}>
-                      <CartIcon title="cart" count={cartItemsCount} />
-                    </Link>
-                  ) : (
-                    <Link to={link.path} onClick={closeMobileMenu}>
-                      {link.text}
-                    </Link>
-                  )}
+                  <Link to={link.path} onClick={closeMobileMenu}>
+                    {link.text}
+                  </Link>
                 </li>
               ))}
             </ul>
