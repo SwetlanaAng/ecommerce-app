@@ -68,6 +68,9 @@
           transition: all 0.3s ease;
           .cart {
             height: 18px;
+            svg {
+              transition: all 0.3s ease;
+            }
           }
         }
         &:hover {
@@ -75,6 +78,10 @@
             background-color: var(--primary-color);
             svg {
               stroke: var(--white);
+            }
+            .cart-badge {
+              background-color: var(--white);
+              color: var(--primary-color);
             }
           }
         }
