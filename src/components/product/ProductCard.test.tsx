@@ -1,6 +1,8 @@
 import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import ProductCard from './ProductCard';
+import { CartProvider } from '../../features/cart/context/CartContext';
+import { AuthProvider } from '../../features/auth/context/AuthContext';
 
 describe('ProductCard', () => {
   const defaultProps = {
@@ -18,7 +20,11 @@ describe('ProductCard', () => {
   const renderComponent = (props = {}) => {
     return render(
       <MemoryRouter>
-        <ProductCard {...defaultProps} {...props} />
+        <AuthProvider>
+          <CartProvider>
+            <ProductCard {...defaultProps} {...props} />
+          </CartProvider>
+        </AuthProvider>
       </MemoryRouter>
     );
   };

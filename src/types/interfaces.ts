@@ -190,3 +190,38 @@ export interface PersonalInfo {
 export interface CategoryWithChildren extends CategoryData {
   children: CategoryWithChildren[];
 }
+
+export interface CartItem {
+  id: string;
+  productId: string;
+  name: string;
+  price: number;
+  originalPrice?: number;
+  isOnSale?: boolean;
+  quantity: number;
+  imageUrl: string;
+  variant: {
+    id: number;
+    attributes: Array<{
+      name: string;
+      value: unknown;
+    }>;
+  };
+}
+
+export interface Cart {
+  id: string;
+  version: number;
+  lineItems: CartItem[];
+  totalPrice: {
+    centAmount: number;
+    fractionDigits: number;
+    currencyCode: string;
+  };
+  discountCodes?: Array<{
+    discountCode: {
+      id: string;
+      typeId: string;
+    };
+  }>;
+}
