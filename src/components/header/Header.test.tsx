@@ -2,12 +2,35 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Header from './Header';
 import { useAuth } from '../../features/auth/hooks/useAuth';
+import { useCart } from '../../features/cart/hooks/useCart';
 
 jest.mock('../../assets/logo.svg', () => 'logo.svg');
+jest.mock('../../services/keys', () => ({
+  KEYS: {
+    API_URL: 'http://test-api.com',
+    AUTH_URL: 'http://test-auth.com',
+    PROJECT_KEY: 'test-project',
+    CLIENT_ID: 'test-client',
+    CLIENT_SECRET: 'test-secret',
+    SCOPES: ['test-scope'],
+  },
+}));
+
+jest.mock('../../services/cart.service', () => ({
+  getCart: jest.fn(),
+  createCart: jest.fn(),
+  addProductToCart: jest.fn(),
+}));
+
+jest.mock('../../services/registration.service', () => ({
+  getTokenFromStorage: jest.fn(),
+}));
 
 jest.mock('../../features/auth/hooks/useAuth');
+jest.mock('../../features/cart/hooks/useCart');
 
 const mockedUseAuth = useAuth as jest.Mock;
+const mockedUseCart = useCart as jest.Mock;
 
 const renderHeader = () => {
   return render(
@@ -20,6 +43,11 @@ const renderHeader = () => {
 describe('Header component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockedUseCart.mockReturnValue({
+      cartItemsCount: 2,
+      cart: null,
+      addToCart: jest.fn(),
+    });
   });
 
   it('renders correctly for unauthenticated users', () => {
@@ -86,5 +114,19 @@ describe('Header component', () => {
 
     const nav = screen.getByRole('navigation');
     expect(nav.className).not.toContain('active');
+  });
+
+  it('displays cart icon with correct count', () => {
+    mockedUseAuth.mockReturnValue({ isAuthenticated: false });
+    mockedUseCart.mockReturnValue({
+      cartItemsCount: 5,
+      cart: null,
+      addToCart: jest.fn(),
+    });
+
+    renderHeader();
+
+    const cartIcon = screen.getByTitle(/cart/i);
+    expect(cartIcon).toBeInTheDocument();
   });
 });
