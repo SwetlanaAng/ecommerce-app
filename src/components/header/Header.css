@@ -53,35 +53,31 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 25px;
       .header-actions-item {
         a {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 46px;
-          height: 46px;
-          border-radius: 50%;
-          background-color: transparent;
-          border: 1px solid var(--primary-color);
           cursor: pointer;
           transition: all 0.3s ease;
+          line-height: 1;
           .cart {
-            height: 18px;
             svg {
+              width: 24px;
+              height: 24px;
               transition: all 0.3s ease;
+              stroke: var(--primary-color);
             }
           }
         }
         &:hover {
           a {
-            background-color: var(--primary-color);
             svg {
-              stroke: var(--white);
+              stroke: var(--accent-color);
             }
             .cart-badge {
-              background-color: var(--white);
-              color: var(--primary-color);
+              background-color: var(--accent-color);
             }
           }
         }

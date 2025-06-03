@@ -9,12 +9,13 @@
   .cart-badge {
     position: absolute;
     top: -9px;
-    right: -8px;
+    right: -9px;
     background-color: #ff4444;
+    border: 1px solid var(--bg-color);
     color: white;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
+    width: 19px;
+    height: 19px;
     display: flex;
     align-items: center;
     justify-content: center;
