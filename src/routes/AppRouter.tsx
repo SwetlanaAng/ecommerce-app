@@ -9,14 +9,15 @@ import { AppProvider } from '../features/app/context/AppContext';
 import AuthGuard from '../features/auth/guards/AuthGuard';
 import Loader from '../components/loader/Loader';
 import ScrollToTop from './ScrollToTop';
-import AboutUs from '../pages/aboutUs/AboutUs';
-import Basket from '../pages/basket/Basket';
+
 const Main = lazy(() => import('../pages/main/Main'));
 const Login = lazy(() => import('../pages/login/Login'));
 const Register = lazy(() => import('../pages/register/Register'));
 const Catalog = lazy(() => import('../pages/catalog/Catalog'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
 const ProductDetails = lazy(() => import('../pages/product/ProductDetails'));
+const Basket = lazy(() => import('../pages/basket/Basket'));
+const AboutUs = lazy(() => import('../pages/aboutUs/AboutUs'));
 const NotFound = lazy(() => import('../pages/notFound/NotFound'));
 
 const AppRouter: React.FC = () => {
