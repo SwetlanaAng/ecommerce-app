@@ -60,7 +60,6 @@
   }
   .section {
     margin: 160px 0;
-    border-radius: 8px;
     &:last-child {
       margin-bottom: 0;
     }

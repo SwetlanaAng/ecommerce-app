@@ -1,0 +1,49 @@
+.promo-code-section {
+  h4 {
+    margin-bottom: 20px;
+  }
+  .active-promo-codes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    .active-promo-code {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(242, 109, 138, 0.1);
+      color: var(--primary-color);
+      border-radius: 16px;
+      padding: 4px 12px;
+      font-size: 14px;
+    }
+    .remove-promo-btn {
+      color: #dc3545;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: color 0.2s;
+      &:hover {
+        color: #c82333;
+      }
+    }
+  }
+  .promo-code-form {
+    margin-bottom: 15px;
+    .promo-code-input-group {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      .promo-code-submit {
+        height: max-content;
+        padding: 8px 16px;
+      }
+    }
+    .promo-code-submit {
+      padding: 8px 16px;
+      white-space: nowrap;
+      min-width: 100px;
+    }
+  }
+}

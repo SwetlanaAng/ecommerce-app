@@ -5,6 +5,8 @@ import { CartItem } from '../../types/interfaces';
 import Loader from '../../components/loader/Loader';
 import Button from '../../components/button/Button';
 import AnimatedPrice from '../../components/AnimatedPrice/AnimatedPrice';
+import PriceDisplay from '../../components/PriceDisplay/PriceDisplay';
+import PromoCode from '../../components/PromoCode/PromoCode';
 import deleteIcon from '../../assets/delete.svg';
 import './Basket.css';
 
@@ -61,6 +63,14 @@ const Basket: React.FC = () => {
   }
 
   const totalAmount = cart.totalPrice.centAmount / Math.pow(10, cart.totalPrice.fractionDigits);
+  const hasPromoCodes =
+    (cart.discountCodes && cart.discountCodes.length > 0) || !!cart.discountOnTotalPrice;
+  const discountedAmount = cart.discountOnTotalPrice
+    ? cart.discountOnTotalPrice.discountedAmount.centAmount /
+      Math.pow(10, cart.discountOnTotalPrice.discountedAmount.fractionDigits)
+    : 0;
+
+  const subtotalAmount = hasPromoCodes ? totalAmount + discountedAmount : totalAmount;
 
   return (
     <div className="basket-page">
@@ -135,14 +145,23 @@ const Basket: React.FC = () => {
         </div>
 
         <div className="cart-summary">
+          <PromoCode />
           <div className="cart-total">
             <div className="total-line">
               <span>Subtotal:</span>
-              <AnimatedPrice value={totalAmount} />
+              <div className="subtotal-price">
+                <AnimatedPrice value={subtotalAmount} className="subtotal-amount" />
+              </div>
             </div>
             <div className="total-line total-final">
               <span>Total:</span>
-              <AnimatedPrice value={totalAmount} />
+              <PriceDisplay
+                totalPrice={totalAmount}
+                discountedAmount={discountedAmount}
+                currencyCode={cart.totalPrice.currencyCode}
+                hasPromoCodes={hasPromoCodes}
+                className="final-total-price"
+              />
             </div>
           </div>
 

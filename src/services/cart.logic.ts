@@ -55,6 +55,24 @@ interface ApiCart {
       typeId: string;
     };
   }>;
+  discountOnTotalPrice?: {
+    discountedAmount: {
+      centAmount: number;
+      fractionDigits: number;
+      currencyCode: string;
+    };
+    includedDiscounts: Array<{
+      discount: {
+        id: string;
+        typeId: string;
+      };
+      discountedAmount: {
+        centAmount: number;
+        fractionDigits: number;
+        currencyCode: string;
+      };
+    }>;
+  };
 }
 
 function adaptCartData(apiCart: ApiCart): Cart {
@@ -106,8 +124,11 @@ function adaptCartData(apiCart: ApiCart): Cart {
       currencyCode: apiCart.totalPrice?.currencyCode || 'USD',
     },
     discountCodes: apiCart.discountCodes || [],
+    discountOnTotalPrice: apiCart.discountOnTotalPrice,
   };
 }
+
+export { adaptCartData };
 
 export async function getCart(): Promise<Cart> {
   const token = await getTokenFromStorage();

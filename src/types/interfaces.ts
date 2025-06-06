@@ -224,4 +224,22 @@ export interface Cart {
       typeId: string;
     };
   }>;
+  discountOnTotalPrice?: {
+    discountedAmount: {
+      centAmount: number;
+      fractionDigits: number;
+      currencyCode: string;
+    };
+    includedDiscounts: Array<{
+      discount: {
+        id: string;
+        typeId: string;
+      };
+      discountedAmount: {
+        centAmount: number;
+        fractionDigits: number;
+        currencyCode: string;
+      };
+    }>;
+  };
 }

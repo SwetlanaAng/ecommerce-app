@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/button/Button';
 import ProductCard from '../../components/product/ProductCard';
+import PromoCodeBanner from '../../components/PromoCodeBanner/PromoCodeBanner';
 import { useEffect, useState } from 'react';
 import { getProductsList } from '../../services/products.service';
 import { Product } from '../../types/interfaces';
@@ -176,6 +177,10 @@ const Main = () => {
         <video src={macaronsSweetDecorativeCandy} autoPlay muted loop className="hero-video" />
       </section>
 
+      <section className="section promo-code">
+        <PromoCodeBanner />
+      </section>
+
       <section className="section numbers">
         <div className="numbers-flex">
           {numbers.map((number, index) => (
@@ -230,7 +235,7 @@ const Main = () => {
             </div>
             <h3>Celebrations and special occasions</h3>
             <p>
-              Mark life’s big moments with elegance. Our macarons add an unforgettable touch of joy
+              Mark life's big moments with elegance. Our macarons add an unforgettable touch of joy
               to any celebration
             </p>
           </li>
