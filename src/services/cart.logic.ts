@@ -24,7 +24,7 @@ interface ApiPrice {
   };
 }
 
-interface ApiLineItem {
+export interface ApiLineItem {
   id: string;
   productId: string;
   name?: { [key: string]: string } | string;
@@ -40,7 +40,7 @@ interface ApiLineItem {
   };
 }
 
-interface ApiCart {
+export interface ApiCart {
   id: string;
   version: number;
   lineItems?: ApiLineItem[];

@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useCart } from '../features/cart/hooks/useCart';
 import { usePromoCode } from './usePromoCode';
+import { adaptCartData, ApiCart } from '../services/cart.logic';
 
 export const useCartWithPromoCodes = () => {
-  const { cart, refreshCart, ...cartMethods } = useCart();
+  const { cart, setCart, ...cartMethods } = useCart();
   const {
     activePromoCodes,
     updateActivePromoCodes,
@@ -26,7 +27,8 @@ export const useCartWithPromoCodes = () => {
     const result = await addPromoCode(code, cart.id, cart.version);
 
     if (result.success && result.result) {
-      await refreshCart();
+      const adaptedCart = adaptCartData(result.result as ApiCart);
+      setCart(adaptedCart);
       return true;
     }
 
@@ -38,8 +40,9 @@ export const useCartWithPromoCodes = () => {
 
     const result = await removePromoCode(promocodeId, cart.id, cart.version);
 
-    if (result.success) {
-      await refreshCart();
+    if (result.success && result.result) {
+      const adaptedCart = adaptCartData(result.result as ApiCart);
+      setCart(adaptedCart);
     }
   };
 
