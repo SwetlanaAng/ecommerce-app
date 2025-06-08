@@ -7,6 +7,7 @@ import Button from '../../components/button/Button';
 import AnimatedPrice from '../../components/AnimatedPrice/AnimatedPrice';
 import PriceDisplay from '../../components/PriceDisplay/PriceDisplay';
 import PromoCode from '../../components/PromoCode/PromoCode';
+import DiscountInfo from '../../components/DiscountInfo/DiscountInfo';
 import deleteIcon from '../../assets/delete.svg';
 import './Basket.css';
 
@@ -103,6 +104,7 @@ const Basket: React.FC = () => {
                       className={`cart-item-current-price ${item.isOnSale ? 'discounted' : ''}`}
                     />
                   </div>
+                  <DiscountInfo appliedDiscounts={item.appliedDiscounts} />
                 </div>
 
                 <div className="cart-item-quantity">

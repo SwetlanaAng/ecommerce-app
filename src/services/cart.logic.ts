@@ -38,6 +38,32 @@ export interface ApiLineItem {
       value: unknown;
     }>;
   };
+  discountedPricePerQuantity?: Array<{
+    quantity: number;
+    discountedPrice: {
+      value: {
+        centAmount: number;
+        fractionDigits: number;
+        currencyCode: string;
+      };
+      includedDiscounts: Array<{
+        discount: {
+          id: string;
+          typeId: string;
+        };
+        discountedAmount: {
+          centAmount: number;
+          fractionDigits: number;
+          currencyCode: string;
+        };
+      }>;
+    };
+  }>;
+  totalPrice?: {
+    centAmount: number;
+    fractionDigits: number;
+    currencyCode: string;
+  };
 }
 
 export interface ApiCart {
@@ -76,26 +102,87 @@ export interface ApiCart {
 }
 
 function adaptCartData(apiCart: ApiCart): Cart {
+  console.log('Cart API Response:', JSON.stringify(apiCart, null, 2));
+
   const adaptedLineItems: CartItem[] =
     apiCart.lineItems?.map((apiItem: ApiLineItem) => {
-      const price = apiItem.price?.value?.centAmount
+      console.log('Processing line item:', {
+        id: apiItem.id,
+        name: apiItem.name,
+        price: apiItem.price,
+        discountedPricePerQuantity: apiItem.discountedPricePerQuantity,
+        totalPrice: apiItem.totalPrice,
+      });
+
+      const basePrice = apiItem.price?.value?.centAmount
         ? apiItem.price.value.centAmount / Math.pow(10, apiItem.price.value.fractionDigits)
         : 0;
 
-      const originalPrice =
-        apiItem.price?.discounted?.value?.centAmount && apiItem.price?.value?.centAmount
-          ? apiItem.price.value.centAmount / Math.pow(10, apiItem.price.value.fractionDigits)
-          : undefined;
+      const productDiscountPrice = apiItem.price?.discounted?.value?.centAmount
+        ? apiItem.price.discounted.value.centAmount /
+          Math.pow(10, apiItem.price.discounted.value.fractionDigits)
+        : null;
 
-      const isOnSale = !!apiItem.price?.discounted;
+      let cartDiscountPrice = null;
+      let originalPriceBeforeDiscount = null;
+      let isDiscountedByPromoCode = false;
+      const appliedDiscounts: Array<{
+        discountType: 'product' | 'cart';
+        discountAmount: number;
+        discountId?: string;
+      }> = [];
 
-      const finalPrice =
-        isOnSale && apiItem.price?.discounted?.value?.centAmount
-          ? apiItem.price.discounted.value.centAmount /
-            Math.pow(10, apiItem.price.discounted.value.fractionDigits)
-          : price;
+      if (apiItem.discountedPricePerQuantity && apiItem.discountedPricePerQuantity.length > 0) {
+        const discountInfo = apiItem.discountedPricePerQuantity[0];
+        cartDiscountPrice =
+          discountInfo.discountedPrice.value.centAmount /
+          Math.pow(10, discountInfo.discountedPrice.value.fractionDigits);
 
-      return {
+        originalPriceBeforeDiscount = productDiscountPrice || basePrice;
+        isDiscountedByPromoCode = true;
+
+        console.log('Found cart discount for item:', {
+          cartDiscountPrice,
+          originalPriceBeforeDiscount,
+          discountInfo,
+        });
+
+        discountInfo.discountedPrice.includedDiscounts?.forEach(discount => {
+          const discountAmount =
+            discount.discountedAmount.centAmount /
+            Math.pow(10, discount.discountedAmount.fractionDigits);
+          appliedDiscounts.push({
+            discountType: 'cart',
+            discountAmount,
+            discountId: discount.discount.id,
+          });
+        });
+      }
+
+      let finalPrice: number;
+      let originalPrice: number | undefined;
+      let isOnSale: boolean;
+
+      if (isDiscountedByPromoCode && cartDiscountPrice !== null) {
+        finalPrice = cartDiscountPrice;
+        originalPrice = originalPriceBeforeDiscount || undefined;
+        isOnSale = true;
+      } else if (productDiscountPrice !== null) {
+        finalPrice = productDiscountPrice;
+        originalPrice = basePrice;
+        isOnSale = true;
+
+        appliedDiscounts.push({
+          discountType: 'product',
+          discountAmount: basePrice - productDiscountPrice,
+        });
+      } else {
+        finalPrice = basePrice;
+        originalPrice = undefined;
+        isOnSale = false;
+      }
+
+      const adaptedItem = {
         id: apiItem.id,
         productId: apiItem.productId,
         name:
@@ -111,7 +198,11 @@ function adaptCartData(apiCart: ApiCart): Cart {
           id: apiItem.variant?.id || 1,
           attributes: apiItem.variant?.attributes || [],
         },
+        appliedDiscounts: appliedDiscounts.length > 0 ? appliedDiscounts : undefined,
       };
+
+      console.log('Adapted item:', adaptedItem);
+      return adaptedItem;
     }) || [];
 
   return {

@@ -207,6 +207,11 @@ export interface CartItem {
       value: unknown;
     }>;
   };
+  appliedDiscounts?: Array<{
+    discountType: 'product' | 'cart';
+    discountAmount: number;
+    discountId?: string;
+  }>;
 }
 
 export interface Cart {
