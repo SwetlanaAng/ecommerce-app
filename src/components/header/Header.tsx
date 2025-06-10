@@ -6,6 +6,8 @@ import { useAuth } from '../../features/auth/hooks/useAuth';
 import { useCart } from '../../features/cart/hooks/useCart';
 import { CartIcon } from '../../components/cartIcon/CartIcon';
 import logoutIcon from '../../assets/logout.svg';
+import loginIcon from '../../assets/login.svg';
+import profileIcon from '../../assets/profile.svg';
 import './Header.css';
 
 interface HeaderProps {
@@ -78,12 +80,7 @@ const Header: React.FC<HeaderProps> = () => {
       },
     ];
 
-    if (isAuthenticated) {
-      navLinks.push({
-        path: AppRouterPaths.PROFILE,
-        text: 'Profile',
-      });
-    } else {
+    if (!isAuthenticated) {
       navLinks.push({
         path: AppRouterPaths.REGISTER,
         text: 'Register',
@@ -124,12 +121,17 @@ const Header: React.FC<HeaderProps> = () => {
               </Link>
             </div>
             {isAuthenticated ? (
-              <a onClick={handleLogout} className="logout-link">
-                <img src={logoutIcon} alt="logout" />
-              </a>
+              <>
+                <Link to={AppRouterPaths.PROFILE}>
+                  <img src={profileIcon} alt="profile" />
+                </Link>
+                <a onClick={handleLogout} className="logout-link">
+                  <img src={logoutIcon} alt="logout" />
+                </a>
+              </>
             ) : (
               <Link to={AppRouterPaths.LOGIN} className="login-link">
-                Log in
+                <img src={loginIcon} alt="login" />
               </Link>
             )}
           </div>

@@ -190,19 +190,19 @@ const Basket: React.FC = () => {
           <PromoCode />
           <div className="cart-total">
             <div className="total-line subtotal">
-              <span>Subtotal:</span>
+              <span>Subtotal</span>
               <div className="subtotal-price">
                 <AnimatedPrice value={subtotalAmount} className="subtotal-amount" />
               </div>
             </div>
             {(actualDiscountedAmount > 0 || cart.discountCodes?.length !== 0) && (
               <div className="total-line discount">
-                <span>Discount:</span>
+                <span>Discount</span>
                 <AnimatedPrice value={actualDiscountedAmount} className="discount-amount" />
               </div>
             )}
             <div className="total-line total-final">
-              <span>Total:</span>
+              <span>Total</span>
               <AnimatedPrice value={totalAmount} className="total-amount" />
             </div>
           </div>

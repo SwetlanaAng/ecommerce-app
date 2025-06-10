@@ -53,7 +53,7 @@ describe('PromoCode', () => {
   it('renders promo code form with input and submit button', () => {
     render(<PromoCode />);
 
-    expect(screen.getByPlaceholderText('Enter promo code')).toBeInTheDocument();
+    expect(screen.getByLabelText('Promo code')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /arrow/i })).toBeInTheDocument();
     expect(document.querySelector('form')).toBeInTheDocument();
   });
@@ -62,7 +62,7 @@ describe('PromoCode', () => {
     const user = userEvent.setup();
     render(<PromoCode />);
 
-    const input = screen.getByPlaceholderText('Enter promo code');
+    const input = screen.getByLabelText('Promo code');
     await user.type(input, 'SAVE20');
 
     expect(input).toHaveValue('SAVE20');
@@ -75,11 +75,11 @@ describe('PromoCode', () => {
     expect(submitButton).toBeDisabled();
   });
 
-  it('submit button is enabled when input has value', async () => {
+  it('submit button is enabled when input has valid promo code', async () => {
     const user = userEvent.setup();
     render(<PromoCode />);
 
-    const input = screen.getByPlaceholderText('Enter promo code');
+    const input = screen.getByLabelText('Promo code');
     const submitButton = screen.getByRole('button', { name: /arrow/i });
 
     await user.type(input, 'SAVE20');
@@ -90,7 +90,7 @@ describe('PromoCode', () => {
     const user = userEvent.setup();
     render(<PromoCode />);
 
-    const input = screen.getByPlaceholderText('Enter promo code');
+    const input = screen.getByLabelText('Promo code');
     const submitButton = screen.getByRole('button', { name: /arrow/i });
 
     await user.type(input, '   ');
@@ -103,7 +103,7 @@ describe('PromoCode', () => {
 
     render(<PromoCode />);
 
-    const input = screen.getByPlaceholderText('Enter promo code');
+    const input = screen.getByLabelText('Promo code');
     const submitButton = screen.getByRole('button', { name: /arrow/i });
 
     await user.type(input, 'SAVE20');
@@ -125,7 +125,7 @@ describe('PromoCode', () => {
 
     render(<PromoCode />);
 
-    const input = screen.getByPlaceholderText('Enter promo code');
+    const input = screen.getByLabelText('Promo code');
     const submitButton = screen.getByRole('button', { name: /arrow/i });
 
     await user.type(input, 'SAVE20');
@@ -146,7 +146,7 @@ describe('PromoCode', () => {
 
     render(<PromoCode />);
 
-    const input = screen.getByPlaceholderText('Enter promo code');
+    const input = screen.getByLabelText('Promo code');
     const submitButton = screen.getByRole('button', { name: /arrow/i });
 
     await user.type(input, 'INVALID');
@@ -183,7 +183,7 @@ describe('PromoCode', () => {
 
     render(<PromoCode />);
 
-    const input = screen.getByPlaceholderText('Enter promo code');
+    const input = screen.getByLabelText('Promo code');
     const submitButton = screen.getByRole('button', { name: /arrow/i });
 
     await user.type(input, 'INVALID');
@@ -274,7 +274,7 @@ describe('PromoCode', () => {
 
     render(<PromoCode />);
 
-    const input = screen.getByPlaceholderText('Enter promo code');
+    const input = screen.getByLabelText('Promo code');
     const submitButton = screen.getByRole('button', { name: /arrow/i });
 
     await user.type(input, '  SAVE20  ');

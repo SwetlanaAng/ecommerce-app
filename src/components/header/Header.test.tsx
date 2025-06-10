@@ -61,7 +61,7 @@ describe('Header component', () => {
     expect(screen.getByText(/register/i)).toBeInTheDocument();
     expect(screen.getByText(/about/i)).toBeInTheDocument();
     expect(screen.getByTitle(/cart/i)).toBeInTheDocument();
-    expect(screen.getByText(/log in/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/login/i)).toBeInTheDocument();
   });
 
   it('renders correctly for authenticated users', () => {
@@ -69,7 +69,7 @@ describe('Header component', () => {
 
     renderHeader();
 
-    expect(screen.getByText(/profile/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/profile/i)).toBeInTheDocument();
     expect(screen.getByAltText(/logout/i)).toBeInTheDocument();
   });
 

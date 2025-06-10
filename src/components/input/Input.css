@@ -22,11 +22,13 @@
 
   &::placeholder {
     color: #ada7ab;
-    opacity: 1;
+    font-weight: 400;
+    font-size: 14px;
   }
 
   &::-ms-input-placeholder {
     color: #ada7ab;
+    font-size: 14px;
   }
 
   &:focus,

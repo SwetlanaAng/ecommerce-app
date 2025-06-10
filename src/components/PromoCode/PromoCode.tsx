@@ -52,10 +52,10 @@ const PromoCode: React.FC = () => {
           <Input
             name="promo-code"
             id="promo-code"
+            labelText="Promo code"
             type="text"
             value={promoCodeInput}
             onChange={e => setPromoCodeInput(e.target.value)}
-            placeholder="Enter promo code"
             className="promo-code-input"
             disabled={isSubmitting}
           />

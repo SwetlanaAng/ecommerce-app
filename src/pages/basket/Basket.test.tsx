@@ -433,13 +433,13 @@ describe('Basket', () => {
 
     renderWithRouter(<Basket />);
 
-    expect(screen.getByText('Subtotal:')).toBeInTheDocument();
+    expect(screen.getByText('Subtotal')).toBeInTheDocument();
     expect(document.querySelector('.subtotal-amount')).toHaveTextContent('$6.00');
 
-    expect(screen.getByText('Discount:')).toBeInTheDocument();
+    expect(screen.getByText('Discount')).toBeInTheDocument();
     expect(document.querySelector('.discount-amount')).toHaveTextContent('$1.00');
 
-    expect(screen.getByText('Total:')).toBeInTheDocument();
+    expect(screen.getByText('Total')).toBeInTheDocument();
     expect(document.querySelector('.total-amount')).toHaveTextContent('$5.00');
   });
 
@@ -475,7 +475,7 @@ describe('Basket', () => {
 
     renderWithRouter(<Basket />);
 
-    expect(screen.queryByText('Discount:')).not.toBeInTheDocument();
+    expect(screen.queryByText('Discount')).not.toBeInTheDocument();
   });
 
   it('shows discount row when there are discount codes even without price difference', () => {
@@ -518,7 +518,7 @@ describe('Basket', () => {
 
     renderWithRouter(<Basket />);
 
-    expect(screen.getByText('Discount:')).toBeInTheDocument();
+    expect(screen.getByText('Discount')).toBeInTheDocument();
   });
 
   it('displays discount info when item has applied discounts', () => {

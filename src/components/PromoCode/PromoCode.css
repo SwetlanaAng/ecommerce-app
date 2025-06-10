@@ -7,7 +7,7 @@
     .active-promo-code {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 4px;
       background: rgba(242, 109, 138, 0.1);
       color: var(--primary-color);
       border-radius: 12px;
@@ -31,7 +31,7 @@
     margin-bottom: 8px;
     .promo-code-input-group {
       display: flex;
-      gap: 20px;
+      gap: 8px;
       align-items: center;
       .form-group {
         flex: 1;
