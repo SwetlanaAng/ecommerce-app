@@ -135,13 +135,14 @@
         .cart-item-quantity {
           display: flex;
           align-items: center;
+          padding: 4px;
           gap: 12px;
           border: 1px solid #f0f0f0;
           border-radius: 100px;
         }
         .quantity-btn {
-          width: 40px;
-          height: 40px;
+          width: 32px;
+          height: 32px;
           border: none;
           background: transparent;
           color: #898989;
