@@ -5,6 +5,7 @@ import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import { useCart } from '../../features/cart/hooks/useCart';
 import { CartIcon } from '../../components/cartIcon/CartIcon';
+import logoutIcon from '../../assets/logout.svg';
 import './Header.css';
 
 interface HeaderProps {
@@ -124,7 +125,7 @@ const Header: React.FC<HeaderProps> = () => {
             </div>
             {isAuthenticated ? (
               <a onClick={handleLogout} className="logout-link">
-                Log out
+                <img src={logoutIcon} alt="logout" />
               </a>
             ) : (
               <Link to={AppRouterPaths.LOGIN} className="login-link">

@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { useCartWithPromoCodes } from '../../hooks/useCartWithPromoCodes';
 import Button from '../button/Button';
 import Input from '../input/Input';
+import arrowIcon from '../../assets/arrow.svg';
 import './PromoCode.css';
 
 const PromoCode: React.FC = () => {
@@ -30,6 +31,10 @@ const PromoCode: React.FC = () => {
     if (success) {
       toast.success(`Promo code "${codeToAdd}" applied successfully!`);
       setPromoCodeInput('');
+    } else {
+      if (!promoCodeError) {
+        toast.error(`Promo code "${codeToAdd}" is not applicable to items in your cart`);
+      }
     }
   };
 
@@ -38,12 +43,10 @@ const PromoCode: React.FC = () => {
     toast.success('Promo code removed successfully!');
   };
 
-  const buttonText = isSubmitting ? 'Applying...' : 'Apply';
+  const buttonText = isSubmitting ? '...' : <img src={arrowIcon} alt="arrow" />;
 
   return (
     <div className="promo-code-section">
-      <h4>Promo Code</h4>
-
       <form onSubmit={handleSubmit} className="promo-code-form">
         <div className="promo-code-input-group">
           <Input
@@ -69,7 +72,7 @@ const PromoCode: React.FC = () => {
       {activePromoCodes.length > 0 && (
         <div className="active-promo-codes">
           {activePromoCodes.map(code => (
-            <div key={code.id} className="active-promo-code">
+            <div key={code.id} className="active-promo-code applied">
               <span>{code.name || code.code || code.id.substring(0, 8) + '...'}</span>
               <button
                 onClick={() => handleRemovePromoCode(code.id)}

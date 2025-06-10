@@ -102,18 +102,8 @@ export interface ApiCart {
 }
 
 function adaptCartData(apiCart: ApiCart): Cart {
-  console.log('Cart API Response:', JSON.stringify(apiCart, null, 2));
-
   const adaptedLineItems: CartItem[] =
     apiCart.lineItems?.map((apiItem: ApiLineItem) => {
-      console.log('Processing line item:', {
-        id: apiItem.id,
-        name: apiItem.name,
-        price: apiItem.price,
-        discountedPricePerQuantity: apiItem.discountedPricePerQuantity,
-        totalPrice: apiItem.totalPrice,
-      });
-
       const basePrice = apiItem.price?.value?.centAmount
         ? apiItem.price.value.centAmount / Math.pow(10, apiItem.price.value.fractionDigits)
         : 0;
@@ -140,12 +130,6 @@ function adaptCartData(apiCart: ApiCart): Cart {
 
         originalPriceBeforeDiscount = productDiscountPrice || basePrice;
         isDiscountedByPromoCode = true;
-
-        console.log('Found cart discount for item:', {
-          cartDiscountPrice,
-          originalPriceBeforeDiscount,
-          discountInfo,
-        });
 
         discountInfo.discountedPrice.includedDiscounts?.forEach(discount => {
           const discountAmount =
@@ -201,7 +185,6 @@ function adaptCartData(apiCart: ApiCart): Cart {
         appliedDiscounts: appliedDiscounts.length > 0 ? appliedDiscounts : undefined,
       };
 
-      console.log('Adapted item:', adaptedItem);
       return adaptedItem;
     }) || [];
 
@@ -235,14 +218,33 @@ export async function getCart(): Promise<Cart> {
 
 export async function clearCart(): Promise<Cart | null> {
   const currentCart = await getCart();
-  await deleteCart(currentCart.id, currentCart.version);
+
+  if (!currentCart.lineItems || currentCart.lineItems.length === 0) {
+    return currentCart;
+  }
+
+  let updatedCart = currentCart;
 
   try {
-    const apiCart = await createCart();
-    return adaptCartData(apiCart);
+    for (const lineItem of currentCart.lineItems) {
+      const result = await removeLineItem(lineItem.id);
+      if (result) {
+        updatedCart = adaptCartData(result);
+      }
+    }
+
+    return updatedCart;
   } catch (err) {
     console.error('Error clearing cart:', err);
-    return null;
+
+    try {
+      await deleteCart(currentCart.id, currentCart.version);
+      const apiCart = await createCart();
+      return adaptCartData(apiCart);
+    } catch (fallbackErr) {
+      console.error('Error with fallback clear cart:', fallbackErr);
+      return null;
+    }
   }
 }
 

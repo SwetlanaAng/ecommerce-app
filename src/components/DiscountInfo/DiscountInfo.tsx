@@ -20,9 +20,8 @@ const DiscountInfo: React.FC<DiscountInfoProps> = ({ appliedDiscounts, className
       {appliedDiscounts.map((discount, index) => (
         <div key={index} className={`discount-badge ${discount.discountType}`}>
           <span className="discount-type">
-            {discount.discountType === 'product' ? 'Product Sale' : 'Promo Code'}
+            {discount.discountType === 'product' ? 'Sale' : 'HOLIDAY15'}
           </span>
-          <span className="discount-amount">-${discount.discountAmount.toFixed(2)}</span>
         </div>
       ))}
     </div>

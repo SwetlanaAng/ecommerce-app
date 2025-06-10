@@ -96,11 +96,11 @@ export async function getPromoCodesWithDetails(token?: string): Promise<PromoCod
 
         if (cartDiscount.value?.type === 'relative') {
           const percentage = cartDiscount.value.permyriad / 100;
-          discountText = `${percentage}% OFF`;
+          discountText = `${percentage}%`;
         } else if (cartDiscount.value?.type === 'absolute') {
           const amount = cartDiscount.value.money?.centAmount / 100;
           const currency = cartDiscount.value.money?.currencyCode || 'USD';
-          discountText = `${amount} ${currency} OFF`;
+          discountText = `${amount} ${currency}`;
         }
 
         promoCodesWithDetails.push({

@@ -69,7 +69,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {isInCart ? (
               <img src={tickIcon} alt="add to cart" />
             ) : (
-              <img src={addToCartIcon} alt="add to cart" />
+              <div className="add-to-cart-button-content">
+                <img src={addToCartIcon} alt="add to cart" />
+                <span>Buy</span>
+              </div>
             )}
           </button>
         </div>

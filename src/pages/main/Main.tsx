@@ -177,10 +177,6 @@ const Main = () => {
         <video src={macaronsSweetDecorativeCandy} autoPlay muted loop className="hero-video" />
       </section>
 
-      <section className="section promo-code">
-        <PromoCodeBanner />
-      </section>
-
       <section className="section numbers">
         <div className="numbers-flex">
           {numbers.map((number, index) => (
@@ -223,6 +219,10 @@ const Main = () => {
           ))}
         </div>
         <Button className="flavor-button">Order Now</Button>
+      </section>
+
+      <section className="section promo-code">
+        <PromoCodeBanner />
       </section>
 
       <section className="section gift">

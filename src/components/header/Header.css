@@ -23,25 +23,12 @@
             border-radius: 20px;
             transition: all 0.3s ease;
             cursor: pointer;
-            .cart {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              padding: 2px;
-              svg {
-                stroke: var(--primary-color);
-              }
-            }
           }
           &.active {
             cursor: default;
             a {
-              background: var(--primary-color);
-              color: var(--white);
+              background: #f0f0f0;
               pointer-events: none;
-              svg {
-                stroke: var(--white);
-              }
             }
           }
           &:hover:not(.active) a {
@@ -53,7 +40,10 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 25px;
+      gap: 20px;
+      background: var(--white);
+      padding: 12px 24px;
+      border-radius: 100px;
       .header-actions-item {
         a {
           display: flex;
@@ -62,22 +52,11 @@
           cursor: pointer;
           transition: all 0.3s ease;
           line-height: 1;
-          .cart {
-            svg {
-              width: 24px;
-              height: 24px;
-              transition: all 0.3s ease;
-              stroke: var(--primary-color);
-            }
-          }
         }
         &:hover {
           a {
-            svg {
-              stroke: var(--accent-color);
-            }
             .cart-badge {
-              background-color: var(--accent-color);
+              background-color: var(--accent-color-hover);
             }
           }
         }

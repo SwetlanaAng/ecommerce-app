@@ -123,6 +123,7 @@
     }
     &.featured-products {
       .view-all-button {
+        font-family: inherit;
         background: transparent;
         color: var(--accent-color);
         font-size: 18px;

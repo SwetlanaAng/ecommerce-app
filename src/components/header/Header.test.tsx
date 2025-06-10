@@ -70,7 +70,7 @@ describe('Header component', () => {
     renderHeader();
 
     expect(screen.getByText(/profile/i)).toBeInTheDocument();
-    expect(screen.getByText(/log out/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/logout/i)).toBeInTheDocument();
   });
 
   it('toggles mobile menu on hamburger click', () => {
@@ -93,7 +93,7 @@ describe('Header component', () => {
 
     renderHeader();
 
-    const logoutLink = screen.getByText(/log out/i);
+    const logoutLink = screen.getByAltText(/logout/i);
     fireEvent.click(logoutLink);
 
     expect(mockLogout).toHaveBeenCalled();
