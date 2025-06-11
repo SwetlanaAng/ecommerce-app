@@ -4,6 +4,7 @@ export interface Customer {
   firstName?: string;
   lastName?: string;
   dateOfBirth?: string;
+  version?: number;
 }
 
 export interface ResultProps {

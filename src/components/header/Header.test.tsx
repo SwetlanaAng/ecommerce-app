@@ -65,12 +65,38 @@ describe('Header component', () => {
   });
 
   it('renders correctly for authenticated users', () => {
-    mockedUseAuth.mockReturnValue({ isAuthenticated: true, logout: jest.fn() });
+    mockedUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      logout: jest.fn(),
+      user: { firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
+    });
 
     renderHeader();
 
     expect(screen.getByAltText(/profile/i)).toBeInTheDocument();
-    expect(screen.getByAltText(/logout/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/profile menu/i)).toBeInTheDocument();
+
+    // Logout button is not visible by default (inside dropdown)
+    expect(screen.queryByAltText(/logout/i)).not.toBeInTheDocument();
+  });
+
+  it('shows profile dropdown when profile button is clicked', () => {
+    mockedUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      logout: jest.fn(),
+      user: { firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
+    });
+
+    renderHeader();
+
+    const profileButton = screen.getByLabelText(/profile menu/i);
+    fireEvent.click(profileButton);
+
+    // Now the dropdown should be visible
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('john@example.com')).toBeInTheDocument();
+    expect(screen.getByText(/account settings/i)).toBeInTheDocument();
+    expect(screen.getByText(/sign out/i)).toBeInTheDocument();
   });
 
   it('toggles mobile menu on hamburger click', () => {
@@ -87,16 +113,47 @@ describe('Header component', () => {
     expect(nav.className).toContain('active');
   });
 
-  it('calls logout and navigates on logout link click', () => {
+  it('calls logout and navigates on logout button click in dropdown', () => {
     const mockLogout = jest.fn();
-    mockedUseAuth.mockReturnValue({ isAuthenticated: true, logout: mockLogout });
+    mockedUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      logout: mockLogout,
+      user: { firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
+    });
 
     renderHeader();
 
-    const logoutLink = screen.getByAltText(/logout/i);
-    fireEvent.click(logoutLink);
+    // First open the dropdown
+    const profileButton = screen.getByLabelText(/profile menu/i);
+    fireEvent.click(profileButton);
+
+    // Then click the logout button
+    const logoutButton = screen.getByText(/sign out/i);
+    fireEvent.click(logoutButton);
 
     expect(mockLogout).toHaveBeenCalled();
+  });
+
+  it('closes profile dropdown when clicking outside', () => {
+    mockedUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      logout: jest.fn(),
+      user: { firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
+    });
+
+    renderHeader();
+
+    const profileButton = screen.getByLabelText(/profile menu/i);
+    fireEvent.click(profileButton);
+
+    // Dropdown should be visible
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+
+    // Click outside (on document body)
+    fireEvent.mouseDown(document.body);
+
+    // Dropdown should be hidden
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
   });
 
   it('closes mobile menu when a link is clicked', () => {
@@ -128,5 +185,37 @@ describe('Header component', () => {
 
     const cartIcon = screen.getByTitle(/cart/i);
     expect(cartIcon).toBeInTheDocument();
+  });
+
+  it('displays user name correctly when user has first and last name', () => {
+    mockedUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      logout: jest.fn(),
+      user: { firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
+    });
+
+    renderHeader();
+
+    const profileButton = screen.getByLabelText(/profile menu/i);
+    fireEvent.click(profileButton);
+
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+  });
+
+  it('displays fallback name when user has only email', () => {
+    mockedUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      logout: jest.fn(),
+      user: { email: 'john@example.com' },
+    });
+
+    renderHeader();
+
+    const profileButton = screen.getByLabelText(/profile menu/i);
+    fireEvent.click(profileButton);
+
+    // Check that email appears in both profile-name and profile-email divs
+    const profileElements = screen.getAllByText('john@example.com');
+    expect(profileElements).toHaveLength(2); // Should appear twice - as name and email
   });
 });

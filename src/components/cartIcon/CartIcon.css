@@ -2,15 +2,15 @@
   position: relative;
   display: inline-block;
   cursor: pointer;
-  line-height: normal;
   transition: all 0.3s ease;
+  height: 24px;
   svg {
     stroke: currentColor;
   }
   .cart-badge {
     position: absolute;
-    bottom: 4px;
-    right: -4px;
+    bottom: -2px;
+    right: -3px;
     background-color: var(--accent-color);
     color: var(--white);
     border-radius: 50%;
