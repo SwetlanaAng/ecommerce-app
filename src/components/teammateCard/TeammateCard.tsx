@@ -29,6 +29,21 @@ export const TeammateCard = ({
   const [isContributionActive, setIsContributionActive] = useState(false);
   const [isEducationActive, setIsEducationActive] = useState(false);
   const [isLanguagesActive, setIsLanguagesActive] = useState(false);
+  function onContributionsClick() {
+    setIsContributionActive(!isContributionActive);
+    setIsEducationActive(false);
+    setIsLanguagesActive(false);
+  }
+  function onEducationClick() {
+    setIsContributionActive(false);
+    setIsEducationActive(!isEducationActive);
+    setIsLanguagesActive(false);
+  }
+  function onLanguagesClick() {
+    setIsContributionActive(false);
+    setIsEducationActive(false);
+    setIsLanguagesActive(!isLanguagesActive);
+  }
   return (
     <>
       <div className={`team-card`}>
@@ -39,10 +54,7 @@ export const TeammateCard = ({
         <h4 className="role">{role}</h4>
         <p>{text}</p>
         <div className="accordion">
-          <div
-            className="accordion-box"
-            onClick={() => setIsContributionActive(!isContributionActive)}
-          >
+          <div className="accordion-box" onClick={onContributionsClick}>
             <h5>
               Contributions
               <img
@@ -51,15 +63,13 @@ export const TeammateCard = ({
                 alt="arrow-down"
               />
             </h5>
-            {isContributionActive && (
-              <ol className="contributions ">
-                {contributions.map((contribution, index) => (
-                  <li key={index}>{contribution}</li>
-                ))}
-              </ol>
-            )}
+            <ol className={`contributions ${isContributionActive ? 'active' : ''}`}>
+              {contributions.map((contribution, index) => (
+                <li key={index}>{contribution}</li>
+              ))}
+            </ol>
           </div>
-          <div className="accordion-box" onClick={() => setIsEducationActive(!isEducationActive)}>
+          <div className="accordion-box" onClick={onEducationClick}>
             <h5>
               Education
               <img
@@ -68,9 +78,11 @@ export const TeammateCard = ({
                 alt="arrow-down"
               />
             </h5>
-            {isEducationActive && <div className="education">{education}</div>}
+            <div className={`education ${isEducationActive ? 'active' : ''}`}>
+              <p>{education}</p>
+            </div>
           </div>
-          <div className="accordion-box" onClick={() => setIsLanguagesActive(!isLanguagesActive)}>
+          <div className="accordion-box" onClick={onLanguagesClick}>
             <h5>
               Languages
               <img
@@ -79,13 +91,11 @@ export const TeammateCard = ({
                 alt="arrow-down"
               />
             </h5>
-            {isLanguagesActive && (
-              <ul className="languages">
-                {languages.map((language, index) => (
-                  <li key={index}>{language}</li>
-                ))}
-              </ul>
-            )}
+            <ul className={`languages ${isLanguagesActive ? 'active' : ''}`}>
+              {languages.map((language, index) => (
+                <li key={index}>{language}</li>
+              ))}
+            </ul>
           </div>
         </div>
         <Link to={gitLink}>

@@ -35,9 +35,10 @@
   h4 {
     margin-bottom: 10px;
   }
-  ol {
+  ol,
+  ul {
+    margin-left: 10px;
     padding-left: 13px;
-    padding-bottom: 20px;
     li {
       padding: 5px 10px;
       font-size: 13px;
@@ -55,7 +56,10 @@
     .accordion-box {
       transition: all 0.3s ease;
       &:hover {
-        color: var(--accent-color);
+        h5 {
+          color: var(--accent-color);
+        }
+        cursor: pointer;
       }
       &:not(:last-child) {
         border-bottom: 1px solid rgb(157, 157, 157);
@@ -64,6 +68,24 @@
       h5 {
         position: relative;
         padding: 10px 15px;
+      }
+      .contributions,
+      .education,
+      .languages {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+        p {
+          height: auto;
+        }
+      }
+
+      .contributions.active,
+      .education.active,
+      .languages.active {
+        height: auto;
+        max-height: 9999px;
+        transition: all 0.5s cubic-bezier(1, 0, 1, 0);
       }
     }
     .arrow {
