@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ProductCard from '../../components/product/ProductCard';
-import { Product, ProductCardProps, ProductFilters } from '../../types/interfaces';
+import { ProductCardProps, ProductFilters } from '../../types/interfaces';
 import { getProductsList, SortOption, searchProducts } from '../../services/products.service';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
 import SkeletonCard from '../../components/skeleton/SkeletonCard';
@@ -19,6 +19,9 @@ import './Catalog.css';
 const Catalog: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [products, setProducts] = useState<ProductCardProps[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -44,6 +47,8 @@ const Catalog: React.FC = () => {
     'price asc': 'Price (Low to High)',
     'price desc': 'Price (High to Low)',
   };
+
+  const BATCH_SIZE = 9;
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -81,36 +86,50 @@ const Catalog: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchProducts = async (sort: SortOption) => {
-      setLoading(true);
-      try {
-        let productsList: Product[] | undefined;
+  const resetAndFetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    setOffset(0);
+    setHasMore(true);
 
-        if (searchQuery) {
-          productsList = await searchProducts(searchQuery, filters, sort);
-        } else {
-          productsList = await getProductsList(200, '', sort, filters);
-        }
-
-        if (productsList) {
-          const adaptedProducts = await Promise.all(
-            productsList.map(product => toCardAdapter(product))
-          );
-          setProducts(adaptedProducts);
-        } else {
-          setError('Failed to load products, please try again later');
-        }
-      } catch (err) {
-        setError('Error loading products, please try again later');
-        console.error('Error loading products:', err);
-      } finally {
-        setLoading(false);
+    try {
+      if (searchQuery) {
+        const all = await searchProducts(searchQuery, filters, sortOption);
+        const batch = await Promise.all(all.map(toCardAdapter));
+        setProducts(batch);
+      } else {
+        const list = await getProductsList(BATCH_SIZE, '0', sortOption, filters);
+        const batch = await Promise.all(list.map(toCardAdapter));
+        setProducts(batch);
+        setHasMore(list.length === BATCH_SIZE);
+        setOffset(BATCH_SIZE);
       }
-    };
+    } catch {
+      setError('Failed to load products. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }, [searchQuery, sortOption, filters]);
 
-    fetchProducts(sortOption);
-  }, [sortOption, searchQuery, filters]);
+  useEffect(() => {
+    resetAndFetch();
+  }, [resetAndFetch]);
+
+  const loadMore = async () => {
+    if (loadingMore || !hasMore || Boolean(searchQuery)) return;
+    setLoadingMore(true);
+    try {
+      const list = await getProductsList(BATCH_SIZE, offset.toString(), sortOption, filters);
+      const batch = await Promise.all(list.map(toCardAdapter));
+      setProducts(prev => [...prev, ...batch]);
+      setHasMore(list.length === BATCH_SIZE);
+      setOffset(prev => prev + BATCH_SIZE);
+    } catch {
+      setError('Failed to load more products.');
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -268,6 +287,13 @@ const Catalog: React.FC = () => {
           )}
         </div>
       </div>
+      {hasMore && !loading && (
+        <div className="catalog-load-more">
+          <Button onClick={loadMore} disabled={loadingMore}>
+            {loadingMore ? 'Loading…' : 'Load More'}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
