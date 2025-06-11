@@ -8,7 +8,6 @@
   }
   .promo-code-card {
     position: relative;
-    cursor: pointer;
     background: #fff;
     border-radius: 32px;
     display: flex;
