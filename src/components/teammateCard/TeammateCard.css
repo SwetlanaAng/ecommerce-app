@@ -29,7 +29,7 @@
   p {
     font-size: 13px;
     margin: 0 10px 10px;
-    height: 281px;
+    height: 240px;
     text-align: center;
   }
   h4 {
@@ -46,6 +46,32 @@
   }
   .btn {
     padding: 14px 50px;
+  }
+  .accordion {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid rgb(157, 157, 157);
+    margin-bottom: 30px;
+    .accordion-box {
+      transition: all 0.3s ease;
+      &:hover {
+        color: var(--accent-color);
+      }
+      &:not(:last-child) {
+        border-bottom: 1px solid rgb(157, 157, 157);
+      }
+
+      h5 {
+        position: relative;
+        padding: 10px 15px;
+      }
+    }
+    .arrow {
+      position: absolute;
+      width: 15px;
+      top: 12px;
+      right: 5px;
+    }
   }
 }
 .team-image {
