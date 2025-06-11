@@ -3,6 +3,7 @@ import { TeammateCard } from '../../components/teammateCard/TeammateCard';
 import './AboutUs.css';
 import { gitInitTeam } from './gitInitNeam';
 const { sveta, olya, elmira } = gitInitTeam;
+import logo from '../../assets/logo-rsschool.svg';
 
 const AboutUs: React.FC = () => {
   return (
@@ -50,6 +51,12 @@ const AboutUs: React.FC = () => {
           languages={elmira.languages}
         />
       </div>
+
+      <a href="https://rs.school/" target="_blank" className="rs">
+        <div className="rsLogo">
+          <img src={logo} alt="rs school logo" />{' '}
+        </div>
+      </a>
     </div>
   );
 };

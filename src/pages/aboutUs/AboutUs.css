@@ -8,3 +8,20 @@
   font-size: 13px;
   text-align: center;
 }
+.rs {
+  display: block;
+  width: 20%;
+  margin: 30px auto 0;
+}
+.rsLogo {
+  width: 100%;
+
+  transition: 0.5s;
+  img {
+    width: 100%;
+  }
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+}

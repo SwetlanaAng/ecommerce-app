@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import Button from '../button/Button';
 import './TeammateCard.css';
 import arrowDown from '../../assets/arrow_down.png';
@@ -98,9 +97,9 @@ export const TeammateCard = ({
             </ul>
           </div>
         </div>
-        <Link to={gitLink}>
+        <a href={gitLink} target="_blank" className="gh">
           <Button children="GitHub" />
-        </Link>
+        </a>
       </div>
     </>
   );
