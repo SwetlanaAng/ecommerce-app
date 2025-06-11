@@ -20,6 +20,7 @@
     color: rgb(157, 157, 157);
     text-align: center;
     margin: 10px 0;
+    height: 90px;
   }
   h3 {
     text-align: center;
@@ -28,15 +29,23 @@
   p {
     font-size: 13px;
     margin: 0 10px 10px;
+    height: 281px;
+    text-align: center;
   }
   h4 {
     margin-bottom: 10px;
   }
-  ul {
+  ol {
+    padding-left: 13px;
+    padding-bottom: 20px;
     li {
       padding: 5px 10px;
       font-size: 13px;
+      list-style: auto;
     }
+  }
+  .btn {
+    padding: 14px 50px;
   }
 }
 .team-image {

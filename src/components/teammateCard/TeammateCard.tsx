@@ -2,13 +2,15 @@ import { Link } from 'react-router-dom';
 import Button from '../button/Button';
 import './TeammateCard.css';
 
-interface TeammateCardProps {
+export interface TeammateCardProps {
   name: string;
   role: string;
   img: string;
   text: string;
   contributions: string[];
   gitLink: string;
+  education: string;
+  languages: string[];
 }
 
 export const TeammateCard = ({
@@ -28,11 +30,11 @@ export const TeammateCard = ({
       <h4 className="role">{role}</h4>
       <p>{text}</p>
       <h4>Contributions</h4>
-      <ul className="contributions">
+      <ol className="contributions">
         {contributions.map((contribution, index) => (
           <li key={index}>{contribution}</li>
         ))}
-      </ul>
+      </ol>
       <Link to={gitLink}>
         <Button children="GitHub" />
       </Link>
