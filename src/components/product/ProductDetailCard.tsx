@@ -10,7 +10,7 @@ interface Props {
 }
 
 const ProductDetailCard: React.FC<Props> = ({ product }) => {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, addToCart } = useCart();
   const { name, description, masterVariant } = product;
   const title = name['en-US'];
   const desc = description?.['en-US'] || 'No description.';
@@ -28,6 +28,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const [inCart, setInCart] = useState(false);
   const [lineItemId, setLineItemId] = useState<string | null>(null);
   const [isRemoving, setIsRemoving] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -50,6 +51,23 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
 
   const handleNext = () => {
     setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleAdd = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (inCart || isAdding) return;
+
+    setIsAdding(true);
+    try {
+      await addToCart(product.id);
+      toast.success('Item added to cart');
+    } catch {
+      toast.error('Failed to add item. Please try again.');
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   const handleRemove = async (e: React.MouseEvent) => {
@@ -91,6 +109,11 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
           )}
         </div>
         <div className="detail-actions">
+          {!inCart && !isRemoving && (
+            <button className="btn primary" onClick={handleAdd} disabled={isAdding}>
+              {isAdding ? 'Adding…' : 'Add to Cart'}
+            </button>
+          )}
           {(inCart || isRemoving) && (
             <button className="btn" onClick={handleRemove} disabled={isRemoving}>
               {isRemoving ? 'Removing…' : 'Remove from Cart'}
