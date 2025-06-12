@@ -55,7 +55,7 @@ const PromoCode: React.FC = () => {
             labelText="Promo code"
             type="text"
             value={promoCodeInput}
-            onChange={e => setPromoCodeInput(e.target.value)}
+            onChange={e => setPromoCodeInput(e.target.value.toUpperCase())}
             className="promo-code-input"
             disabled={isSubmitting}
           />

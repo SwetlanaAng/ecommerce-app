@@ -57,13 +57,13 @@ const Main = () => {
     {
       icon: <img src={number1} alt="icon" />,
       textIcon: 'Variety',
-      number: '24+',
+      number: '24<sup>+</sup>',
       text: 'Exquisite Flavors',
     },
     {
       icon: <img src={number2} alt="icon" />,
       textIcon: 'Heritage',
-      number: '100%',
+      number: '100<sup>%</sup>',
       text: 'Authentic French Recipe',
     },
     {
@@ -75,7 +75,7 @@ const Main = () => {
     {
       icon: <img src={number4} alt="icon" />,
       textIcon: 'Delivered',
-      number: '50K+',
+      number: '50K<sup>+</sup>',
       text: 'Macarons Shipped Annually',
     },
   ];
@@ -207,7 +207,10 @@ const Main = () => {
                 {number.icon} {number.textIcon}
               </div>
               <div className="number-text">
-                <div className="number-number">{number.number}</div>
+                <div
+                  className="number-number"
+                  dangerouslySetInnerHTML={{ __html: number.number }}
+                />
                 <div className="number-text">{number.text}</div>
               </div>
             </div>

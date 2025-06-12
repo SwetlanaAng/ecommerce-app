@@ -31,9 +31,12 @@
     font-size: 14px;
   }
 
-  &:focus,
   &:hover {
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-color: var(--text-color);
+  }
+
+  &:focus {
+    border-color: var(--accent-color);
   }
 
   &:disabled {
@@ -123,7 +126,7 @@ input[type='checkbox'] {
 }
 
 .error-text {
-  color: #dc3545;
+  color: #e74245;
   font-size: 14px;
   margin-top: 4px;
 }

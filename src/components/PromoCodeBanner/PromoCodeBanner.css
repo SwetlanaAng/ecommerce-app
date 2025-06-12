@@ -71,6 +71,7 @@
         border: 1px solid rgba(255, 255, 255, 0.15);
         background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(20px);
+        line-height: 120%;
       }
       .promo-discount {
         font-size: 100px;
@@ -99,8 +100,8 @@
       color: #898989;
     }
     .promo-valid {
-      color: var(--primary-color);
-      border-radius: 4px;
+      color: var(--accent-color);
+      border-radius: 8px;
       background: rgba(242, 109, 138, 0.1);
       padding: 4px 8px;
       font-size: 14px;
