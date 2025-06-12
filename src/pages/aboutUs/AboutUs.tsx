@@ -52,7 +52,7 @@ const AboutUs: React.FC = () => {
         />
       </div>
 
-      <a href="https://rs.school/" target="_blank" className="rs">
+      <a href="https://rs.school/" target="_blank" className="rs" aria-label="schoolLogo">
         <div className="rsLogo">
           <img src={logo} alt="rs school logo" />{' '}
         </div>
