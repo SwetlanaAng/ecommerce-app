@@ -1,7 +1,7 @@
 import React from 'react';
 import { TeammateCard } from '../../components/teammateCard/TeammateCard';
 import './AboutUs.css';
-import { gitInitTeam } from './gitInitNeam';
+import { gitInitTeam } from './gitInitTeam';
 const { sveta, olya, elmira } = gitInitTeam;
 import logo from '../../assets/logo-rsschool.svg';
 

@@ -1,6 +1,5 @@
 .team-cards-container {
   display: flex;
-  gap: 20px;
   justify-content: space-around;
 }
 .description {
@@ -15,7 +14,6 @@
 }
 .rsLogo {
   width: 100%;
-
   transition: 0.5s;
   img {
     width: 100%;
@@ -23,5 +21,28 @@
   &:hover {
     cursor: pointer;
     transform: scale(1.1);
+  }
+}
+@media (max-width: 600px) {
+  .about-us-page {
+    h3 {
+      font-size: 20px;
+    }
+    h1 {
+      font-size: 30px;
+    }
+  }
+  .description {
+    font-size: 10px;
+  }
+}
+@media (max-width: 550px) {
+  .about-us-page {
+    .team-cards-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
   }
 }
