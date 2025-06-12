@@ -285,15 +285,15 @@ const Catalog: React.FC = () => {
               )}
             </div>
           )}
+          {hasMore && !loading && (
+            <div className="catalog-load-more">
+              <Button onClick={loadMore} disabled={loadingMore}>
+                {loadingMore ? 'Loading…' : 'Load More'}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
-      {hasMore && !loading && (
-        <div className="catalog-load-more">
-          <Button onClick={loadMore} disabled={loadingMore}>
-            {loadingMore ? 'Loading…' : 'Load More'}
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
