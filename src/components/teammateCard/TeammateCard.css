@@ -7,9 +7,6 @@
   height: 100%;
   background: white;
   border-radius: 20px;
-  transition:
-    transform 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
   padding: 15px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   .role {
@@ -50,7 +47,7 @@
     border: 1px solid rgb(157, 157, 157);
     margin-bottom: 30px;
     .accordion-box {
-      transition: all 0.3s ease;
+      transition: all 0.5s ease;
       &:hover {
         h5 {
           color: var(--accent-color);
@@ -89,6 +86,10 @@
       width: 15px;
       top: 12px;
       right: 5px;
+      transition: 0.5s;
+    }
+    .arrow.active {
+      transform: rotate(180deg);
     }
   }
 }

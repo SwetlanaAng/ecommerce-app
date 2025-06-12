@@ -2,7 +2,6 @@ import Button from '../button/Button';
 import './TeammateCard.css';
 import arrowDown from '../../assets/arrow_down.png';
 import { useState } from 'react';
-import arrowUp from '../../assets/arrow_up.png';
 
 export interface TeammateCardProps {
   name: string;
@@ -57,8 +56,8 @@ export const TeammateCard = ({
             <h5>
               Contributions
               <img
-                className="arrow"
-                src={isContributionActive ? arrowUp : arrowDown}
+                className={`arrow ${isContributionActive ? 'active' : ''}`}
+                src={arrowDown}
                 alt="arrow-down"
               />
             </h5>
@@ -68,12 +67,13 @@ export const TeammateCard = ({
               ))}
             </ol>
           </div>
+
           <div className="accordion-box" onClick={onEducationClick}>
             <h5>
               Education
               <img
-                className="arrow"
-                src={isEducationActive ? arrowUp : arrowDown}
+                className={`arrow ${isEducationActive ? 'active' : ''}`}
+                src={arrowDown}
                 alt="arrow-down"
               />
             </h5>
@@ -81,12 +81,13 @@ export const TeammateCard = ({
               <p>{education}</p>
             </div>
           </div>
+
           <div className="accordion-box" onClick={onLanguagesClick}>
             <h5>
               Languages
               <img
-                className="arrow"
-                src={isLanguagesActive ? arrowUp : arrowDown}
+                className={`arrow ${isLanguagesActive ? 'active' : ''}`}
+                src={arrowDown}
                 alt="arrow-down"
               />
             </h5>
