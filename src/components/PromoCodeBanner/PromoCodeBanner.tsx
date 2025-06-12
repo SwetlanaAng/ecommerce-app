@@ -30,7 +30,7 @@ const PromoCodeBanner: React.FC = () => {
     return (
       <div className="promo-banner">
         <div className="promo-banner-header">
-          <h2>Active Promo Codes</h2>
+          <h2>Current Delights & Sweet Deals</h2>
           <p>Loading available discounts...</p>
         </div>
         <div className="promo-loading">
@@ -44,7 +44,7 @@ const PromoCodeBanner: React.FC = () => {
     return (
       <div className="promo-banner">
         <div className="promo-banner-header">
-          <h2>Promo Codes</h2>
+          <h2>Current Delights & Sweet Deals</h2>
           <p>Unable to load promo codes at the moment</p>
         </div>
       </div>
@@ -54,7 +54,7 @@ const PromoCodeBanner: React.FC = () => {
   return (
     <div className="promo-banner">
       <div className="promo-banner-header">
-        <h2>Active Promo Codes</h2>
+        <h2>Current Delights & Sweet Deals</h2>
       </div>
 
       <div className="promo-codes-flex">

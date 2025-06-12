@@ -20,18 +20,20 @@ describe('NotFound Component', () => {
     jest.clearAllMocks();
   });
 
-  test('renders NotFound page with heading, image, and button', () => {
+  test('renders NotFound page with heading, video, and button', () => {
     render(<NotFound />);
 
-    expect(screen.getByRole('heading', { name: /sorry, page not found/i })).toBeInTheDocument();
-    expect(screen.getByAltText('notFound')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /back to the home page/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /Uh-oh... I think I took a wrong turn/i })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('video')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /go home/i })).toBeInTheDocument();
   });
 
   test('navigates to main page when button is clicked', () => {
     render(<NotFound />);
 
-    const button = screen.getByRole('button', { name: /back to the home page/i });
+    const button = screen.getByRole('button', { name: /go home/i });
     fireEvent.click(button);
 
     expect(mockedNavigate).toHaveBeenCalledWith(AppRouterPaths.MAIN);

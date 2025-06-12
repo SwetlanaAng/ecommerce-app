@@ -1,15 +1,25 @@
 .not-found-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 20px;
-  h1 {
-    margin-bottom: 50px;
-  }
-  img {
-    max-width: 400px;
-    width: 100%;
+  border-radius: var(--border-radius-br-l, 32px);
+  background: var(--white, #fff);
+  padding: 60px 20px;
+  .not-found-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    gap: 20px;
+    video {
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      margin-bottom: 12px;
+    }
+    button {
+      margin-top: 20px;
+    }
   }
 }

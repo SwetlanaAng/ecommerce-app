@@ -44,7 +44,7 @@ describe('PromoCodeBanner', () => {
 
     render(<PromoCodeBanner />);
 
-    expect(screen.getByText('Active Promo Codes')).toBeInTheDocument();
+    expect(screen.getByText('Current Delights & Sweet Deals')).toBeInTheDocument();
     expect(screen.getByText('Loading available discounts...')).toBeInTheDocument();
     expect(document.querySelector('.loading-spinner')).toBeInTheDocument();
   });
@@ -64,7 +64,7 @@ describe('PromoCodeBanner', () => {
 
     render(<PromoCodeBanner />);
 
-    expect(screen.getByText('Promo Codes')).toBeInTheDocument();
+    expect(screen.getByText('Current Delights & Sweet Deals')).toBeInTheDocument();
     expect(screen.getByText('Unable to load promo codes at the moment')).toBeInTheDocument();
   });
 
@@ -102,7 +102,7 @@ describe('PromoCodeBanner', () => {
 
     render(<PromoCodeBanner />);
 
-    expect(screen.getByText('Active Promo Codes')).toBeInTheDocument();
+    expect(screen.getByText('Current Delights & Sweet Deals')).toBeInTheDocument();
     expect(screen.getByText('SAVE20')).toBeInTheDocument();
     expect(screen.getByText('FREESHIP')).toBeInTheDocument();
     expect(screen.getByText('Get 20% off your order')).toBeInTheDocument();
@@ -303,7 +303,7 @@ describe('PromoCodeBanner', () => {
 
     render(<PromoCodeBanner />);
 
-    expect(screen.getByText('Active Promo Codes')).toBeInTheDocument();
+    expect(screen.getByText('Current Delights & Sweet Deals')).toBeInTheDocument();
     expect(screen.getByText('SAVE20')).toBeInTheDocument();
   });
 
