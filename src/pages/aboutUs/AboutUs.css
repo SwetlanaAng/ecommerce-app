@@ -1,6 +1,8 @@
 .team-cards-container {
   display: flex;
   justify-content: space-around;
+  margin: 0 auto;
+  max-width: 80%;
 }
 .description {
   padding: 0 20px 30px;
@@ -21,6 +23,11 @@
   &:hover {
     cursor: pointer;
     transform: scale(1.1);
+  }
+}
+@media (max-width: 800px) {
+  .team-cards-container {
+    max-width: 100%;
   }
 }
 @media (max-width: 600px) {
