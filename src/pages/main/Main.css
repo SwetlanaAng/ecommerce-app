@@ -60,7 +60,6 @@
   }
   .section {
     margin: 160px 0;
-    border-radius: 8px;
     &:last-child {
       margin-bottom: 0;
     }
@@ -96,21 +95,22 @@
           background: var(--white);
           padding: 20px;
           .number-icon {
-            img {
-              width: 24px;
-              height: 24px;
-            }
             display: flex;
             align-items: center;
             gap: 8px;
             border-radius: 8px;
             background: rgba(242, 109, 138, 0.1);
             padding: 4px 8px;
-            font-weight: 400;
+            font-weight: 600;
             color: var(--text-color);
             color: var(--primary-color);
             width: fit-content;
             font-size: 14px;
+            line-height: 130%;
+            img {
+              width: 24px;
+              height: 24px;
+            }
           }
           .number-number {
             font-size: 60px;
@@ -118,12 +118,16 @@
             color: var(--text-color);
             line-height: 120%;
             margin-bottom: 12px;
+            sup {
+              font-size: 40px;
+            }
           }
         }
       }
     }
     &.featured-products {
       .view-all-button {
+        font-family: inherit;
         background: transparent;
         color: var(--accent-color);
         font-size: 18px;
@@ -180,30 +184,6 @@
         color: var(--white);
       }
     }
-    &.benefits {
-      .benefits-flex {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        .benefit-card {
-          position: relative;
-          padding: 60px;
-          background: var(--primary-color);
-          border-radius: 20px;
-          display: flex;
-          gap: 20px;
-          color: var(--white);
-          h3 {
-            font-size: 30px;
-            color: var(--white);
-            flex: 1;
-          }
-          p {
-            flex: 1;
-          }
-        }
-      }
-    }
     &.reviews {
       .reviews-flex {
         display: flex;
@@ -251,9 +231,8 @@
         flex-wrap: wrap;
         gap: 20px;
         li {
-          width: calc((100% - 20px) / 2);
           background: #fff;
-          border-radius: 8px;
+          border-radius: 20px;
           padding: 32px;
           .gift-icon {
             display: flex;
@@ -267,9 +246,128 @@
               line-height: 100%;
             }
           }
+          &:first-child,
+          &:last-child {
+            width: calc(40% - 10px);
+          }
+          &:nth-child(2),
+          &:nth-child(3) {
+            width: calc(60% - 10px);
+          }
+
           h3 {
             font-size: 30px;
             margin-bottom: 20px;
+            max-width: 530px;
+          }
+          p {
+            max-width: 530px;
+          }
+        }
+      }
+    }
+    &.banner {
+      display: flex;
+      background: url('../../assets/banner.jpg') no-repeat center center;
+      background-size: cover;
+      padding: 60px;
+      border-radius: 32px;
+      color: var(--white);
+      gap: 20px;
+      .banner-title {
+        flex: 1;
+        h2 {
+          margin-bottom: 0px;
+          color: var(--white);
+          max-width: 420px;
+        }
+      }
+      .banner-content {
+        flex: 1;
+        button {
+          margin-top: 40px;
+          background-color: var(--white);
+          color: var(--text-color);
+          &:hover {
+            background-color: var(--accent-color);
+            color: var(--white);
+          }
+        }
+      }
+    }
+    &.faq {
+      display: flex;
+      gap: 20px;
+      .faq-wrapper {
+        flex: 1;
+        top: 20px;
+        position: sticky;
+        height: fit-content;
+      }
+      .faq-subtitle {
+        p:first-child {
+          margin-bottom: 10px;
+        }
+      }
+      .faq-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        flex: 1;
+        .faq-item {
+          border-radius: 20px;
+          background: var(--white);
+          padding: 32px;
+          .faq-question {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            .faq-category {
+              font-size: 14px;
+              color: var(--accent-color);
+              background: rgba(231, 66, 109, 0.1);
+              border-radius: 8px;
+              padding: 6px 12px;
+              width: fit-content;
+              line-height: 100%;
+            }
+            .faq-question-content {
+              display: flex;
+              gap: 20px;
+              justify-content: space-between;
+              align-items: baseline;
+            }
+            h3 {
+              font-size: 22px;
+              font-weight: 600;
+              color: var(--text-color);
+              margin: 0;
+            }
+            .faq-toggle {
+              font-size: 24px;
+              font-weight: 300;
+              transition: all 0.2s ease;
+            }
+            &:hover {
+              .faq-toggle {
+                color: var(--primary-color);
+              }
+            }
+          }
+          .faq-answer {
+            animation: fadeInUp 0.3s ease;
+            margin-top: 20px;
+          }
+          &.expanded {
+            .faq-question {
+              .faq-toggle {
+                color: var(--primary-color);
+                transform: rotate(180deg);
+              }
+            }
           }
         }
       }
@@ -321,6 +419,22 @@
           }
         }
       }
+      &.gift {
+        ul {
+          li {
+            img {
+              width: 100px;
+            }
+          }
+        }
+      }
+      &.faq {
+        flex-direction: column;
+        gap: 60px;
+        .faq-wrapper {
+          position: relative;
+        }
+      }
     }
   }
 }
@@ -348,6 +462,9 @@
           .number-card {
             .number-number {
               font-size: 32px;
+              sup {
+                font-size: 22px;
+              }
             }
           }
         }
@@ -358,22 +475,20 @@
           font-size: 20px;
         }
       }
-      &.benefits {
-        .benefits-flex {
-          .benefit-card {
-            flex-direction: column;
-            gap: 0;
-            padding: 40px;
-            h3 {
-              font-size: 20px;
-            }
-          }
-        }
-      }
       &.gift {
         ul {
           li {
-            width: 100%;
+            &:first-child,
+            &:last-child {
+              width: 100%;
+            }
+            &:nth-child(2),
+            &:nth-child(3) {
+              width: 100%;
+            }
+            img {
+              width: 120px;
+            }
           }
         }
       }
@@ -381,6 +496,14 @@
         .reviews-flex {
           .review-card {
             width: 100%;
+          }
+        }
+      }
+      &.banner {
+        flex-direction: column;
+        .banner-title {
+          h2 {
+            max-width: 100%;
           }
         }
       }
@@ -437,13 +560,6 @@
       &.flavors {
         padding: 20px;
       }
-      &.benefits {
-        .benefits-flex {
-          .benefit-card {
-            padding: 20px;
-          }
-        }
-      }
       &.gift {
         ul {
           li {
@@ -471,6 +587,21 @@
             .review-author-container {
               flex-direction: column;
               align-items: flex-start;
+            }
+          }
+        }
+      }
+      &.banner {
+        padding: 20px;
+      }
+      &.faq {
+        .faq-container {
+          .faq-item {
+            padding: 20px;
+            .faq-question {
+              h3 {
+                font-size: 18px;
+              }
             }
           }
         }

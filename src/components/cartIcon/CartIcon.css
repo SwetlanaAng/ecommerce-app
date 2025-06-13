@@ -3,25 +3,24 @@
   display: inline-block;
   cursor: pointer;
   transition: all 0.3s ease;
+  height: 24px;
   svg {
     stroke: currentColor;
   }
   .cart-badge {
     position: absolute;
-    top: -9px;
-    right: -9px;
-    background-color: #ff4444;
-    border: 1px solid var(--bg-color);
-    color: white;
+    bottom: -2px;
+    right: -3px;
+    background-color: var(--accent-color);
+    color: var(--white);
     border-radius: 50%;
-    width: 19px;
-    height: 19px;
+    width: 14px;
+    height: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
-    font-weight: bold;
-    min-width: 18px;
+    font-size: 10px;
+    font-weight: 400;
     box-sizing: border-box;
     line-height: 1;
     transition: all 0.3s ease;

@@ -34,6 +34,7 @@ const Catalog: React.FC = () => {
       max: undefined,
     },
     isBestSeller: undefined,
+    isGlutenFree: undefined,
     categoryId: undefined,
   });
 
@@ -140,6 +141,7 @@ const Catalog: React.FC = () => {
         max: undefined,
       },
       isBestSeller: undefined,
+      isGlutenFree: undefined,
       categoryId: filters.categoryId,
     });
   };
@@ -174,6 +176,12 @@ const Catalog: React.FC = () => {
         setFilters({
           ...filters,
           isBestSeller: undefined,
+        });
+        break;
+      case 'isGlutenFree':
+        setFilters({
+          ...filters,
+          isGlutenFree: undefined,
         });
         break;
       case 'category':

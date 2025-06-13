@@ -20,6 +20,12 @@ const Footer = () => {
                 <li>
                   <Link to={AppRouterPaths.CATALOG}>Catalog</Link>
                 </li>
+                <li>
+                  <Link to={AppRouterPaths.ABOUT_US}>About</Link>
+                </li>
+                <li>
+                  <Link to={AppRouterPaths.BASKET}>Basket</Link>
+                </li>
                 {isAuthenticated && (
                   <li>
                     <Link to={AppRouterPaths.PROFILE}>Profile</Link>

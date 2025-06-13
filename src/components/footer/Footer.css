@@ -57,6 +57,8 @@ footer {
         order: 2;
         ul {
           flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: center;
         }
       }
       .logo {

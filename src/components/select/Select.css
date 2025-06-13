@@ -8,7 +8,7 @@
   color: var(--text-color);
   transition: all 0.3s ease;
   &:hover {
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-color: var(--text-color);
   }
 }
 
@@ -40,8 +40,8 @@ select:open::picker-icon {
 ::picker(select) {
   margin-top: 3px;
   border: none;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border-radius: 8px;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
 }
 
 option {
@@ -55,15 +55,6 @@ option {
 
 option:hover {
   color: var(--accent-color);
-}
-
-option .icon {
-  font-size: 1.6rem;
-  text-box: trim-both cap alphabetic;
-}
-
-selectedcontent .icon {
-  display: none;
 }
 
 option::checkmark {
@@ -86,12 +77,6 @@ option::checkmark {
 
 ::picker(select):popover-open {
   opacity: 1;
-}
-
-@starting-style {
-  ::picker(select):popover-open {
-    opacity: 0;
-  }
 }
 
 ::picker(select) {
