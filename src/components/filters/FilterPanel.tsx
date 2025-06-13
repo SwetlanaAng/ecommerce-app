@@ -39,6 +39,13 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
     });
   };
 
+  const handleGlutenFreeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onFilterChange({
+      ...filters,
+      isGlutenFree: event.target.checked,
+    });
+  };
+
   const handlePriceChange = () => {
     onFilterChange({
       ...filters,
@@ -117,7 +124,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
 
       <div className="filter-section">
         <h4>Flavors</h4>
-        <div className="flavor-options">
+        <div className="product-type-options">
           {availableFlavors.length > 0 ? (
             <>
               <div className="flavor-option">
@@ -151,15 +158,27 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
 
       <div className="filter-section">
         <h4>Product Type</h4>
-        <div className="best-seller-option">
-          <Input
-            type="checkbox"
-            id="best-seller"
-            name="best-seller"
-            checked={filters.isBestSeller || false}
-            onChange={handleBestSellerChange}
-            labelText="Best Seller"
-          />
+        <div className="product-type-options">
+          <div className="best-seller-option">
+            <Input
+              type="checkbox"
+              id="best-seller"
+              name="best-seller"
+              checked={filters.isBestSeller || false}
+              onChange={handleBestSellerChange}
+              labelText="Best Seller"
+            />
+          </div>
+          <div className="best-seller-option">
+            <Input
+              type="checkbox"
+              id="gluten-free"
+              name="gluten-free"
+              checked={filters.isGlutenFree || false}
+              onChange={handleGlutenFreeChange}
+              labelText="Gluten Free"
+            />
+          </div>
         </div>
       </div>
     </div>

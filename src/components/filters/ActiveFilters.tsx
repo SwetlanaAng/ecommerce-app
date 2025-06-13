@@ -11,6 +11,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({ filters, onRemoveFilter }
   const hasActiveFilters =
     (filters.flavors && filters.flavors.length > 0) ||
     filters.isBestSeller ||
+    filters.isGlutenFree ||
     filters.priceRange?.min !== undefined ||
     filters.priceRange?.max !== undefined ||
     filters.categoryName !== undefined;
@@ -57,6 +58,13 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({ filters, onRemoveFilter }
         <div className="active-filter-tag">
           Best Seller
           <button onClick={() => onRemoveFilter('isBestSeller')}>×</button>
+        </div>
+      )}
+
+      {filters.isGlutenFree && (
+        <div className="active-filter-tag">
+          Gluten Free
+          <button onClick={() => onRemoveFilter('isGlutenFree')}>×</button>
         </div>
       )}
 

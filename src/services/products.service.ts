@@ -22,7 +22,10 @@ const buildFilterPredicates = (filters?: ProductFilters): string[] => {
     }
 
     if (filters.isBestSeller === true) {
-      predicates.push(`variants.attributes.isBestSeller:true`);
+      predicates.push(`variants.attributes.isBestSeller:"true"`);
+    }
+    if (filters.isGlutenFree === true) {
+      predicates.push(`variants.attributes.isGlutenFree:"true"`);
     }
 
     if (filters.categoryId) {
@@ -33,47 +36,119 @@ const buildFilterPredicates = (filters?: ProductFilters): string[] => {
   return predicates;
 };
 
+async function fetchProductsWithQuery(
+  query: string,
+  limit: number,
+  offset: string,
+  sort: SortOption,
+  baseFilters?: ProductFilters
+): Promise<Product[]> {
+  const accessToken = await getBasicToken();
+  let url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections/search?limit=${limit}`;
+
+  if (sort) {
+    url += `&sort=${sort}`;
+  }
+
+  if (baseFilters?.priceRange) {
+    if (baseFilters.priceRange.min !== undefined) {
+      url += `&filter=variants.price.centAmount:range(${baseFilters.priceRange.min * 100} to *)`;
+    }
+    if (baseFilters.priceRange.max !== undefined) {
+      url += `&filter=variants.price.centAmount:range(* to ${baseFilters.priceRange.max * 100})`;
+    }
+  }
+
+  if (
+    baseFilters?.flavors &&
+    baseFilters.flavors.length > 0 &&
+    !baseFilters.flavors.includes('all')
+  ) {
+    baseFilters.flavors.forEach(flavor => {
+      url += `&filter=variants.attributes.flavors.key:"${flavor}"`;
+    });
+  }
+
+  if (baseFilters?.categoryId) {
+    url += `&filter=categories.id:"${baseFilters.categoryId}"`;
+  }
+
+  if (query) {
+    url += `&filter.query=${encodeURIComponent(query)}`;
+  }
+
+  if (offset) {
+    url += `&offset=${offset}`;
+  }
+
+  url += '&expand=categories[*]';
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.results;
+}
+
+function mergeUniqueProducts(products: Product[]): Product[] {
+  const uniqueProducts = new Map<string, Product>();
+  products.forEach(product => {
+    if (product.id && !uniqueProducts.has(product.id)) {
+      uniqueProducts.set(product.id, product);
+    }
+  });
+  return Array.from(uniqueProducts.values());
+}
+
 export async function getProductsList(
   limit: number = 20,
   offset: string = '',
   sort: SortOption = '',
   filters?: ProductFilters
 ): Promise<Product[]> {
-  const accessToken = await getBasicToken();
-
   try {
-    let url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections/search?limit=${limit}`;
-
-    if (sort) {
-      url += `&sort=${sort}`;
+    if (!filters?.isBestSeller && !filters?.isGlutenFree) {
+      return await fetchProductsWithQuery('', limit, offset, sort, filters);
     }
 
-    const predicates = buildFilterPredicates(filters);
+    const queries: Promise<Product[]>[] = [];
+    const baseFilters = { ...filters, isBestSeller: false, isGlutenFree: false };
 
-    if (predicates.length > 0) {
-      predicates.forEach(predicate => {
-        url += `&filter=${encodeURIComponent(predicate)}`;
-      });
+    if (filters.isBestSeller) {
+      queries.push(
+        fetchProductsWithQuery(
+          'variants.attributes.isBestSeller:true',
+          limit,
+          offset,
+          sort,
+          baseFilters
+        )
+      );
     }
 
-    if (offset) {
-      url += `&offset=${offset}`;
+    if (filters.isGlutenFree) {
+      queries.push(
+        fetchProductsWithQuery(
+          'variants.attributes.isGlutenFree:true',
+          limit,
+          offset,
+          sort,
+          baseFilters
+        )
+      );
     }
 
-    url += '&expand=categories[*]';
+    const results = await Promise.all(queries);
+    const mergedProducts = mergeUniqueProducts(results.flat());
 
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.results;
+    return mergedProducts;
   } catch (error) {
     console.error('Error fetching products:', error);
     throw error;

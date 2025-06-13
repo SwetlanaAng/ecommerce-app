@@ -204,3 +204,83 @@ export async function getMyCarts(token?: string) {
   });
   return await handleResponse(response);
 }
+
+export async function getCartWithPromoCode(
+  inputValue: string,
+  cartId: string,
+  token: string,
+  cartVersion: string
+) {
+  const requestBody = {
+    version: parseInt(cartVersion, 10),
+    actions: [
+      {
+        action: 'addDiscountCode',
+        code: inputValue,
+      },
+    ],
+  };
+
+  try {
+    const response = await fetch(`${apiUrl}/${projectKey}/me/carts/${cartId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else if (response.status === 400) {
+      const errorData = await response.json().catch(() => ({}));
+      return errorData.message || 'Нет такого промокода';
+    } else {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (e) {
+    console.error('Error adding promo code:', e);
+    return 'Нет такого промокода';
+  }
+}
+
+export async function removeDiscountCode(
+  cartId: string,
+  token: string,
+  cartVersion: string,
+  promocodeId: string
+) {
+  const requestBody = {
+    version: parseInt(cartVersion, 10),
+    actions: [
+      {
+        action: 'removeDiscountCode',
+        discountCode: {
+          typeId: 'discount-code',
+          id: promocodeId,
+        },
+      },
+    ],
+  };
+
+  try {
+    const response = await fetch(`${apiUrl}/${projectKey}/me/carts/${cartId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.error('Error removing promo code:', e);
+    return null;
+  }
+}

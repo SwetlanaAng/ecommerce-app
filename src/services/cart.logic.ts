@@ -24,7 +24,7 @@ interface ApiPrice {
   };
 }
 
-interface ApiLineItem {
+export interface ApiLineItem {
   id: string;
   productId: string;
   name?: { [key: string]: string } | string;
@@ -38,9 +38,35 @@ interface ApiLineItem {
       value: unknown;
     }>;
   };
+  discountedPricePerQuantity?: Array<{
+    quantity: number;
+    discountedPrice: {
+      value: {
+        centAmount: number;
+        fractionDigits: number;
+        currencyCode: string;
+      };
+      includedDiscounts: Array<{
+        discount: {
+          id: string;
+          typeId: string;
+        };
+        discountedAmount: {
+          centAmount: number;
+          fractionDigits: number;
+          currencyCode: string;
+        };
+      }>;
+    };
+  }>;
+  totalPrice?: {
+    centAmount: number;
+    fractionDigits: number;
+    currencyCode: string;
+  };
 }
 
-interface ApiCart {
+export interface ApiCart {
   id: string;
   version: number;
   lineItems?: ApiLineItem[];
@@ -55,29 +81,92 @@ interface ApiCart {
       typeId: string;
     };
   }>;
+  discountOnTotalPrice?: {
+    discountedAmount: {
+      centAmount: number;
+      fractionDigits: number;
+      currencyCode: string;
+    };
+    includedDiscounts: Array<{
+      discount: {
+        id: string;
+        typeId: string;
+      };
+      discountedAmount: {
+        centAmount: number;
+        fractionDigits: number;
+        currencyCode: string;
+      };
+    }>;
+  };
 }
 
 function adaptCartData(apiCart: ApiCart): Cart {
   const adaptedLineItems: CartItem[] =
     apiCart.lineItems?.map((apiItem: ApiLineItem) => {
-      const price = apiItem.price?.value?.centAmount
+      const basePrice = apiItem.price?.value?.centAmount
         ? apiItem.price.value.centAmount / Math.pow(10, apiItem.price.value.fractionDigits)
         : 0;
 
-      const originalPrice =
-        apiItem.price?.discounted?.value?.centAmount && apiItem.price?.value?.centAmount
-          ? apiItem.price.value.centAmount / Math.pow(10, apiItem.price.value.fractionDigits)
-          : undefined;
+      const productDiscountPrice = apiItem.price?.discounted?.value?.centAmount
+        ? apiItem.price.discounted.value.centAmount /
+          Math.pow(10, apiItem.price.discounted.value.fractionDigits)
+        : null;
 
-      const isOnSale = !!apiItem.price?.discounted;
+      let cartDiscountPrice = null;
+      let originalPriceBeforeDiscount = null;
+      let isDiscountedByPromoCode = false;
+      const appliedDiscounts: Array<{
+        discountType: 'product' | 'cart';
+        discountAmount: number;
+        discountId?: string;
+      }> = [];
 
-      const finalPrice =
-        isOnSale && apiItem.price?.discounted?.value?.centAmount
-          ? apiItem.price.discounted.value.centAmount /
-            Math.pow(10, apiItem.price.discounted.value.fractionDigits)
-          : price;
+      if (apiItem.discountedPricePerQuantity && apiItem.discountedPricePerQuantity.length > 0) {
+        const discountInfo = apiItem.discountedPricePerQuantity[0];
+        cartDiscountPrice =
+          discountInfo.discountedPrice.value.centAmount /
+          Math.pow(10, discountInfo.discountedPrice.value.fractionDigits);
 
-      return {
+        originalPriceBeforeDiscount = productDiscountPrice || basePrice;
+        isDiscountedByPromoCode = true;
+
+        discountInfo.discountedPrice.includedDiscounts?.forEach(discount => {
+          const discountAmount =
+            discount.discountedAmount.centAmount /
+            Math.pow(10, discount.discountedAmount.fractionDigits);
+          appliedDiscounts.push({
+            discountType: 'cart',
+            discountAmount,
+            discountId: discount.discount.id,
+          });
+        });
+      }
+
+      let finalPrice: number;
+      let originalPrice: number | undefined;
+      let isOnSale: boolean;
+
+      if (isDiscountedByPromoCode && cartDiscountPrice !== null) {
+        finalPrice = cartDiscountPrice;
+        originalPrice = originalPriceBeforeDiscount || undefined;
+        isOnSale = true;
+      } else if (productDiscountPrice !== null) {
+        finalPrice = productDiscountPrice;
+        originalPrice = basePrice;
+        isOnSale = true;
+
+        appliedDiscounts.push({
+          discountType: 'product',
+          discountAmount: basePrice - productDiscountPrice,
+        });
+      } else {
+        finalPrice = basePrice;
+        originalPrice = undefined;
+        isOnSale = false;
+      }
+
+      const adaptedItem = {
         id: apiItem.id,
         productId: apiItem.productId,
         name:
@@ -93,7 +182,10 @@ function adaptCartData(apiCart: ApiCart): Cart {
           id: apiItem.variant?.id || 1,
           attributes: apiItem.variant?.attributes || [],
         },
+        appliedDiscounts: appliedDiscounts.length > 0 ? appliedDiscounts : undefined,
       };
+
+      return adaptedItem;
     }) || [];
 
   return {
@@ -106,8 +198,11 @@ function adaptCartData(apiCart: ApiCart): Cart {
       currencyCode: apiCart.totalPrice?.currencyCode || 'USD',
     },
     discountCodes: apiCart.discountCodes || [],
+    discountOnTotalPrice: apiCart.discountOnTotalPrice,
   };
 }
+
+export { adaptCartData };
 
 export async function getCart(): Promise<Cart> {
   const token = await getTokenFromStorage();
@@ -123,14 +218,33 @@ export async function getCart(): Promise<Cart> {
 
 export async function clearCart(): Promise<Cart | null> {
   const currentCart = await getCart();
-  await deleteCart(currentCart.id, currentCart.version);
+
+  if (!currentCart.lineItems || currentCart.lineItems.length === 0) {
+    return currentCart;
+  }
+
+  let updatedCart = currentCart;
 
   try {
-    const apiCart = await createCart();
-    return adaptCartData(apiCart);
+    for (const lineItem of currentCart.lineItems) {
+      const result = await removeLineItem(lineItem.id);
+      if (result) {
+        updatedCart = adaptCartData(result);
+      }
+    }
+
+    return updatedCart;
   } catch (err) {
     console.error('Error clearing cart:', err);
-    return null;
+
+    try {
+      await deleteCart(currentCart.id, currentCart.version);
+      const apiCart = await createCart();
+      return adaptCartData(apiCart);
+    } catch (fallbackErr) {
+      console.error('Error with fallback clear cart:', fallbackErr);
+      return null;
+    }
   }
 }
 

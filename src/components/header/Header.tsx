@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
 import { AppRouterPaths } from '../../routes/AppRouterPathsEnums';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import { useCart } from '../../features/cart/hooks/useCart';
 import { CartIcon } from '../../components/cartIcon/CartIcon';
+import logoutIcon from '../../assets/logout.svg';
+import loginIcon from '../../assets/login.svg';
+import profileIcon from '../../assets/profile.svg';
+import settingsIcon from '../../assets/settings.svg';
 import './Header.css';
 
 interface HeaderProps {
@@ -23,9 +27,11 @@ interface NavLink {
 const Header: React.FC<HeaderProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const { cartItemsCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const isActive = (path: string) => {
     return location.pathname === path ? 'active' : '';
@@ -39,14 +45,37 @@ const Header: React.FC<HeaderProps> = () => {
     setMobileMenuOpen(false);
   };
 
+  const toggleProfileDropdown = () => {
+    setProfileDropdownOpen(!profileDropdownOpen);
+  };
+
+  const closeProfileDropdown = () => {
+    setProfileDropdownOpen(false);
+  };
+
   const handleLogout = () => {
     logout();
     navigate(AppRouterPaths.MAIN);
     closeMobileMenu();
+    closeProfileDropdown();
   };
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        closeProfileDropdown();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
     closeMobileMenu();
+    closeProfileDropdown();
   }, [location]);
 
   useEffect(() => {
@@ -77,12 +106,7 @@ const Header: React.FC<HeaderProps> = () => {
       },
     ];
 
-    if (isAuthenticated) {
-      navLinks.push({
-        path: AppRouterPaths.PROFILE,
-        text: 'Profile',
-      });
-    } else {
+    if (!isAuthenticated) {
       navLinks.push({
         path: AppRouterPaths.REGISTER,
         text: 'Register',
@@ -93,6 +117,23 @@ const Header: React.FC<HeaderProps> = () => {
   };
 
   const navLinks = getNavLinks();
+
+  const getDisplayName = () => {
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    if (user?.firstName) {
+      return user.firstName;
+    }
+    if (user?.email) {
+      return user.email;
+    }
+    return 'User';
+  };
+
+  const getUserEmail = () => {
+    return user?.email || '';
+  };
 
   return (
     <header className="header">
@@ -123,12 +164,42 @@ const Header: React.FC<HeaderProps> = () => {
               </Link>
             </div>
             {isAuthenticated ? (
-              <a onClick={handleLogout} className="logout-link">
-                Log out
-              </a>
+              <div className="profile-dropdown" ref={dropdownRef}>
+                <button
+                  className="profile-trigger"
+                  onClick={toggleProfileDropdown}
+                  aria-label="Profile menu"
+                >
+                  <img src={profileIcon} alt="profile" />
+                </button>
+                {profileDropdownOpen && (
+                  <div className="profile-dropdown-menu">
+                    <div className="profile-dropdown-header">
+                      <div className="profile-info">
+                        <div className="profile-name">{getDisplayName()}</div>
+                        <div className="profile-email">{getUserEmail()}</div>
+                      </div>
+                    </div>
+                    <div className="profile-dropdown-body">
+                      <Link
+                        to={AppRouterPaths.PROFILE}
+                        className="profile-dropdown-item"
+                        onClick={closeProfileDropdown}
+                      >
+                        <img src={settingsIcon} alt="settings" />
+                        Account settings
+                      </Link>
+                      <button className="profile-dropdown-item logout-item" onClick={handleLogout}>
+                        <img src={logoutIcon} alt="logout" />
+                        Sign out
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
               <Link to={AppRouterPaths.LOGIN} className="login-link">
-                Log in
+                <img src={loginIcon} alt="login" />
               </Link>
             )}
           </div>

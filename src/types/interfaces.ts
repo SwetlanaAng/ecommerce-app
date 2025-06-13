@@ -4,6 +4,7 @@ export interface Customer {
   firstName?: string;
   lastName?: string;
   dateOfBirth?: string;
+  version?: number;
 }
 
 export interface ResultProps {
@@ -133,6 +134,7 @@ export interface ProductCardProps {
   slug: string;
   filters?: {
     isBestSeller?: boolean;
+    isGlutenFree?: boolean;
   };
   category: string;
 }
@@ -154,6 +156,7 @@ export interface ProductFilters {
     max?: number;
   };
   isBestSeller?: boolean;
+  isGlutenFree?: boolean;
   categoryId?: string;
 }
 
@@ -207,6 +210,11 @@ export interface CartItem {
       value: unknown;
     }>;
   };
+  appliedDiscounts?: Array<{
+    discountType: 'product' | 'cart';
+    discountAmount: number;
+    discountId?: string;
+  }>;
 }
 
 export interface Cart {
@@ -224,4 +232,22 @@ export interface Cart {
       typeId: string;
     };
   }>;
+  discountOnTotalPrice?: {
+    discountedAmount: {
+      centAmount: number;
+      fractionDigits: number;
+      currencyCode: string;
+    };
+    includedDiscounts: Array<{
+      discount: {
+        id: string;
+        typeId: string;
+      };
+      discountedAmount: {
+        centAmount: number;
+        fractionDigits: number;
+        currencyCode: string;
+      };
+    }>;
+  };
 }
