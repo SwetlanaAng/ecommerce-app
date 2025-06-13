@@ -1,4 +1,5 @@
-.product-card {
+.product-card,
+.team-card {
   position: relative;
   width: calc((100% - 40px) / 3);
   display: block;

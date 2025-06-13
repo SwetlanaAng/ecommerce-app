@@ -1,0 +1,153 @@
+.team-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 100%;
+  background: white;
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  .role {
+    color: rgb(157, 157, 157);
+    text-align: center;
+    margin: 10px 0;
+    height: 85px;
+  }
+  h3 {
+    text-align: center;
+    margin-bottom: 3px;
+  }
+  p {
+    margin: 0 0 10px;
+    height: 390px;
+    text-align: center;
+  }
+  h4 {
+    margin-bottom: 15px;
+  }
+  ol,
+  ul {
+    margin-left: 9px;
+    padding-left: 16px;
+    li {
+      padding: 5px 0;
+      list-style: disc;
+    }
+  }
+  .btn {
+    padding: 14px 50px;
+  }
+  .accordion {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid rgb(157, 157, 157);
+    margin-bottom: 30px;
+    .accordion-box {
+      transition: all 0.5s ease;
+      &:hover {
+        h5 {
+          color: var(--accent-color);
+        }
+        cursor: pointer;
+      }
+      &:not(:last-child) {
+        border-bottom: 1px solid rgb(157, 157, 157);
+      }
+
+      h5 {
+        position: relative;
+        padding: 10px 15px;
+      }
+      .contributions,
+      .education,
+      .languages {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+        p {
+          height: auto;
+          padding: 0 3px;
+        }
+      }
+
+      .contributions.active,
+      .education.active,
+      .languages.active {
+        height: auto;
+        max-height: 9999px;
+        transition: all 0.5s cubic-bezier(1, 0, 1, 0);
+      }
+    }
+    .arrow {
+      position: absolute;
+      width: 15px;
+      top: 12px;
+      right: 5px;
+      transition: 0.5s;
+    }
+    .arrow.active {
+      transform: rotate(180deg);
+    }
+  }
+}
+.team-image {
+  width: 100px;
+  height: 100px;
+  margin: 20px 0;
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+  }
+}
+@media (max-width: 860px) {
+  .team-card {
+    .role {
+      height: 90px;
+    }
+    p {
+      height: 450px;
+    }
+  }
+}
+@media (max-width: 690px) {
+  .team-card {
+    p {
+      margin: 0;
+      height: 500px;
+    }
+    .accordion {
+      .accordion-box {
+        h5 {
+          padding: 10px 10px 10px 5px;
+        }
+      }
+    }
+    .btn {
+      padding: 14px 35px;
+    }
+  }
+}
+@media (max-width: 551px) {
+  .team-card {
+    width: 70%;
+    .role {
+      height: 50px;
+    }
+    p {
+      height: 300px;
+    }
+    .accordion {
+      .accordion-box {
+        h5 {
+          padding: 10px 10px 10px 5px;
+        }
+      }
+    }
+    .btn {
+      padding: 14px 40px;
+    }
+  }
+}
