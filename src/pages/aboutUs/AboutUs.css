@@ -29,19 +29,6 @@
     max-width: 100%;
   }
 }
-/* @media (max-width: 600px) {
-  .about-us-page {
-    h3 {
-      font-size: 20px;
-    }
-    h1 {
-      font-size: 30px;
-    }
-  }
-  .description {
-    font-size: 10px;
-  }
-} */
 @media (max-width: 550px) {
   .about-us-page {
     .team-cards-container {
