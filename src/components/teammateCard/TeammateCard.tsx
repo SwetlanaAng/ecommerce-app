@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 export interface TeammateCardProps {
   name: string;
+  surname: string;
   role: string;
   img: string;
   text: string;
@@ -16,6 +17,7 @@ export interface TeammateCardProps {
 
 export const TeammateCard = ({
   name,
+  surname,
   role,
   img,
   text,
@@ -24,24 +26,11 @@ export const TeammateCard = ({
   gitLink,
   languages,
 }: TeammateCardProps) => {
-  const [isContributionActive, setIsContributionActive] = useState(false);
-  const [isEducationActive, setIsEducationActive] = useState(false);
-  const [isLanguagesActive, setIsLanguagesActive] = useState(false);
-  function onContributionsClick() {
-    setIsContributionActive(!isContributionActive);
-    setIsEducationActive(false);
-    setIsLanguagesActive(false);
-  }
-  function onEducationClick() {
-    setIsContributionActive(false);
-    setIsEducationActive(!isEducationActive);
-    setIsLanguagesActive(false);
-  }
-  function onLanguagesClick() {
-    setIsContributionActive(false);
-    setIsEducationActive(false);
-    setIsLanguagesActive(!isLanguagesActive);
-  }
+  type AccordionSection = 'contributions' | 'education' | 'languages' | null;
+  const [activeSection, setActiveSection] = useState<AccordionSection>(null);
+  const toggleSection = (section: AccordionSection) => {
+    setActiveSection(activeSection === section ? null : section);
+  };
   return (
     <>
       <div className={`team-card`}>
@@ -49,49 +38,50 @@ export const TeammateCard = ({
           <img src={img} alt={name} />
         </div>
         <h3>{name}</h3>
+        <h3>{surname}</h3>
         <h4 className="role">{role}</h4>
         <p>{text}</p>
         <div className="accordion">
-          <div className="accordion-box" onClick={onContributionsClick}>
+          <div className="accordion-box" onClick={() => toggleSection('contributions')}>
             <h5>
               Contributions
               <img
-                className={`arrow ${isContributionActive ? 'active' : ''}`}
+                className={`arrow ${activeSection === 'contributions' ? 'active' : ''}`}
                 src={arrowDown}
                 alt="arrow-down"
               />
             </h5>
-            <ol className={`contributions ${isContributionActive ? 'active' : ''}`}>
+            <ul className={`contributions ${activeSection === 'contributions' ? 'active' : ''}`}>
               {contributions.map((contribution, index) => (
                 <li key={index}>{contribution}</li>
               ))}
-            </ol>
+            </ul>
           </div>
 
-          <div className="accordion-box" onClick={onEducationClick}>
+          <div className="accordion-box" onClick={() => toggleSection('education')}>
             <h5>
               Education
               <img
-                className={`arrow ${isEducationActive ? 'active' : ''}`}
+                className={`arrow ${activeSection === 'education' ? 'active' : ''}`}
                 src={arrowDown}
                 alt="arrow-down"
               />
             </h5>
-            <div className={`education ${isEducationActive ? 'active' : ''}`}>
+            <div className={`education ${activeSection === 'education' ? 'active' : ''}`}>
               <p>{education}</p>
             </div>
           </div>
 
-          <div className="accordion-box" onClick={onLanguagesClick}>
+          <div className="accordion-box" onClick={() => toggleSection('languages')}>
             <h5>
               Languages
               <img
-                className={`arrow ${isLanguagesActive ? 'active' : ''}`}
+                className={`arrow ${activeSection === 'languages' ? 'active' : ''}`}
                 src={arrowDown}
                 alt="arrow-down"
               />
             </h5>
-            <ul className={`languages ${isLanguagesActive ? 'active' : ''}`}>
+            <ul className={`languages ${activeSection === 'languages' ? 'active' : ''}`}>
               {languages.map((language, index) => (
                 <li key={index}>{language}</li>
               ))}

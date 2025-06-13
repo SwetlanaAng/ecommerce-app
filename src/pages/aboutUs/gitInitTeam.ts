@@ -7,7 +7,8 @@ interface GitInitTeam {
 }
 export const gitInitTeam: GitInitTeam = {
   sveta: {
-    name: 'Sveta',
+    name: 'Svetlana',
+    surname: 'Angeliuk',
     role: 'Frontend Developer',
     img: Sveta,
     text: 'Extremely self-disciplined, dedicated and hardworking. She is very active and always eager to contribute to our project. Additionally, she is highly responsible and attentive to details, making significant contributions during the testing phase of our product.',
@@ -23,7 +24,8 @@ export const gitInitTeam: GitInitTeam = {
     languages: ['Russian - native speaker', 'English - B2'],
   },
   olya: {
-    name: 'Olya',
+    name: 'Olga',
+    surname: 'Us',
     role: 'Frontend Developer, TeamLead',
     img: Olya,
     text: 'Our team leader who is the heart of the project. She has poured her soul into this work and always demonstrates commitment and passion. As a team lead, she was always ready to help solve any issues, offer support, and tackle the most challenging tasks with enthusiasm and professionalism.',
@@ -42,6 +44,7 @@ export const gitInitTeam: GitInitTeam = {
   },
   elmira: {
     name: 'Elmira',
+    surname: 'Shainurova',
     role: 'Frontend Developer',
     img: Elmira,
     text: 'Incredibly reliable and trustworthy. You can always count on her to handle tasks independently. She willingly takes on responsibilities and successfully completes the assignments entrusted to her, demonstrating great initiative and dedication.',

@@ -6,6 +6,7 @@ describe('TeammateCard', () => {
     render(
       <TeammateCard
         name="TestName"
+        surname="TestSurname"
         role="TestRole"
         img="../../assets/Sveta.jpg"
         text="TestText"
@@ -17,6 +18,7 @@ describe('TeammateCard', () => {
     );
 
     expect(screen.getByText('TestName')).toBeInTheDocument();
+    expect(screen.getByText('TestSurname')).toBeInTheDocument();
     expect(screen.getByText('TestRole')).toBeInTheDocument();
     expect(screen.getByText('TestText')).toBeInTheDocument();
     expect(screen.getByText('TestEducation')).toBeInTheDocument();
@@ -29,6 +31,7 @@ describe('TeammateCard', () => {
     render(
       <TeammateCard
         name="TestName"
+        surname="TestSurname"
         role="TestRole"
         img="../../assets/Sveta.jpg"
         text="TestText"
@@ -45,6 +48,7 @@ describe('TeammateCard', () => {
     render(
       <TeammateCard
         name="TestName"
+        surname="TestSurname"
         role="TestRole"
         img="../../assets/Sveta.jpg"
         text="TestText"

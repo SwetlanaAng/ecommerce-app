@@ -6,7 +6,6 @@
 }
 .description {
   padding: 0 20px 30px;
-  font-size: 13px;
   text-align: center;
 }
 .rs {
@@ -30,7 +29,7 @@
     max-width: 100%;
   }
 }
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
   .about-us-page {
     h3 {
       font-size: 20px;
@@ -42,7 +41,7 @@
   .description {
     font-size: 10px;
   }
-}
+} */
 @media (max-width: 550px) {
   .about-us-page {
     .team-cards-container {

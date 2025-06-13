@@ -2,7 +2,6 @@ import React from 'react';
 import { TeammateCard } from '../../components/teammateCard/TeammateCard';
 import './AboutUs.css';
 import { gitInitTeam } from './gitInitTeam';
-const { sveta, olya, elmira } = gitInitTeam;
 import logo from '../../assets/logo-rsschool.svg';
 
 const AboutUs: React.FC = () => {
@@ -20,36 +19,9 @@ const AboutUs: React.FC = () => {
         that collaboration and mutual support are key to achieving our goals.
       </p>
       <div className="team-cards-container">
-        <TeammateCard
-          name={sveta.name}
-          role={sveta.role}
-          img={sveta.img}
-          text={sveta.text}
-          contributions={sveta.contributions}
-          gitLink={sveta.gitLink}
-          education={sveta.education}
-          languages={sveta.languages}
-        />
-        <TeammateCard
-          name={olya.name}
-          role={olya.role}
-          img={olya.img}
-          text={olya.text}
-          contributions={olya.contributions}
-          gitLink={olya.gitLink}
-          education={olya.education}
-          languages={olya.languages}
-        />
-        <TeammateCard
-          name={elmira.name}
-          role={elmira.role}
-          img={elmira.img}
-          text={elmira.text}
-          contributions={elmira.contributions}
-          gitLink={elmira.gitLink}
-          education={elmira.education}
-          languages={elmira.languages}
-        />
+        {Object.values(gitInitTeam).map(teammate => (
+          <TeammateCard key={teammate.name} {...teammate} />
+        ))}
       </div>
 
       <a href="https://rs.school/" target="_blank" className="rs" aria-label="schoolLogo">
