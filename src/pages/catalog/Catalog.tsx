@@ -30,6 +30,7 @@ const Catalog: React.FC = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined);
   const [categoryPath, setCategoryPath] = useState<CategoryPath[]>([]);
   const [currentCategoryName, setCurrentCategoryName] = useState<string | undefined>(undefined);
+  const [fullSearchResults, setFullSearchResults] = useState<ProductCardProps[] | null>(null);
   const [filters, setFilters] = useState<ProductFilters>({
     flavors: [],
     priceRange: {
@@ -95,8 +96,11 @@ const Catalog: React.FC = () => {
     try {
       if (searchQuery) {
         const all = await searchProducts(searchQuery, filters, sortOption);
-        const batch = await Promise.all(all.map(toCardAdapter));
-        setProducts(batch);
+        const adapted = await Promise.all(all.map(toCardAdapter));
+        setFullSearchResults(adapted);
+        setProducts(adapted.slice(0, BATCH_SIZE));
+        setHasMore(adapted.length > BATCH_SIZE);
+        setOffset(BATCH_SIZE);
       } else {
         const list = await getProductsList(BATCH_SIZE, '0', sortOption, filters);
         const batch = await Promise.all(list.map(toCardAdapter));
@@ -116,14 +120,20 @@ const Catalog: React.FC = () => {
   }, [resetAndFetch]);
 
   const loadMore = async () => {
-    if (loadingMore || !hasMore || Boolean(searchQuery)) return;
+    if (loadingMore || !hasMore) return;
     setLoadingMore(true);
     try {
-      const list = await getProductsList(BATCH_SIZE, offset.toString(), sortOption, filters);
-      const batch = await Promise.all(list.map(toCardAdapter));
+      let batch: ProductCardProps[];
+      if (searchQuery) {
+        await new Promise(resolve => setTimeout(resolve, 300)); // or 0ms
+        batch = fullSearchResults!.slice(offset, offset + BATCH_SIZE);
+      } else {
+        const list = await getProductsList(BATCH_SIZE, offset.toString(), sortOption, filters);
+        batch = await Promise.all(list.map(toCardAdapter));
+      }
       setProducts(prev => [...prev, ...batch]);
-      setHasMore(list.length === BATCH_SIZE);
       setOffset(prev => prev + BATCH_SIZE);
+      setHasMore(batch.length === BATCH_SIZE);
     } catch {
       setError('Failed to load more products.');
     } finally {
