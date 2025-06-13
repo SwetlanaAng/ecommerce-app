@@ -57,7 +57,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (inCart || isAdding) return;
+    if (inCart || isAdding || isRemoving) return;
 
     setIsAdding(true);
     try {
@@ -74,7 +74,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!lineItemId || isRemoving) return;
+    if (!lineItemId || isRemoving || isAdding) return;
 
     setIsRemoving(true);
     try {
