@@ -134,6 +134,7 @@ export interface ProductCardProps {
   slug: string;
   filters?: {
     isBestSeller?: boolean;
+    isGlutenFree?: boolean;
   };
   category: string;
 }
@@ -155,6 +156,7 @@ export interface ProductFilters {
     max?: number;
   };
   isBestSeller?: boolean;
+  isGlutenFree?: boolean;
   categoryId?: string;
 }
 

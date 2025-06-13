@@ -31,12 +31,17 @@
       position: absolute;
       bottom: 8px;
       left: 8px;
-      background-color: var(--primary-color);
       color: white;
       border-radius: 8px;
       padding: 6px 12px;
       font-size: 14px;
-      line-height: 100%;
+      line-height: 100%; 
+      &.best-seller {
+        background-color: var(--primary-color);
+      }
+      &.gluten-free {
+        background-color: var(--accent-color);
+      }
     }
     .product-category {
       right: 8px;

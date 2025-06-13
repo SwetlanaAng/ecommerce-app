@@ -46,7 +46,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <Link to={`/catalog/${slug}`} className="product-card">
       <div className="product-image">
         <img src={imageUrl} alt={name} />
-        {filters?.isBestSeller && <div className="product-filter">Best Seller</div>}
+        {(filters?.isBestSeller || filters?.isGlutenFree) && (
+          <div
+            className={`product-filter ${filters?.isBestSeller ? 'best-seller' : 'gluten-free'}`}
+          >
+            {filters?.isBestSeller && 'Best Seller'}
+            {filters?.isGlutenFree && 'Gluten Free'}
+          </div>
+        )}
         {category && <div className="product-category">{category}</div>}
       </div>
       <div className="product-info">
