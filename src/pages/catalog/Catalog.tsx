@@ -102,10 +102,10 @@ const Catalog: React.FC = () => {
         setHasMore(adapted.length > BATCH_SIZE);
         setOffset(BATCH_SIZE);
       } else {
-        const list = await getProductsList(BATCH_SIZE, '0', sortOption, filters);
-        const batch = await Promise.all(list.map(toCardAdapter));
+        const list = await getProductsList(BATCH_SIZE + 1, '0', sortOption, filters);
+        const batch = await Promise.all(list.slice(0, BATCH_SIZE).map(toCardAdapter));
         setProducts(batch);
-        setHasMore(list.length === BATCH_SIZE);
+        setHasMore(list.length > BATCH_SIZE);
         setOffset(BATCH_SIZE);
       }
     } catch {
@@ -123,17 +123,23 @@ const Catalog: React.FC = () => {
     if (loadingMore || !hasMore) return;
     setLoadingMore(true);
     try {
-      let batch: ProductCardProps[];
-      if (searchQuery) {
-        await new Promise(resolve => setTimeout(resolve, 300)); // or 0ms
-        batch = fullSearchResults!.slice(offset, offset + BATCH_SIZE);
+      let batch: ProductCardProps[] = [];
+      const nextOffset = offset + BATCH_SIZE;
+
+      if (searchQuery && fullSearchResults) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        batch = fullSearchResults.slice(offset, nextOffset);
+        setProducts(prev => [...prev, ...batch]);
+        setHasMore(nextOffset < fullSearchResults.length);
       } else {
-        const list = await getProductsList(BATCH_SIZE, offset.toString(), sortOption, filters);
-        batch = await Promise.all(list.map(toCardAdapter));
+        const list = await getProductsList(BATCH_SIZE + 1, offset.toString(), sortOption, filters);
+        const adapted = await Promise.all(list.map(toCardAdapter));
+        const visibleBatch = adapted.slice(0, BATCH_SIZE);
+        setProducts(prev => [...prev, ...visibleBatch]);
+        setHasMore(adapted.length > BATCH_SIZE);
       }
-      setProducts(prev => [...prev, ...batch]);
-      setOffset(prev => prev + BATCH_SIZE);
-      setHasMore(batch.length === BATCH_SIZE);
+
+      setOffset(nextOffset);
     } catch {
       setError('Failed to load more products.');
     } finally {
