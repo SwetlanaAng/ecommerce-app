@@ -38,7 +38,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [showFullDesc, setShowFullDesc] = useState(false);
-  const descPreview = desc.length > 210 ? desc.slice(0, 210) + '…' : desc;
+  const descPreview = desc.length > 210 ? desc.slice(0, 210) + '… ' : desc;
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -122,12 +122,14 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
           </div>
           <h1 className="detail-title">{title}</h1>
           <div className="detail-description">
-            <p>{showFullDesc ? desc : descPreview}</p>
-            {desc.length > 210 && !showFullDesc && (
-              <div className="detail-read-more" onClick={() => setShowFullDesc(true)}>
-                Read more
-              </div>
-            )}
+            <p>
+              {showFullDesc ? desc : descPreview}
+              {desc.length > 210 && !showFullDesc && (
+                <span className="detail-read-more" onClick={() => setShowFullDesc(true)}>
+                  Read more
+                </span>
+              )}
+            </p>
           </div>
           <div className="detail-price">
             {sale != null ? (

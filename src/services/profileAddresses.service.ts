@@ -45,7 +45,6 @@ async function addAddress(
 
     const data = await response.json();
     const newAddressId = data.addresses[data.addresses.length - 1].id;
-    console.log(actionAddId);
     try {
       const response = await fetch(url, {
         method: 'POST',

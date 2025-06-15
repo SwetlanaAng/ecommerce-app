@@ -20,7 +20,6 @@ export async function getProducts(): Promise<Product[]> {
     }
 
     const data = await response.json();
-    console.log('API Response:', data);
     return data.results;
   } catch (error) {
     console.error('Error fetching products:', error);
