@@ -16,13 +16,19 @@ export const useAnimatedPrice = ({
   const animationRef = useRef<number>();
   const startTimeRef = useRef<number>();
   const startValueRef = useRef<number>();
+  const lastTargetRef = useRef<number>(targetValue);
 
   useEffect(() => {
-    if (currentValue === targetValue) return;
+    if (currentValue === targetValue && lastTargetRef.current === targetValue) return;
+
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
 
     setIsAnimating(true);
     startValueRef.current = currentValue;
     startTimeRef.current = Date.now();
+    lastTargetRef.current = targetValue;
 
     const animate = () => {
       const now = Date.now();

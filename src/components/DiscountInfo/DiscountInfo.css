@@ -1,0 +1,16 @@
+.discount-info {
+  .discount-badge {
+    font-weight: 400;
+    width: fit-content;
+    text-transform: uppercase;
+    &.product {
+      color: var(--primary-color);
+    }
+    &.cart {
+      color: var(--primary-color);
+    }
+    .discount-type {
+      font-size: 14px;
+    }
+  }
+}

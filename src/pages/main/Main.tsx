@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/button/Button';
 import ProductCard from '../../components/product/ProductCard';
+import PromoCodeBanner from '../../components/PromoCodeBanner/PromoCodeBanner';
 import { useEffect, useState } from 'react';
 import { getProductsList } from '../../services/products.service';
 import { Product } from '../../types/interfaces';
@@ -28,6 +29,7 @@ import './Main.css';
 const Main = () => {
   const navigate = useNavigate();
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
@@ -55,13 +57,13 @@ const Main = () => {
     {
       icon: <img src={number1} alt="icon" />,
       textIcon: 'Variety',
-      number: '24+',
+      number: '24<sup>+</sup>',
       text: 'Exquisite Flavors',
     },
     {
       icon: <img src={number2} alt="icon" />,
       textIcon: 'Heritage',
-      number: '100%',
+      number: '100<sup>%</sup>',
       text: 'Authentic French Recipe',
     },
     {
@@ -73,73 +75,94 @@ const Main = () => {
     {
       icon: <img src={number4} alt="icon" />,
       textIcon: 'Delivered',
-      number: '50K+',
+      number: '50K<sup>+</sup>',
       text: 'Macarons Shipped Annually',
-    },
-  ];
-
-  const benefits = [
-    {
-      title: 'Authentic French Craftsmanship',
-      description:
-        'Each macaron is meticulously hand-piped by our expert pastry chefs, trained in the revered traditions of French patisserie. We honor the authentic French macaron recipe, ensuring a perfect balance of crunchy exterior and chewy interior',
-    },
-    {
-      title: 'Superior Ingredients, Unforgettable Flavor',
-      description:
-        'We use only the finest, sustainably sourced almond flour, pure Madagascar vanilla, and premium cocoa. Our signature ganache fillings, made without butter, ensure a smoother taste that truly highlights each vibrant flavor and prevents melting during transit',
-    },
-    {
-      title: 'Freshness, Delivered to Your Door',
-      description:
-        'Unlike others, we ship our macarons fresh, never frozen. Each order is carefully packaged with air cushions and insulated pouches to ensure your delicate treats arrive in pristine condition, ready to be savored',
-    },
-    {
-      title: 'Gluten-Friendly Indulgence',
-      description:
-        'Crafted with almond flour, our macarons offer a naturally gluten-friendly option for those seeking a delightful treat without compromise',
-    },
-    {
-      title: 'A Taste of Paris, Anywhere',
-      description:
-        'Experience the elegance and charm of a Parisian patisserie from the comfort of your home. Our classic Parisian-sized macarons are designed to transport you with every bite',
     },
   ];
 
   const reviews = [
     {
       review:
-        'Absolutely divine! I ordered a custom box for my anniversary, and every single macaron was a work of art. The Pistachio was incredibly authentic, and the Raspberry burst with fresh flavor. They arrived perfectly packaged and fresh. Truly the best I’ve had outside of Paris!',
-      author: 'Eleanor V.',
+        "Absolutely divine! I ordered a custom box for my anniversary, and every single macaron was a work of art. The Pistachio was incredibly authentic, and the Raspberry burst with fresh flavor. They arrived perfectly packaged and fresh. Truly the best I've had outside of Paris!",
+      author: 'Eleanor V.',
       image: customer5,
       rating: 5,
       city: 'New York, NY ',
     },
     {
       review:
-        'I’m usually skeptical about ordering perishable food online, but exceeded all expectations. The shipping was incredibly fast, and the macarons were pristine. The Dark Chocolate is my new obsession — so rich and smooth. Highly recommend for any special occasion or just a treat for yourself!',
-      author: 'Marcus L.',
+        "I'm usually skeptical about ordering perishable food online, but exceeded all expectations. The shipping was incredibly fast, and the macarons were pristine. The Dark Chocolate is my new obsession — so rich and smooth. Highly recommend for any special occasion or just a treat for yourself!",
+      author: 'Marcus L.',
       image: customer6,
       rating: 4,
       city: 'Austin, TX',
     },
     {
       review:
-        'As a pastry chef myself, I appreciate true craftsmanship. These macarons are simply exquisite. The shells have that perfect delicate crisp, and the ganache fillings are incredibly balanced. The ’surprise assortment’ was a fantastic way to discover new favorites. You can taste the quality in every bite.',
-      author: 'Isabella R.',
+        "As a pastry chef myself, I appreciate true craftsmanship. These macarons are simply exquisite. The shells have that perfect delicate crisp, and the ganache fillings are incredibly balanced. The 'surprise assortment' was a fantastic way to discover new favorites. You can taste the quality in every bite.",
+      author: 'Isabella R.',
       image: customer7,
       rating: 5,
       city: 'Los Angeles, CA',
     },
     {
       review:
-        'I sent a gift box to my sister, and she raved about them! She particularly loved the Classic Vanilla, saying it was ’pure comfort.’ The ordering process was seamless, and the customer service was fantastic when I had a question about delivery. A perfect gift solution!',
-      author: 'David S.',
+        "I sent a gift box to my sister, and she raved about them! She particularly loved the Classic Vanilla, saying it was 'pure comfort.' The ordering process was seamless, and the customer service was fantastic when I had a question about delivery. A perfect gift solution!",
+      author: 'David S.',
       image: customer8,
       rating: 5,
       city: 'Chicago, IL',
     },
   ];
+
+  const faqData = [
+    {
+      category: 'Ordering & Delivery',
+      question: 'How are your macarons packaged to ensure freshness during shipping?',
+      answer:
+        'We meticulously package our macarons in insulated pouches with air cushions to protect them from temperature fluctuations and physical damage during transit. We ship them fresh, never frozen, so they arrive in perfect condition, ready to enjoy.',
+    },
+    {
+      category: 'Ordering & Delivery',
+      question: 'What are your shipping times and costs?',
+      answer:
+        'We offer various shipping options, including standard and expedited delivery. Standard shipping typically takes [X-Y] business days, and expedited options are available for faster delivery. Shipping costs are calculated at checkout based on your location and chosen speed. You can see an estimate before finalizing your purchase.',
+    },
+    {
+      category: 'Ordering & Delivery',
+      question: 'Can I track my order?',
+      answer:
+        "Yes! Once your order ships, you will receive a confirmation email with a tracking number. You can use this number to monitor your package's journey directly to your door",
+    },
+    {
+      category: 'Product Information & Care',
+      question: 'How long do your macarons stay fresh, and how should I store them?',
+      answer:
+        'For optimal freshness, we recommend consuming your macarons within 5-7 days of arrival. Store them in an airtight container in the refrigerator. For best taste, allow them to come to room temperature for about 15-20 minutes before enjoying.',
+    },
+    {
+      category: 'Product Information & Care',
+      question: 'Are your macarons gluten-free?',
+      answer:
+        "Yes! All of our macarons are naturally gluten-free as they're made with almond flour instead of wheat flour. However, they are produced in a facility that also processes gluten-containing ingredients.",
+    },
+    {
+      category: 'Product Information & Care',
+      question: 'What ingredients do you use in your macarons?',
+      answer:
+        'We use only premium ingredients: almond flour, powdered sugar, egg whites, and natural flavorings. Our ganache fillings contain butter, cream, chocolate, and natural fruit purees or extracts depending on the flavor.',
+    },
+    {
+      category: 'Custom Orders & Events',
+      question: 'Do you offer custom macaron orders for events or corporate gifting?',
+      answer:
+        'Absolutely! We specialize in custom orders for weddings, corporate events, and special occasions. We can create custom colors, flavors, and packaging. Please contact us at least 2 weeks in advance for custom orders.',
+    },
+  ];
+
+  const toggleFAQ = (index: number) => {
+    setExpandedFAQ(expandedFAQ === index ? null : index);
+  };
 
   return (
     <div className="main-container">
@@ -184,7 +207,10 @@ const Main = () => {
                 {number.icon} {number.textIcon}
               </div>
               <div className="number-text">
-                <div className="number-number">{number.number}</div>
+                <div
+                  className="number-number"
+                  dangerouslySetInnerHTML={{ __html: number.number }}
+                />
                 <div className="number-text">{number.text}</div>
               </div>
             </div>
@@ -205,6 +231,10 @@ const Main = () => {
             <ProductCard key={product.id} {...toCardAdapter(product)} />
           ))}
         </div>
+      </section>
+
+      <section className="section promo-code">
+        <PromoCodeBanner />
       </section>
 
       <section className="section flavors">
@@ -230,7 +260,7 @@ const Main = () => {
             </div>
             <h3>Celebrations and special occasions</h3>
             <p>
-              Mark life’s big moments with elegance. Our macarons add an unforgettable touch of joy
+              Mark life's big moments with elegance. Our macarons add an unforgettable touch of joy
               to any celebration
             </p>
           </li>
@@ -270,18 +300,6 @@ const Main = () => {
         </ul>
       </section>
 
-      <section className="section benefits">
-        <h2 className="section-title">Why Choose Our Macarons? </h2>
-        <div className="benefits-flex">
-          {benefits.map((benefit, index) => (
-            <div key={index} className="benefit-card">
-              <h3>{benefit.title}</h3>
-              <p>{benefit.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section className="section reviews">
         <h2 className="section-title">Customer Reviews</h2>
         <div className="reviews-flex">
@@ -306,6 +324,49 @@ const Main = () => {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="section faq">
+        <div className="faq-wrapper">
+          <h2 className="section-title">Your Questions, Answered</h2>
+          <div className="faq-subtitle">
+            <p>Have questions? We've got answers.</p>
+            <p>
+              For everything else email us on <b>info@macarons-shop.com</b>
+            </p>
+          </div>
+        </div>
+        <div className="faq-container">
+          {faqData.map((faq, index) => (
+            <div key={index} className={`faq-item ${expandedFAQ === index ? 'expanded' : ''}`}>
+              <div className="faq-question" onClick={() => toggleFAQ(index)}>
+                <div className="faq-category">{faq.category}</div>
+                <div className="faq-question-content">
+                  <h3>{faq.question}</h3>
+                  <span className="faq-toggle">{expandedFAQ === index ? '−' : '+'}</span>
+                </div>
+              </div>
+              {expandedFAQ === index && (
+                <div className="faq-answer">
+                  <p>{faq.answer}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section banner">
+        <div className="banner-title">
+          <h2>Indulge in Elegance</h2>
+        </div>
+        <div className="banner-content">
+          <p>
+            Don't just dream of exquisite French macarons — experience them. Our handcrafted
+            delights are perfect for any occasion, or simply to treat yourself
+          </p>
+          <Button onClick={() => navigate('/catalog')}>Order Now</Button>
         </div>
       </section>
     </div>

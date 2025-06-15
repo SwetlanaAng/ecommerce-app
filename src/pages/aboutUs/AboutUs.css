@@ -1,0 +1,166 @@
+.about-us-page {
+  .about-us-page-content {
+    margin-bottom: 80px;
+    h1 {
+      font-size: 100px;
+      text-align: center;
+      letter-spacing: -5px;
+      line-height: 100%;
+      animation: fadeInDown 1s ease-out;
+      margin-bottom: 20px;
+      span {
+        color: var(--primary-color);
+      }
+    }
+    .description {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      animation: fadeInUp 1s ease-out;
+    }
+  }
+  .about-us-page-content-team {
+    h1 {
+      margin-bottom: 20px;
+      text-align: center;
+      span {
+        color: var(--accent-color);
+      }
+    }
+    .description {
+      text-align: center;
+    }
+    .team-cards-container {
+      margin-top: 40px;
+      display: flex;
+      gap: 20px;
+    }
+  }
+  .about-us-page-content-communication {
+    margin-top: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    h1 {
+      margin-bottom: 20px;
+      max-width: 680px;
+    }
+    .description {
+      max-width: 680px;
+    }
+    .communication-cards-container {
+      margin-top: 80px;
+      display: flex;
+      gap: 20px;
+      .communication-card {
+        background: var(--white);
+        width: calc((100% - 60px) / 4);
+        border-radius: 20px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        text-align: left;
+        h5 {
+          font-size: 22px;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+  .about-us-page-content-rs {
+    margin-top: 160px;
+    background: var(--white);
+    padding: 60px;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    h1 {
+      margin-bottom: 20px;
+      span {
+        color: #ffb749;
+      }
+    }
+    p {
+      max-width: 800px;
+    }
+    .rs {
+      flex-shrink: 0;
+      width: 160px;
+      transition: 0.5s;
+      img {
+        width: 100%;
+      }
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .about-us-page-content-team {
+    .team-cards-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .about-us-page {
+    .about-us-page-content {
+      h1 {
+        font-size: 62px;
+        letter-spacing: -2px;
+      }
+    }
+    .about-us-page-content-communication {
+      margin-top: 100px;
+      .communication-cards-container {
+        flex-wrap: wrap;
+        .communication-card {
+          width: calc((100% - 20px) / 2);
+        }
+      }
+    }
+    .about-us-page-content-rs {
+      margin-top: 100px;
+      padding: 20px;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+      .rs {
+        width: 100px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .about-us-page {
+    .about-us-page-content {
+      h1 {
+        font-size: 48px;
+      }
+    }
+    .about-us-page-content-communication {
+      margin-top: 60px;
+      .communication-cards-container {
+        .communication-card {
+          width: 100%;
+        }
+      }
+    }
+    .about-us-page-content-rs {
+      margin-bottom: 60px;
+      .rs {
+        width: 80px;
+      }
+    }
+  }
+}

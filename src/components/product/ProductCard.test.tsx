@@ -1,5 +1,5 @@
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import ProductCard from './ProductCard';
 import { useCart } from '../../features/cart/hooks/useCart';
 
@@ -117,7 +117,10 @@ describe('ProductCard', () => {
     renderComponent();
 
     const addToCartButton = screen.getByRole('button');
-    fireEvent.click(addToCartButton);
+
+    await act(async () => {
+      fireEvent.click(addToCartButton);
+    });
 
     expect(mockAddToCart).toHaveBeenCalledWith(defaultProps.id);
   });

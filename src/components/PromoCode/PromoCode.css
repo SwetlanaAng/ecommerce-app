@@ -1,0 +1,50 @@
+.promo-code-section {
+  margin-bottom: 40px;
+  .active-promo-codes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    .active-promo-code {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(242, 109, 138, 0.1);
+      color: var(--primary-color);
+      border-radius: 12px;
+      padding: 4px 8px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .remove-promo-btn {
+      color: #f26d8a97;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      transition: color 0.2s;
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+  .promo-code-form {
+    margin-bottom: 8px;
+    .promo-code-input-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      .form-group {
+        flex: 1;
+      }
+      .promo-code-submit {
+        padding: 14px;
+        line-height: 14px;
+        border-radius: 12px;
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}

@@ -46,7 +46,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <Link to={`/catalog/${slug}`} className="product-card">
       <div className="product-image">
         <img src={imageUrl} alt={name} />
-        {filters?.isBestSeller && <div className="product-filter">Best Seller</div>}
+        {(filters?.isBestSeller || filters?.isGlutenFree) && (
+          <div
+            className={`product-filter ${filters?.isBestSeller ? 'best-seller' : 'gluten-free'}`}
+          >
+            {filters?.isBestSeller && 'Best Seller'}
+            {filters?.isGlutenFree && 'Gluten Free'}
+          </div>
+        )}
         {category && <div className="product-category">{category}</div>}
       </div>
       <div className="product-info">
@@ -54,12 +61,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {description && <p className="product-description">{description}</p>}
         <div className="product-price-container-wrapper">
           <div className="product-price-container">
-            {isOnSale && originalPrice && (
-              <span className="product-original-price">${originalPrice.toFixed(2)}</span>
-            )}
             <span className={`product-price ${isOnSale ? 'product-price-discounted' : ''}`}>
               ${price.toFixed(2)}
             </span>
+            {isOnSale && originalPrice && (
+              <span className="product-original-price">${originalPrice.toFixed(2)}</span>
+            )}
           </div>
           <button
             className={`add-to-cart-button ${isInCart ? 'in-cart' : ''} ${isAddingToCart ? 'loading' : ''}`}
@@ -69,7 +76,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {isInCart ? (
               <img src={tickIcon} alt="add to cart" />
             ) : (
-              <img src={addToCartIcon} alt="add to cart" />
+              <div className="add-to-cart-button-content">
+                <img src={addToCartIcon} alt="add to cart" />
+                <span>Buy</span>
+              </div>
             )}
           </button>
         </div>

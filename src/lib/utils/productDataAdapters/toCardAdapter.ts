@@ -27,8 +27,10 @@ export default function toCardAdapter(product: Product): ProductCardProps {
 
   const slug = product.slug['en-US'];
   const isBestSellerAttr = variant.attributes.find(attribute => attribute.name === 'isBestSeller');
+  const isGlutenFreeAttr = variant.attributes.find(attribute => attribute.name === 'isGlutenFree');
 
   let isBestSeller = false;
+  let isGlutenFree = false;
   if (isBestSellerAttr) {
     const value = isBestSellerAttr.value;
     if (typeof value === 'boolean') {
@@ -40,7 +42,13 @@ export default function toCardAdapter(product: Product): ProductCardProps {
     }
   }
 
-  const filters = { isBestSeller };
+  if (isGlutenFreeAttr) {
+    const value = isGlutenFreeAttr.value;
+    if (typeof value === 'boolean') {
+      isGlutenFree = value;
+    }
+  }
+  const filters = { isBestSeller, isGlutenFree };
 
   return {
     id: product.id,

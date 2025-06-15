@@ -4,6 +4,7 @@ import Input from '../../../input/Input';
 import { ChangePasswordModal } from '../../../../schemas/changePasswordSchemas';
 import { toast } from 'react-toastify';
 import { ChangePassword } from '../../../../services/profilePersonal.service';
+import { useAuth } from '../../../../features/auth/hooks/useAuth';
 
 interface ChangePasswordFormProps {
   formData: ChangePasswordModal;
@@ -29,9 +30,16 @@ export const ChangePasswordContent: React.FC<ChangePasswordFormProps> = ({
   handleSubmit,
   onSuccess,
 }) => {
+  const { updateUser } = useAuth();
+
   const onSubmit: SubmitHandler<ChangePasswordModal> = async data => {
     try {
-      await ChangePassword(data);
+      const updatedProfile = await ChangePassword(data);
+
+      updateUser({
+        version: updatedProfile.version,
+      });
+
       reset();
       if (onSuccess) {
         onSuccess();
