@@ -1,6 +1,13 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import ProductDetailCard from './ProductDetailCard';
 import { Product } from '../../types/interfaces';
+
+jest.mock('../../services/keys', () => ({
+  KEYS: {
+    API_URL: 'https://api.example.com',
+    PROJECT_KEY: 'test-project',
+  },
+}));
 
 jest.mock(
   '../image/ImageModal',
@@ -13,6 +20,21 @@ jest.mock('../../features/cart/hooks/useCart', () => ({
     addToCart: jest.fn(),
     removeFromCart: jest.fn(),
   }),
+}));
+
+jest.mock('../../services/products.service', () => ({
+  getProductsList: jest.fn().mockResolvedValue([]),
+}));
+
+jest.mock('react-router-dom', () => ({
+  useNavigate: () => jest.fn(),
+}));
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
 }));
 
 const mockProduct: Product = {
@@ -107,13 +129,17 @@ const mockProduct: Product = {
 };
 
 describe('ProductDetailCard', () => {
-  it('renders product info correctly', () => {
-    render(<ProductDetailCard product={mockProduct} />);
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders product info correctly', async () => {
+    await act(async () => {
+      render(<ProductDetailCard product={mockProduct} />);
+    });
 
     expect(screen.getByText('Test Product')).toBeInTheDocument();
-
     expect(screen.getByText('This is a test product')).toBeInTheDocument();
-
     expect(screen.getByText('20.00 USD')).toBeInTheDocument();
     expect(screen.getByText('15.00 USD')).toBeInTheDocument();
 
@@ -122,8 +148,10 @@ describe('ProductDetailCard', () => {
     expect(image.src).toBe('https://example.com/image1.jpg');
   });
 
-  it('changes image on next and prev buttons', () => {
-    render(<ProductDetailCard product={mockProduct} />);
+  it('changes image on next and prev buttons', async () => {
+    await act(async () => {
+      render(<ProductDetailCard product={mockProduct} />);
+    });
 
     const nextBtn = screen.getByRole('button', { name: '⟩' });
     const prevBtn = screen.getByRole('button', { name: '⟨' });
@@ -132,22 +160,30 @@ describe('ProductDetailCard', () => {
       'https://example.com/image1.jpg'
     );
 
-    fireEvent.click(nextBtn);
+    await act(async () => {
+      fireEvent.click(nextBtn);
+    });
     expect((screen.getByAltText('Test Product image 2') as HTMLImageElement).src).toBe(
       'https://example.com/image2.jpg'
     );
 
-    fireEvent.click(prevBtn);
+    await act(async () => {
+      fireEvent.click(prevBtn);
+    });
     expect((screen.getByAltText('Test Product image 1') as HTMLImageElement).src).toBe(
       'https://example.com/image1.jpg'
     );
   });
 
-  it('opens and closes modal when image clicked', () => {
-    render(<ProductDetailCard product={mockProduct} />);
+  it('opens and closes modal when image clicked', async () => {
+    await act(async () => {
+      render(<ProductDetailCard product={mockProduct} />);
+    });
 
     const image = screen.getByAltText('Test Product image 1');
-    fireEvent.click(image);
+    await act(async () => {
+      fireEvent.click(image);
+    });
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });

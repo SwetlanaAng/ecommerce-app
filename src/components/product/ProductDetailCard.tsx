@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Product } from '../../types/interfaces';
 import { toast } from 'react-toastify';
 import { useCart } from '../../features/cart/hooks/useCart';
 import ImageModal from '../image/ImageModal';
+import starIcon from '../../assets/star.svg';
+import Button from '../button/Button';
+import ProductCard from './ProductCard';
+import { getProductsList } from '../../services/products.service';
+import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
+
 import './ProductDetailCard.css';
 
 interface Props {
@@ -10,6 +17,7 @@ interface Props {
 }
 
 const ProductDetailCard: React.FC<Props> = ({ product }) => {
+  const navigate = useNavigate();
   const { cart, removeFromCart, addToCart } = useCart();
   const { name, description, masterVariant } = product;
   const title = name['en-US'];
@@ -29,6 +37,27 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const [lineItemId, setLineItemId] = useState<string | null>(null);
   const [isRemoving, setIsRemoving] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [showFullDesc, setShowFullDesc] = useState(false);
+  const descPreview = desc.length > 210 ? desc.slice(0, 210) + '…' : desc;
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        const products = await getProductsList();
+        if (products && products.length > 4) {
+          const shuffled = products.sort(() => 0.5 - Math.random());
+          setFeaturedProducts(shuffled.slice(0, 4));
+        } else {
+          setFeaturedProducts(products);
+        }
+      } catch (error) {
+        console.error('Error fetching featured products:', error);
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, []);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -53,12 +82,8 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const handleAdd = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  const handleAdd = async () => {
     if (inCart || isAdding || isRemoving) return;
-
     setIsAdding(true);
     try {
       await addToCart(product.id);
@@ -70,12 +95,8 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     }
   };
 
-  const handleRemove = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  const handleRemove = async () => {
     if (!lineItemId || isRemoving || isAdding) return;
-
     setIsRemoving(true);
     try {
       await removeFromCart(lineItemId);
@@ -87,86 +108,119 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     }
   };
 
+  const rating = 5.0;
+  const reviews = 247;
+
   return (
-    <div className="detail-card">
-      <div className="detail-info">
-        <h2 className="detail-title">{title}</h2>
-        <p className="detail-description">{desc}</p>
-        <div className="detail-price">
-          {sale != null ? (
-            <>
-              <span className="detail-price-original">
-                {base.toFixed(2)} {curr}
-              </span>
-              <span className="detail-price-sale">
-                {sale.toFixed(2)} {curr}
-              </span>
-            </>
-          ) : (
-            <span className="detail-price-current">
-              {base.toFixed(2)} {curr}
-            </span>
-          )}
-        </div>
-        <div className="detail-actions">
-          {!inCart && !isRemoving && (
-            <button className="btn primary" onClick={handleAdd} disabled={isAdding}>
-              {isAdding ? 'Adding…' : 'Add to Cart'}
-            </button>
-          )}
-          {(inCart || isRemoving) && (
-            <button className="btn" onClick={handleRemove} disabled={isRemoving}>
-              {isRemoving ? 'Removing…' : 'Remove from Cart'}
-            </button>
-          )}
-        </div>
-      </div>
-
-      <div className="detail-images">
-        {images.length > 0 && (
-          <div className="slider">
-            <img
-              src={images[currentIndex].url}
-              alt={`${title} image ${currentIndex + 1}`}
-              className="slider-image"
-              onClick={() => {
-                setModalIndex(currentIndex);
-                setIsModalOpen(true);
-              }}
-            />
-
-            {images.length > 1 && (
-              <>
-                <button className="slider-btn prev" onClick={handlePrev}>
-                  ⟨
-                </button>
-                <button className="slider-btn next" onClick={handleNext}>
-                  ⟩
-                </button>
-              </>
+    <div className="detail-container">
+      <div className="detail-card">
+        <div className="detail-info">
+          <div className="detail-rating-row">
+            <img src={starIcon} alt="star" className="detail-star" />
+            <span className="detail-rating">{rating.toFixed(1)}</span>
+            <span className="detail-reviews">({reviews} reviews)</span>
+          </div>
+          <h1 className="detail-title">{title}</h1>
+          <div className="detail-description">
+            <p>{showFullDesc ? desc : descPreview}</p>
+            {desc.length > 210 && !showFullDesc && (
+              <div className="detail-read-more" onClick={() => setShowFullDesc(true)}>
+                Read more
+              </div>
             )}
           </div>
-        )}
-        {images.length > 1 && (
-          <div className="detail-images-thumbs">
-            {images.map((img, idx) => (
-              <img
-                key={idx}
-                src={img.url}
-                alt={`${title} thumbnail ${idx + 1}`}
-                className={`thumb-image ${currentIndex === idx ? 'active' : ''}`}
-                onClick={() => setCurrentIndex(idx)}
-              />
-            ))}
+          <div className="detail-price">
+            {sale != null ? (
+              <>
+                <span className="detail-price-original">
+                  {base.toFixed(2)} {curr}
+                </span>
+                <span className="detail-price-sale">
+                  {sale.toFixed(2)} {curr}
+                </span>
+              </>
+            ) : (
+              <span className="detail-price-current">
+                {base.toFixed(2)} {curr}
+              </span>
+            )}
           </div>
-        )}
+          <div className="detail-actions">
+            {!inCart && !isRemoving && (
+              <Button className="btn" onClick={handleAdd} disabled={isAdding}>
+                {isAdding ? 'Adding…' : 'Add to Cart'}
+              </Button>
+            )}
+            {(inCart || isRemoving) && (
+              <Button className="btn primary" onClick={handleRemove} disabled={isRemoving}>
+                {isRemoving ? 'Removing…' : 'Remove from Cart'}
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div className="detail-images">
+          {images.length > 0 && (
+            <div className="slider">
+              <img
+                src={images[currentIndex].url}
+                alt={`${title} image ${currentIndex + 1}`}
+                className="slider-image"
+                onClick={() => {
+                  setModalIndex(currentIndex);
+                  setIsModalOpen(true);
+                }}
+              />
+
+              {images.length > 1 && (
+                <>
+                  <button className="slider-btn prev" onClick={handlePrev}>
+                    ⟨
+                  </button>
+                  <button className="slider-btn next" onClick={handleNext}>
+                    ⟩
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+          {images.length > 1 && (
+            <div className="detail-images-thumbs">
+              {images.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img.url}
+                  alt={`${title} thumbnail ${idx + 1}`}
+                  className={`thumb-image ${currentIndex === idx ? 'active' : ''}`}
+                  onClick={() => setCurrentIndex(idx)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        <ImageModal
+          images={images}
+          isOpen={isModalOpen}
+          initialIndex={modalIndex}
+          onClose={() => setIsModalOpen(false)}
+        />
       </div>
-      <ImageModal
-        images={images}
-        isOpen={isModalOpen}
-        initialIndex={modalIndex}
-        onClose={() => setIsModalOpen(false)}
-      />
+
+      <div className="detail-related">
+        <div className="detail-related-title">
+          <h1>You Might Also Love</h1>
+          <div className="view-all-container">
+            <Button className="view-all-button" onClick={() => navigate('/catalog')}>
+              View All →
+            </Button>
+          </div>
+        </div>
+        <div className="featured-products-grid">
+          {featuredProducts.map(product => (
+            <ProductCard key={product.id} {...toCardAdapter(product)} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
