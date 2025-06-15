@@ -293,7 +293,7 @@ const Catalog: React.FC = () => {
         <div className="catalog-products">
           {loading ? (
             <div className="catalog-flex">
-              {[...Array(8)].map((_, index) => (
+              {[...Array(9)].map((_, index) => (
                 <SkeletonCard key={index} count={1} />
               ))}
             </div>

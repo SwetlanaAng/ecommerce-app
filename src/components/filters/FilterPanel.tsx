@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ProductFilters } from '../../types/interfaces';
-import Button from '../button/Button';
 import Input from '../input/Input';
 import { useAppContext } from '../../features/app/hooks/useAppContext';
 import './FilterPanel.css';
@@ -21,8 +20,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
   );
 
   useEffect(() => {
-    setMinPrice(filters.priceRange?.min ?? priceRange.min);
-    setMaxPrice(filters.priceRange?.max ?? priceRange.max);
+    if (filters.priceRange?.min !== minPrice || filters.priceRange?.max !== maxPrice) {
+      setMinPrice(filters.priceRange?.min ?? priceRange.min);
+      setMaxPrice(filters.priceRange?.max ?? priceRange.max);
+    }
   }, [filters.priceRange, priceRange.min, priceRange.max]);
 
   const handleFlavorChange = (flavor: string) => {
@@ -46,26 +47,32 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
     });
   };
 
-  const handlePriceChange = () => {
+  const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value === '' ? undefined : parseInt(event.target.value);
+    if (value !== undefined && value < 0) return;
+    setMinPrice(value);
+
     onFilterChange({
       ...filters,
       priceRange: {
-        min: minPrice,
+        min: value,
         max: maxPrice,
       },
     });
   };
 
-  const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value ? parseInt(event.target.value) : undefined;
-    if (value !== undefined && value < 0) return;
-    setMinPrice(value);
-  };
-
   const handleMaxPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value ? parseInt(event.target.value) : undefined;
+    const value = event.target.value === '' ? undefined : parseInt(event.target.value);
     if (value !== undefined && value < 0) return;
     setMaxPrice(value);
+
+    onFilterChange({
+      ...filters,
+      priceRange: {
+        min: minPrice,
+        max: value,
+      },
+    });
   };
 
   const handleResetFilters = () => {
@@ -96,7 +103,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
         <div className="price-range-inputs">
           <div className="price-input">
             <Input
-              labelText="Min:"
+              labelText="from"
               id="min-price"
               name="minPrice"
               type="number"
@@ -107,7 +114,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
           </div>
           <div className="price-input">
             <Input
-              labelText="Max:"
+              labelText="to"
               id="max-price"
               name="maxPrice"
               type="number"
@@ -116,9 +123,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
               onChange={handleMaxPriceChange}
             />
           </div>
-          <Button className="apply-price-button" onClick={handlePriceChange}>
-            Apply
-          </Button>
         </div>
       </div>
 

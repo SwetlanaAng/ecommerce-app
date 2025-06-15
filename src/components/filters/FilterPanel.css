@@ -49,13 +49,8 @@
     flex-wrap: wrap;
     gap: 12px;
     align-items: center;
-    input {
-      width: 75px;
-      padding: 10px 14px;
-    }
-    .apply-price-button {
-      padding: 8px 14px;
-      font-size: 16px;
+    .price-input {
+      width: calc((100% - 12px) / 2);
     }
   }
   .product-type-options,
