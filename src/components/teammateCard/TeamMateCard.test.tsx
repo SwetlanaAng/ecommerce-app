@@ -8,24 +8,18 @@ describe('TeammateCard', () => {
         name="TestName"
         surname="TestSurname"
         role="TestRole"
+        gitLink="https://github.com/SwetlanaAng"
         img="../../assets/Sveta.jpg"
         text="TestText"
         contributions={['TestContribution1', 'TestContribution2']}
-        gitLink="https://github.com/SwetlanaAng"
-        education="TestEducation"
-        languages={['TestLanguage1', 'TestLanguage2']}
       />
     );
 
-    expect(screen.getByText('TestName')).toBeInTheDocument();
-    expect(screen.getByText('TestSurname')).toBeInTheDocument();
+    expect(screen.getByText('TestName TestSurname')).toBeInTheDocument();
     expect(screen.getByText('TestRole')).toBeInTheDocument();
     expect(screen.getByText('TestText')).toBeInTheDocument();
-    expect(screen.getByText('TestEducation')).toBeInTheDocument();
     expect(screen.getByText('TestContribution1')).toBeInTheDocument();
     expect(screen.getByText('TestContribution2')).toBeInTheDocument();
-    expect(screen.getByText('TestLanguage1')).toBeInTheDocument();
-    expect(screen.getByText('TestLanguage2')).toBeInTheDocument();
   });
   it('renders with required img', () => {
     render(
@@ -37,8 +31,6 @@ describe('TeammateCard', () => {
         text="TestText"
         contributions={['TestContribution1', 'TestContribution2']}
         gitLink="https://github.com/SwetlanaAng"
-        education="TestEducation"
-        languages={['TestLanguage1', 'TestLanguage2']}
       />
     );
 
@@ -54,8 +46,6 @@ describe('TeammateCard', () => {
         text="TestText"
         contributions={['TestContribution1', 'TestContribution2']}
         gitLink="https://github.com/SwetlanaAng"
-        education="TestEducation"
-        languages={['TestLanguage1', 'TestLanguage2']}
       />
     );
 

@@ -1,5 +1,4 @@
-.product-card,
-.team-card {
+.product-card {
   position: relative;
   width: calc((100% - 40px) / 3);
   display: block;
@@ -36,7 +35,7 @@
       border-radius: 8px;
       padding: 6px 12px;
       font-size: 14px;
-      line-height: 100%; 
+      line-height: 100%;
       &.best-seller {
         background-color: var(--primary-color);
       }
@@ -77,9 +76,6 @@
     font-size: 18px;
     font-weight: 400;
     color: var(--text-color);
-    &.product-price-discounted {
-      color: var(--primary-color);
-    }
   }
   .product-description {
     margin: 0 0 33px 0;

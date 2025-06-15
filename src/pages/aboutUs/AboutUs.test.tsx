@@ -5,8 +5,9 @@ describe('AboutUs', () => {
   it('renders with required headers', () => {
     render(<AboutUs />);
 
-    expect(screen.getByText('About us')).toBeInTheDocument();
-    expect(screen.getByText('Meet Our GitInit Team')).toBeInTheDocument();
+    expect(
+      screen.getByText('Each member brings their own flavor to our recipe for success')
+    ).toBeInTheDocument();
   });
   it('renders with required img logo', () => {
     render(<AboutUs />);

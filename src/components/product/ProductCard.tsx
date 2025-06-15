@@ -61,12 +61,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {description && <p className="product-description">{description}</p>}
         <div className="product-price-container-wrapper">
           <div className="product-price-container">
-            {isOnSale && originalPrice && (
-              <span className="product-original-price">${originalPrice.toFixed(2)}</span>
-            )}
             <span className={`product-price ${isOnSale ? 'product-price-discounted' : ''}`}>
               ${price.toFixed(2)}
             </span>
+            {isOnSale && originalPrice && (
+              <span className="product-original-price">${originalPrice.toFixed(2)}</span>
+            )}
           </div>
           <button
             className={`add-to-cart-button ${isInCart ? 'in-cart' : ''} ${isAddingToCart ? 'loading' : ''}`}
