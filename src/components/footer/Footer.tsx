@@ -45,7 +45,11 @@ const Footer = () => {
             </div>
             <div className="contact">
               <div className="contact-info">info@macaron-shop.com</div>
-              <div className="copyright">© 2025, Macaron Delights. All rights reserved</div>
+              <div className="copyright">
+                © 2025, Macaron Delights. All rights reserved.
+                <br />
+                Made with ❤️ by GitInit Team
+              </div>
             </div>
             <div className="logo">
               <img src={logo} alt="logo" />
