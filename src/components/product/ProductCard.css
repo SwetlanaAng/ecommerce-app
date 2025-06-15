@@ -133,10 +133,6 @@
         width: 16px;
         height: 16px;
       }
-      &:hover {
-        transform: none;
-        background-color: var(--primary-color);
-      }
     }
 
     &.loading {

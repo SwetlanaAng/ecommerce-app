@@ -44,7 +44,10 @@ const Footer = () => {
               </ul>
             </div>
             <div className="contact">
-              <div className="contact-info">info@macaron-shop.com</div>
+              <a href="mailto:info@macarons-shop.com" className="btn">
+                Contact Us
+              </a>
+              <div className="contact-info">info@macarons-shop.com</div>
               <div className="copyright">
                 © 2025, Macaron Delights. All rights reserved.
                 <br />

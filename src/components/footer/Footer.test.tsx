@@ -43,7 +43,7 @@ describe('Footer component', () => {
 
     renderWithRouter(<Footer />);
 
-    expect(screen.getByText('info@macaron-shop.com')).toBeInTheDocument();
+    expect(screen.getByText('info@macarons-shop.com')).toBeInTheDocument();
     expect(screen.getByAltText('logo')).toBeInTheDocument();
   });
 });

@@ -24,6 +24,7 @@ import gift2 from '../../assets/gift2.jpg';
 import gift3 from '../../assets/gift3.jpg';
 import gift4 from '../../assets/gift4.jpg';
 import macaronsSweetDecorativeCandy from '../../assets/macarons-sweet-decorative-candy.mp4';
+import womanVideo from '../../assets/woman-eating.mp4';
 import './Main.css';
 
 const Main = () => {
@@ -98,7 +99,7 @@ const Main = () => {
       city: 'Austin, TX',
     },
     {
-      video: macaronsSweetDecorativeCandy,
+      video: womanVideo,
       title: 'A Taste of Paris, Anywhere',
       buttonText: 'Order now',
     },
@@ -317,7 +318,7 @@ const Main = () => {
             if (index === 2) {
               return (
                 <div key="video-review" className="video-review">
-                  <video src={macaronsSweetDecorativeCandy} autoPlay muted loop />
+                  <video src={review.video} autoPlay muted loop />
                   <div className="video-promo">
                     <h3>{review.title}</h3>
                     <a onClick={() => navigate('/catalog')} className="btn video-button">

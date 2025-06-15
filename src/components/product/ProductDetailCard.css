@@ -37,9 +37,12 @@
         padding: 20px;
         background: white;
         border-radius: 20px;
+        .detail-price-current,
+        .detail-price-sale {
+          font-weight: 600;
+        }
         .detail-price-original {
           font-size: 1rem;
-          font-weight: 400;
           color: #898989;
           text-decoration: line-through;
         }

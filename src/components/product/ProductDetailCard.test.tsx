@@ -63,14 +63,14 @@ const mockProduct: Product = {
         id: 'price-1',
         value: {
           type: 'centPrecision',
-          currencyCode: 'USD',
+          currencyCode: '$',
           centAmount: 2000,
           fractionDigits: 2,
         },
         discounted: {
           value: {
             type: 'centPrecision',
-            currencyCode: 'USD',
+            currencyCode: '$',
             centAmount: 1500,
             fractionDigits: 2,
           },
@@ -140,8 +140,8 @@ describe('ProductDetailCard', () => {
 
     expect(screen.getByText('Test Product')).toBeInTheDocument();
     expect(screen.getByText('This is a test product')).toBeInTheDocument();
-    expect(screen.getByText('20.00 USD')).toBeInTheDocument();
-    expect(screen.getByText('15.00 USD')).toBeInTheDocument();
+    expect(screen.getByText('$20.00')).toBeInTheDocument();
+    expect(screen.getByText('$15.00')).toBeInTheDocument();
 
     const image = screen.getByAltText('Test Product image 1') as HTMLImageElement;
     expect(image).toBeInTheDocument();

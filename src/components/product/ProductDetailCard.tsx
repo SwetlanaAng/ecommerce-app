@@ -25,7 +25,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const images = masterVariant.images;
   const priceInfo = masterVariant.prices[0];
   const base = priceInfo.value.centAmount / 10 ** priceInfo.value.fractionDigits;
-  const curr = priceInfo.value.currencyCode;
+  const curr = '$';
   const sale = priceInfo.discounted
     ? priceInfo.discounted.value.centAmount / 10 ** priceInfo.discounted.value.fractionDigits
     : null;
@@ -135,15 +135,18 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
             {sale != null ? (
               <>
                 <span className="detail-price-sale">
-                  {sale.toFixed(2)} {curr}
+                  {curr}
+                  {sale.toFixed(2)}
                 </span>
                 <span className="detail-price-original">
-                  {base.toFixed(2)} {curr}
+                  {curr}
+                  {base.toFixed(2)}
                 </span>
               </>
             ) : (
               <span className="detail-price-current">
-                {base.toFixed(2)} {curr}
+                {curr}
+                {base.toFixed(2)}
               </span>
             )}
           </div>
