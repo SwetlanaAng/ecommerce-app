@@ -155,7 +155,7 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023.9px) {
   .promo-banner {
     .promo-codes-flex {
       flex-direction: column;
@@ -166,7 +166,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.9px) {
   .promo-banner {
     .promo-codes-flex {
       .promo-code-card {
@@ -183,7 +183,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.9px) {
   .promo-banner {
     .promo-codes-flex {
       .promo-code-card {

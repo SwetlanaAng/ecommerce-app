@@ -93,7 +93,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.9px) {
   .skeleton-card {
     width: 100%;
   }

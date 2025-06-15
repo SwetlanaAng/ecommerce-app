@@ -98,6 +98,11 @@ const Main = () => {
       city: 'Austin, TX',
     },
     {
+      video: macaronsSweetDecorativeCandy,
+      title: 'A Taste of Paris, Anywhere',
+      buttonText: 'Order now',
+    },
+    {
       review:
         "As a pastry chef myself, I appreciate true craftsmanship. These macarons are simply exquisite. The shells have that perfect delicate crisp, and the ganache fillings are incredibly balanced. The 'surprise assortment' was a fantastic way to discover new favorites. You can taste the quality in every bite.",
       author: 'Isabella R.',
@@ -177,14 +182,19 @@ const Main = () => {
               vibrant flavors, meticulously prepared to bring a touch of Parisian elegance directly
               to your door
             </p>
-            <Button
-              className="hero-button"
-              onClick={() => {
-                navigate('/catalog');
-              }}
-            >
-              Order Now
-            </Button>
+            <div className="hero-buttons-container">
+              <Button
+                className="hero-button"
+                onClick={() => {
+                  navigate('/catalog');
+                }}
+              >
+                Order Now
+              </Button>
+              <a href="mailto:info@macarons-shop.com" className="btn secondary hero-button">
+                Contact Us
+              </a>
+            </div>
           </div>
           <div className="customers-container">
             <div className="customer-card">
@@ -302,28 +312,43 @@ const Main = () => {
 
       <section className="section reviews">
         <h2 className="section-title">Customer Reviews</h2>
-        <div className="reviews-flex">
-          {reviews.map((review, index) => (
-            <div key={index} className="review-card">
-              <div className="review-text">
-                <p>{review.review}</p>
-              </div>
-              <div className="review-author-container">
-                <div className="review-author">
-                  <img src={review.image} alt={review.author} />
-                  <div className="review-author-info">
-                    <h3>{review.author}</h3>
-                    <p>{review.city}</p>
+        <div className="reviews-grid">
+          {reviews.map((review, index) => {
+            if (index === 2) {
+              return (
+                <div key="video-review" className="video-review">
+                  <video src={macaronsSweetDecorativeCandy} autoPlay muted loop />
+                  <div className="video-promo">
+                    <h3>{review.title}</h3>
+                    <a onClick={() => navigate('/catalog')} className="btn video-button">
+                      {review.buttonText}
+                    </a>
                   </div>
                 </div>
-                <div className="review-rating">
-                  {Array.from({ length: review.rating }).map((_, index) => (
-                    <img src={star} alt="star" key={index} />
-                  ))}
+              );
+            }
+            return (
+              <div key={index} className={`review-card card-${index + 1}`}>
+                <div className="review-text">
+                  <p>{review.review}</p>
+                </div>
+                <div className="review-author-container">
+                  <div className="review-author">
+                    <img src={review.image} alt={review.author} />
+                    <div className="review-author-info">
+                      <h3>{review.author}</h3>
+                      <p>{review.city}</p>
+                    </div>
+                  </div>
+                  <div className="review-rating">
+                    {Array.from({ length: review.rating || 0 }).map((_, index) => (
+                      <img src={star} alt="star" key={index} />
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -339,12 +364,16 @@ const Main = () => {
         </div>
         <div className="faq-container">
           {faqData.map((faq, index) => (
-            <div key={index} className={`faq-item ${expandedFAQ === index ? 'expanded' : ''}`}>
-              <div className="faq-question" onClick={() => toggleFAQ(index)}>
+            <div
+              key={index}
+              className={`faq-item ${expandedFAQ === index ? 'expanded' : ''}`}
+              onClick={() => toggleFAQ(index)}
+            >
+              <div className="faq-question">
                 <div className="faq-category">{faq.category}</div>
                 <div className="faq-question-content">
                   <h3>{faq.question}</h3>
-                  <span className="faq-toggle">{expandedFAQ === index ? '−' : '+'}</span>
+                  <span className="faq-toggle">+</span>
                 </div>
               </div>
               {expandedFAQ === index && (

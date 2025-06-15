@@ -101,7 +101,7 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023.9px) {
   .about-us-page-content-team {
     .team-cards-container {
       flex-direction: column;
@@ -110,7 +110,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.9px) {
   .about-us-page {
     .about-us-page-content {
       h1 {
@@ -141,7 +141,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.9px) {
   .about-us-page {
     .about-us-page-content {
       h1 {

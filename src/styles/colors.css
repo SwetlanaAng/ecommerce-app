@@ -1,10 +1,11 @@
 :root {
   --bg-color: #f8f8f8;
   --text-color: #131313;
-  --accent-color: #e7426d;
-  --accent-color-hover: #cd2a53;
-  --primary-color: #f26d8a;
+  --accent-color: #a663cc;
+  --accent-color-hover: #490b6c;
+  --primary-color: #e7426d;
   --bg-color-light: #f7ebe5;
   --color-hover: #ecc7b4;
   --white: #ffffff;
+  --border-color: #f0f0f0;
 }

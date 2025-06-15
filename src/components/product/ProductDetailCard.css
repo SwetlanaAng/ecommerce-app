@@ -40,16 +40,9 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         .detail-price-original {
           font-size: 1rem;
-          font-weight: 700;
+          font-weight: 400;
           color: #898989;
           text-decoration: line-through;
-        }
-        .detail-price-sale {
-          font-weight: bold;
-          color: #e74c3c;
-        }
-        .detail-price-current {
-          font-weight: bold;
         }
       }
       .detail-actions {
@@ -189,10 +182,9 @@
       }
     }
   }
-
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023.9px) {
   .detail-container {
     .detail-related {
       .featured-products-grid {
@@ -204,7 +196,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.9px) {
   .detail-container {
     .detail-card {
       .detail-info {

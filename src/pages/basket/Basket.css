@@ -262,7 +262,7 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023.9px) {
   .basket-page {
     .basket-content {
       .cart-items {
@@ -281,7 +281,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.9px) {
   .basket-page {
     .basket-content {
       flex-direction: column;
@@ -320,7 +320,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.9px) {
   .basket-page {
     .modal {
       .modal-content {
