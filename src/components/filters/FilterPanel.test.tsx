@@ -50,10 +50,8 @@ describe('FilterPanel', () => {
       expect((checkbox as HTMLInputElement).checked).toBe(false);
     });
 
-    expect(screen.getByLabelText('Min:')).toHaveValue(priceRange.min);
-    expect(screen.getByLabelText('Max:')).toHaveValue(priceRange.max);
-
-    expect(screen.getByText('Apply')).toBeInTheDocument();
+    expect(screen.getByLabelText('from')).toHaveValue(priceRange.min);
+    expect(screen.getByLabelText('to')).toHaveValue(priceRange.max);
 
     const bestSellerCheckbox = screen.getByLabelText('Best Seller') as HTMLInputElement;
     expect(bestSellerCheckbox.checked).toBe(false);
@@ -104,17 +102,14 @@ describe('FilterPanel', () => {
       />
     );
 
-    const minPriceInput = screen.getByLabelText('Min:');
-    const maxPriceInput = screen.getByLabelText('Max:');
-    const applyButton = screen.getByText('Apply');
+    const minPriceInput = screen.getByLabelText('from');
+    const maxPriceInput = screen.getByLabelText('to');
 
     fireEvent.change(minPriceInput, { target: { value: '20' } });
     expect(minPriceInput).toHaveValue(20);
 
     fireEvent.change(maxPriceInput, { target: { value: '80' } });
     expect(maxPriceInput).toHaveValue(80);
-
-    fireEvent.click(applyButton);
 
     expect(onFilterChange).toHaveBeenCalledWith({
       ...baseFilters,
@@ -134,8 +129,8 @@ describe('FilterPanel', () => {
       />
     );
 
-    const minPriceInput = screen.getByLabelText('Min:');
-    const maxPriceInput = screen.getByLabelText('Max:');
+    const minPriceInput = screen.getByLabelText('from');
+    const maxPriceInput = screen.getByLabelText('to');
     const resetButton = screen.getByText('Reset All');
 
     expect(minPriceInput).toHaveValue(20);

@@ -7,6 +7,14 @@ jest.mock(
   () => (props: { isOpen: boolean }) => (props.isOpen ? <div role="dialog">Modal Open</div> : null)
 );
 
+jest.mock('../../features/cart/hooks/useCart', () => ({
+  useCart: () => ({
+    cart: { lineItems: [] },
+    addToCart: jest.fn(),
+    removeFromCart: jest.fn(),
+  }),
+}));
+
 const mockProduct: Product = {
   id: 'product-1',
   version: 1,
