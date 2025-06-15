@@ -1,6 +1,7 @@
 import { TeammateCard } from '../../components/teammateCard/TeammateCard';
 import { gitInitTeam } from './gitInitTeam';
 import logo from '../../assets/logo-rsschool.svg';
+import videoTeam from '../../assets/team-work.mp4';
 import './AboutUs.css';
 
 const AboutUs: React.FC = () => {
@@ -16,6 +17,7 @@ const AboutUs: React.FC = () => {
           Built during our RS School frontend course, this Macaron Store is more than a website—it's
           a product of learning, growth, and the determination to turn challenges into code.
         </p>
+        <video src={videoTeam} autoPlay muted loop />
       </section>
       <section className="about-us-page-content-team">
         <h1>

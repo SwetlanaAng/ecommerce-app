@@ -64,21 +64,21 @@
   .product-price-container {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
   }
   .product-original-price {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 400;
     color: #898989;
     text-decoration: line-through;
   }
   .product-price {
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 600;
     color: var(--text-color);
   }
   .product-description {
-    margin: 0 0 33px 0;
+    margin: 0 0 32px 0;
     font-size: 14px;
     color: #898989;
     line-height: 130%;
@@ -125,9 +125,10 @@
     &.in-cart {
       width: 32px;
       height: 32px;
-      background-color: var(--primary-color);
+      background-color: var(--accent-color);
       color: white;
       cursor: default;
+      opacity: 1;
       img {
         width: 16px;
         height: 16px;

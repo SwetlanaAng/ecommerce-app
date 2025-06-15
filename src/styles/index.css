@@ -62,10 +62,10 @@ a {
 }
 
 .container {
-  max-width: 1258px;
+  max-width: 1268px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 15px;
+  padding: 0 20px;
 }
 
 @media (max-width: 479.9px) {
@@ -83,5 +83,8 @@ a {
   }
   body {
     font-size: 16px;
+  }
+  .container {
+    padding: 0 12px;
   }
 }

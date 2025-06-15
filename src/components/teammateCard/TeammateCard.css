@@ -32,7 +32,7 @@
         .team-lead {
           font-size: 14px;
           border-radius: 8px;
-          color: var(--accent-color);
+          color: var(--primary-color);
           background: rgba(231, 66, 109, 0.1);
           width: fit-content;
           padding: 6px 12px;
@@ -68,7 +68,7 @@
       font-size: 14px;
       list-style: disc;
       &::marker {
-        color: var(--accent-color);
+        color: var(--primary-color);
       }
     }
   }

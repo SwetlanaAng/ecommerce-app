@@ -11,6 +11,9 @@
       background: var(--white);
       padding: 4px;
       border-radius: 100px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
       ul {
         display: flex;
         gap: 0;
@@ -185,6 +188,8 @@
       .nav {
         position: fixed;
         top: 0;
+        left: unset;
+        transform: unset;
         right: -100%;
         width: 100%;
         max-width: 300px;
