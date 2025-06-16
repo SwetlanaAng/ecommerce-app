@@ -5,6 +5,7 @@ import { FieldErrors, UseFormRegister, SubmitHandler } from 'react-hook-form';
 import { editPersonalInfoModal } from '../../../../schemas/editPersonalInfoSchema';
 import { toast } from 'react-toastify';
 import { updateCustomerProfile } from '../../../../services/profilePersonal.service';
+import { useAuth } from '../../../../features/auth/hooks/useAuth';
 
 type EditPersonalInfoProps = {
   formData: {
@@ -34,16 +35,24 @@ export const EditPersonalInformationContent = ({
   onSuccess,
 }: EditPersonalInfoProps) => {
   const [error, setError] = useState<string | null>(null);
+  const { updateUser } = useAuth();
 
   const onSubmit: SubmitHandler<editPersonalInfoModal> = async data => {
     try {
       setError(null);
 
-      await updateCustomerProfile({
+      const updatedProfile = await updateCustomerProfile({
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
         dateOfBirth: data.dateOfBirth,
+      });
+
+      updateUser({
+        firstName: updatedProfile.firstName,
+        lastName: updatedProfile.lastName,
+        email: updatedProfile.email,
+        dateOfBirth: updatedProfile.dateOfBirth,
       });
 
       if (onSuccess) {

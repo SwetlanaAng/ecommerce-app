@@ -97,7 +97,7 @@ describe('Catalog Component', () => {
     const select = screen.getByTestId('sort-select');
     fireEvent.change(select, { target: { value: 'price asc' } });
     await waitFor(() => {
-      expect(getProductsList).toHaveBeenCalledWith(200, '', 'price asc', expect.anything());
+      expect(getProductsList).toHaveBeenCalledWith(10, '0', 'price asc', expect.anything());
     });
   });
 });

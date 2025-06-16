@@ -33,18 +33,18 @@ h4 {
   margin-bottom: 40px;
 }
 
-h1 {
-  font-size: 60px;
-}
-
+h1,
 h2 {
-  font-size: 40px;
+  font-size: 60px;
+  font-weight: 700;
   line-height: 120%;
+  letter-spacing: -0.05em;
 }
 
 h3 {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 600;
+  line-height: 120%;
 }
 
 h4 {
@@ -62,13 +62,13 @@ a {
 }
 
 .container {
-  max-width: 1258px;
+  max-width: 1268px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 15px;
+  padding: 0 20px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.9px) {
   h1 {
     font-size: 32px;
   }
@@ -83,5 +83,8 @@ a {
   }
   body {
     font-size: 16px;
+  }
+  .container {
+    padding: 0 12px;
   }
 }

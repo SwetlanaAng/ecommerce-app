@@ -6,5 +6,4 @@ const KEYS = {
   CLIENT_SECRET: import.meta.env.VITE_CLIENT_SECRET,
   SCOPES: [import.meta.env.VITE_SCOPES],
 };
-
 export { KEYS };

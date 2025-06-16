@@ -1,5 +1,7 @@
 .btn {
+  font-family: 'Nunito', sans-serif;
   font-size: inherit;
+  line-height: 100%;
   background-color: var(--accent-color);
   color: var(--white);
   border: none;
@@ -11,6 +13,15 @@
     background-color: var(--accent-color-hover);
   }
   &.primary {
+    border: 1px solid var(--accent-color);
+    background-color: transparent;
+    color: var(--accent-color);
+    &:hover {
+      border: 1px solid var(--accent-color-hover);
+      color: var(--accent-color-hover);
+    }
+  }
+  &.secondary {
     border: 1px solid var(--accent-color);
     background-color: transparent;
     color: var(--accent-color);

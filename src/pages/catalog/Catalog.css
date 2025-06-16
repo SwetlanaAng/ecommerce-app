@@ -23,6 +23,11 @@
   }
   .catalog-products {
     flex: 1;
+    .catalog-load-more {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
   }
   .catalog-flex {
     display: flex;
@@ -44,7 +49,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.9px) {
   .catalog-page {
     .catalog-layout {
       flex-direction: column;

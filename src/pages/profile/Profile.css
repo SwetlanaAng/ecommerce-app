@@ -62,7 +62,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.9px) {
   .profile-page {
     .card {
       padding: 30px;
@@ -80,7 +80,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.9px) {
   .profile-page {
     .wrapper {
       margin: 40px 0;

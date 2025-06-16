@@ -4,6 +4,7 @@ export interface Customer {
   firstName?: string;
   lastName?: string;
   dateOfBirth?: string;
+  version?: number;
 }
 
 export interface ResultProps {
@@ -133,6 +134,7 @@ export interface ProductCardProps {
   slug: string;
   filters?: {
     isBestSeller?: boolean;
+    isGlutenFree?: boolean;
   };
   category: string;
 }
@@ -154,6 +156,7 @@ export interface ProductFilters {
     max?: number;
   };
   isBestSeller?: boolean;
+  isGlutenFree?: boolean;
   categoryId?: string;
 }
 
@@ -189,4 +192,62 @@ export interface PersonalInfo {
 
 export interface CategoryWithChildren extends CategoryData {
   children: CategoryWithChildren[];
+}
+
+export interface CartItem {
+  id: string;
+  productId: string;
+  name: string;
+  price: number;
+  originalPrice?: number;
+  isOnSale?: boolean;
+  quantity: number;
+  imageUrl: string;
+  variant: {
+    id: number;
+    attributes: Array<{
+      name: string;
+      value: unknown;
+    }>;
+  };
+  appliedDiscounts?: Array<{
+    discountType: 'product' | 'cart';
+    discountAmount: number;
+    discountId?: string;
+  }>;
+}
+
+export interface Cart {
+  id: string;
+  version: number;
+  lineItems: CartItem[];
+  totalPrice: {
+    centAmount: number;
+    fractionDigits: number;
+    currencyCode: string;
+  };
+  discountCodes?: Array<{
+    discountCode: {
+      id: string;
+      typeId: string;
+    };
+  }>;
+  discountOnTotalPrice?: {
+    discountedAmount: {
+      centAmount: number;
+      fractionDigits: number;
+      currencyCode: string;
+    };
+    includedDiscounts: Array<{
+      discount: {
+        id: string;
+        typeId: string;
+      };
+      discountedAmount: {
+        centAmount: number;
+        fractionDigits: number;
+        currencyCode: string;
+      };
+    }>;
+  };
 }

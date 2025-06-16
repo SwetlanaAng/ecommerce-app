@@ -18,7 +18,6 @@
       color: var(--accent-color);
       cursor: pointer;
       font-size: 16px;
-      text-decoration: underline;
       transition: color 0.3s ease;
       &:hover {
         color: var(--accent-color-hover);
@@ -49,17 +48,11 @@
     flex-wrap: wrap;
     gap: 12px;
     align-items: center;
-    input {
-      width: 75px;
-      padding: 10px 14px;
-      border: 1px solid #ddd;
-    }
-    .apply-price-button {
-      padding: 8px 14px;
-      font-size: 16px;
+    .price-input {
+      width: calc((100% - 12px) / 2);
     }
   }
-  .flavor-options,
+  .product-type-options,
   .best-seller-option {
     display: flex;
     flex-direction: column;
@@ -79,10 +72,10 @@
   gap: 8px;
   margin-bottom: 16px;
   .active-filter-tag {
-    background-color: rgba(242, 109, 138, 0.1);
+    background: rgba(242, 109, 138, 0.1);
     color: var(--primary-color);
-    border-radius: 16px;
-    padding: 4px 12px;
+    border-radius: 8px;
+    padding: 4px 8px;
     font-size: 12px;
     display: flex;
     align-items: center;
@@ -91,17 +84,26 @@
       background: none;
       border: none;
       color: var(--primary-color);
+      opacity: 0.5;
       cursor: pointer;
       font-size: 14px;
       display: flex;
       align-items: center;
       padding: 0;
+      transition: opacity 0.3s ease;
+      &:hover {
+        opacity: 1;
+      }
     }
     &.clear-all {
       background-color: var(--accent-color);
       transition: background-color 0.3s ease;
+      border-radius: 100px;
+      padding: 0;
       button {
         color: var(--white);
+        opacity: 1;
+        padding: 4px 8px;
       }
       &:hover {
         background-color: var(--accent-color-hover);
@@ -110,13 +112,13 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.9px) {
   .filter-panel {
     max-width: 100%;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.9px) {
   .filter-panel {
     .filter-section {
       .label {

@@ -11,29 +11,134 @@
       background: var(--white);
       padding: 4px;
       border-radius: 100px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
       ul {
         display: flex;
-        gap: 10px;
+        gap: 0;
         li {
           cursor: pointer;
           a {
             display: inline-block;
             color: var(--text-color);
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 20px;
             transition: all 0.3s ease;
             cursor: pointer;
+            line-height: 100%;
           }
           &.active {
             cursor: default;
             a {
-              background: var(--primary-color);
-              color: var(--white);
+              background: #f0f0f0;
               pointer-events: none;
             }
           }
           &:hover:not(.active) a {
-            color: var(--primary-color);
+            color: var(--accent-color);
+          }
+        }
+      }
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--white);
+      padding: 12px 24px;
+      border-radius: 100px;
+      .header-actions-item {
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          line-height: 1;
+        }
+        &:hover {
+          a {
+            .cart-badge {
+              background-color: var(--accent-color-hover);
+            }
+          }
+        }
+      }
+      .logout-link,
+      .login-link {
+        color: var(--primary-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        height: 24px;
+        &:hover {
+          color: var(--accent-color);
+        }
+      }
+
+      .profile-dropdown {
+        position: relative;
+        .profile-trigger {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+        }
+        .profile-dropdown-menu {
+          position: absolute;
+          top: calc(100% + 20px);
+          right: -23px;
+          background: var(--white);
+          box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.04);
+          border-radius: 32px;
+          min-width: 250px;
+          overflow: hidden;
+          z-index: 1000;
+          padding: 24px 8px 12px 8px;
+          .profile-dropdown-header {
+            padding: 0px 16px 20px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            .profile-info {
+              .profile-name {
+                font-weight: 600;
+                font-size: 22px;
+                color: var(--text-color);
+                margin-bottom: 8px;
+              }
+              .profile-email {
+                color: #898989;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+            }
+          }
+          .profile-dropdown-body {
+            padding-top: 20px;
+            .profile-dropdown-item {
+              font-size: inherit;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              padding: 12px 16px;
+              text-decoration: none;
+              color: var(--text-color);
+              background: none;
+              border: none;
+              border-radius: 16px;
+              width: 100%;
+              text-align: left;
+              cursor: pointer;
+              transition: all 0.2s ease;
+
+              &:hover {
+                background-color: #f0f0f0;
+              }
+            }
           }
         }
       }
@@ -77,12 +182,14 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.9px) {
   .header {
     .header-content {
       .nav {
         position: fixed;
         top: 0;
+        left: unset;
+        transform: unset;
         right: -100%;
         width: 100%;
         max-width: 300px;
@@ -110,11 +217,20 @@
       .menu-overlay {
         display: block;
       }
+      .header-actions {
+        .profile-dropdown {
+          .profile-dropdown-menu {
+            left: 50%;
+            right: auto;
+            transform: translate(-50%, 0px);
+          }
+        }
+      }
     }
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.9px) {
   .header {
     .header-content {
       padding: 10px 0;

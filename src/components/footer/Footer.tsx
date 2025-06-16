@@ -20,6 +20,12 @@ const Footer = () => {
                 <li>
                   <Link to={AppRouterPaths.CATALOG}>Catalog</Link>
                 </li>
+                <li>
+                  <Link to={AppRouterPaths.ABOUT_US}>About</Link>
+                </li>
+                <li>
+                  <Link to={AppRouterPaths.BASKET}>Basket</Link>
+                </li>
                 {isAuthenticated && (
                   <li>
                     <Link to={AppRouterPaths.PROFILE}>Profile</Link>
@@ -38,8 +44,15 @@ const Footer = () => {
               </ul>
             </div>
             <div className="contact">
-              <div className="contact-info">info@macaron-shop.com</div>
-              <div className="copyright">© 2025, Macaron Delights. All rights reserved</div>
+              <a href="mailto:info@macarons-shop.com" className="btn">
+                Contact Us
+              </a>
+              <div className="contact-info">info@macarons-shop.com</div>
+              <div className="copyright">
+                © 2025, Macaron Delights. All rights reserved.
+                <br />
+                Made with ❤️ by GitInit Team
+              </div>
             </div>
             <div className="logo">
               <img src={logo} alt="logo" />
