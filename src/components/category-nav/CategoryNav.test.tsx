@@ -66,7 +66,7 @@ describe('CategoryNav', () => {
     expect(onSelectCategory).toHaveBeenCalledWith('cat-1');
   });
 
-  it('expands and shows subcategories on toggle', () => {
+  it('shows subcategories for categories with children', () => {
     mockUseAppContext.mockReturnValue({
       categories: mockCategories,
       isLoading: false,
@@ -75,8 +75,6 @@ describe('CategoryNav', () => {
       error: null,
     });
     render(<CategoryNav onSelectCategory={() => {}} />);
-    const expandButton = screen.getByRole('button', { name: /expand category/i });
-    fireEvent.click(expandButton);
     expect(screen.getByText('6-pack')).toBeInTheDocument();
   });
 

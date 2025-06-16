@@ -53,7 +53,7 @@ export async function getProductBySlug(slug: string): Promise<Product> {
 
   try {
     const encodedSlug = encodeURIComponent(`slug(en-US="${slug}")`);
-    const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections?where=${encodedSlug}&limit=1`;
+    const url = `${KEYS.API_URL}/${KEYS.PROJECT_KEY}/product-projections?where=${encodedSlug}&limit=1&expand=categories[*]`;
 
     const response = await fetch(url, {
       headers: {

@@ -43,7 +43,7 @@ const Catalog: React.FC = () => {
   });
 
   const sortOptions = {
-    '': 'Default',
+    '': 'Recommended',
     'name.en-US asc': 'Name (A-Z)',
     'name.en-US desc': 'Name (Z-A)',
     'price asc': 'Price (Low to High)',

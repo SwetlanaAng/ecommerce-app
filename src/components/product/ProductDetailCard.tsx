@@ -30,6 +30,9 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     ? priceInfo.discounted.value.centAmount / 10 ** priceInfo.discounted.value.fractionDigits
     : null;
 
+  const { category } = toCardAdapter(product);
+  const categoryDisplay = category.includes('pack') ? category.split('-')[0] : null;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalIndex, setModalIndex] = useState(0);
@@ -40,6 +43,24 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const [showFullDesc, setShowFullDesc] = useState(false);
   const descPreview = desc.length > 210 ? desc.slice(0, 210) + '… ' : desc;
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [activeTab, setActiveTab] = useState('nutrition');
+
+  const packSize = Number.parseInt(categoryDisplay || '6') || 6;
+
+  const packDescriptions: { [key: number]: string } = {
+    6: 'Just a Little Treat',
+    12: 'Perfect for gifting',
+    24: 'Share the joy',
+  };
+
+  const nutritionData = [
+    { label: 'Serving Size', value1: 'Per Macaron', value2: `Per Box (${packSize} pieces)` },
+    { label: 'Weight', value1: '15g', value2: `${packSize * 15}g` },
+    { label: 'Calories', value1: '85', value2: `${packSize * 85}` },
+    { label: 'Protein', value1: '2.1g', value2: `${(packSize * 2.1).toFixed(1)}g` },
+    { label: 'Fat', value1: '4.2g', value2: `${(packSize * 4.2).toFixed(1)}g` },
+    { label: 'Carbs', value1: '11.5g', value2: `${(packSize * 11.5).toFixed(1)}g` },
+  ];
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
@@ -132,8 +153,12 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
             </p>
           </div>
           <div className="detail-price">
+            <div className="pack-size-description">
+              <p className="pack-size">Box of {packSize}</p>
+              <p className="pack-description">{packDescriptions[packSize] || 'Perfect Choice'}</p>
+            </div>
             {sale != null ? (
-              <>
+              <div className="pack-pricing">
                 <span className="detail-price-sale">
                   {curr}
                   {sale.toFixed(2)}
@@ -142,12 +167,14 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
                   {curr}
                   {base.toFixed(2)}
                 </span>
-              </>
+              </div>
             ) : (
-              <span className="detail-price-current">
-                {curr}
-                {base.toFixed(2)}
-              </span>
+              <div className="pack-pricing">
+                <span className="detail-price-current">
+                  {curr}
+                  {base.toFixed(2)}
+                </span>
+              </div>
             )}
           </div>
           <div className="detail-actions">
@@ -195,7 +222,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8.16 14.24C8.58435 14.24 8.99131 14.4086 9.29137 14.7086C9.59143 15.0087 9.76 15.4157 9.76 15.84M20 9.2C20 10.7464 18.7464 12 17.2 12C15.6536 12 14.4 10.7464 14.4 9.2C14.4 7.6536 15.6536 6.4 17.2 6.4C18.7464 6.4 20 7.6536 20 9.2ZM12.8 15.6C12.8 18.0301 10.8301 20 8.4 20C5.96995 20 4 18.0301 4 15.6C4 13.1699 5.96995 11.2 8.4 11.2C10.8301 11.2 12.8 13.1699 12.8 15.6ZM10.4 6C10.4 7.10457 9.50457 8 8.4 8C7.29543 8 6.4 7.10457 6.4 6C6.4 4.89543 7.29543 4 8.4 4C9.50457 4 10.4 4.89543 10.4 6Z"
+                  d="M8.16 14.24C8.58435 14.24 8.99131 14.4086 9.29137 14.7086C9.59143 15.0087 9.76 15.4157 9.76 15.84M20 9.2C20 10.7464 18.7464 12 17.2 12C15.6536 12 14.4 10.7464 14.4 9.2C14.4 7.6536 15.6536 6.4 17.2 6.4C18.7464 6.4 20 7.6536 20 9.2ZM12.8 15.6C12.8 18.0301 10.8301 20 8.4 20C5.96995 20 4 18.0301 4 15.6C4 13.1699 5.96995 11.2 8.4 11.2C10.8301 11.2 12.8 13.1699 12.8 15.6M10.4 6C10.4 7.10457 9.50457 8 8.4 8C7.29543 8 6.4 7.10457 6.4 6C6.4 4.89543 7.29543 4 8.4 4C9.50457 4 10.4 4.89543 10.4 6Z"
                   stroke="#E7426D"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -252,6 +279,85 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
                 </span>
               </div>
             </div>
+          </div>
+
+          <div className="product-tabs">
+            <div className="tabs-header">
+              <button
+                className={`tab-trigger ${activeTab === 'nutrition' ? 'active' : ''}`}
+                onClick={() => setActiveTab('nutrition')}
+              >
+                Nutritional Info
+              </button>
+              <button
+                className={`tab-trigger ${activeTab === 'ingredients' ? 'active' : ''}`}
+                onClick={() => setActiveTab('ingredients')}
+              >
+                Ingredients
+              </button>
+              <button
+                className={`tab-trigger ${activeTab === 'storage' ? 'active' : ''}`}
+                onClick={() => setActiveTab('storage')}
+              >
+                Storage & Care
+              </button>
+            </div>
+
+            {activeTab === 'nutrition' && (
+              <div className="tab-content">
+                <div className="nutrition-table">
+                  {nutritionData.map((row, index) => (
+                    <div key={index} className="nutrition-row">
+                      <span className="nutrition-label">{row.label}</span>
+                      <span className="nutrition-value">{row.value1}</span>
+                      <span className="nutrition-value">{row.value2}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'ingredients' && (
+              <div className="tab-content">
+                <h4 className="tab-title">
+                  Our {title} macarons are crafted with the finest ingredients:
+                </h4>
+                <ul className="tab-list">
+                  <li>Almond flour (premium blanched almonds)</li>
+                  <li>Powdered sugar</li>
+                  <li>Egg whites (free-range)</li>
+                  <li>Sicilian pistachios</li>
+                  <li>Heavy cream</li>
+                  <li>White chocolate</li>
+                  <li>Natural pistachio extract</li>
+                  <li>Natural food coloring</li>
+                </ul>
+                <p className="tab-note">
+                  Allergens: Contains nuts, eggs, and dairy. May contain traces of other tree nuts.
+                </p>
+              </div>
+            )}
+
+            {activeTab === 'storage' && (
+              <div className="tab-content">
+                <div className="storage-section">
+                  <h4 className="tab-title">Storage Instructions</h4>
+                  <ul className="tab-list">
+                    <li>Store in refrigerator at 35-40°F (2-4°C)</li>
+                    <li>Keep in original packaging until ready to serve</li>
+                    <li>Allow to come to room temperature 15-20 minutes before serving</li>
+                    <li>Best consumed within 7 days of delivery</li>
+                  </ul>
+                </div>
+                <div className="storage-section">
+                  <h4 className="tab-title">Shelf Life</h4>
+                  <ul className="tab-list">
+                    <li>Peak freshness: 7 days</li>
+                    <li>Safe consumption: up to 14 days when properly stored</li>
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

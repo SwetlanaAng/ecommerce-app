@@ -51,23 +51,21 @@ option {
   background: #fff;
   padding: 15px;
   transition: 0.4s;
+  color: var(--text-color);
+  z-index: 1000;
 }
 
 option:hover {
   color: var(--accent-color);
 }
 
+option:checked {
+  background-color: var(--border-color);
+  pointer-events: none;
+}
+
 option::checkmark {
-  order: 1;
-  margin-left: auto;
-  content: url('../../assets/tick.svg');
-  background-color: var(--accent-color);
-  border-radius: 4px;
-  width: 1rem;
-  height: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: none;
 }
 
 ::picker(select) {

@@ -223,7 +223,8 @@
                 border-radius: 100px;
               }
               .review-author-info {
-                h3, p {
+                h3,
+                p {
                   width: max-content;
                 }
               }
@@ -590,6 +591,10 @@
       .hero-content {
         .title {
           font-size: 48px;
+        }
+        .hero-buttons-container {
+          flex-direction: column;
+          text-align: center;
         }
       }
     }

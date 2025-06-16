@@ -120,17 +120,3 @@ export async function getPromoCodesWithDetails(token?: string): Promise<PromoCod
 
   return promoCodesWithDetails;
 }
-
-export async function ensureTestPromoCodes(token?: string): Promise<void> {
-  const authToken = token || (await getTokenFromStorage());
-
-  try {
-    const existingCodes = await getActiveDiscountCodes(authToken);
-
-    if (existingCodes.length === 0) {
-      console.log('No active discount codes found. Please create these codes in commercetools:');
-    }
-  } catch (error) {
-    console.error('Error checking discount codes:', error);
-  }
-}

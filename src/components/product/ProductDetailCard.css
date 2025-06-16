@@ -32,18 +32,38 @@
       }
       .detail-price {
         display: flex;
-        gap: 10px;
-        font-size: 1.25rem;
-        padding: 20px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 12px 24px;
         background: white;
-        border-radius: 20px;
+        border-radius: 12px;
+        .pack-size-description {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          .pack-size {
+            font-size: inherit;
+          }
+          .pack-description {
+            font-size: 14px;
+            color: var(--text-color-secondary);
+          }
+        }
+        .pack-pricing {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
         .detail-price-current,
         .detail-price-sale {
+          font-size: 18px;
           font-weight: 600;
         }
         .detail-price-original {
-          font-size: 1rem;
-          color: #898989;
+          font-size: 14px;
+          font-weight: 400;
+          color: var(--text-color-secondary);
           text-decoration: line-through;
         }
       }
@@ -184,6 +204,104 @@
       }
     }
   }
+  .product-tabs {
+    margin-top: 40px;
+    .tabs-header {
+      display: flex;
+      width: 100%;
+      gap: 12px;
+      margin-bottom: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      padding: 4px;
+      background: var(--white);
+      .tab-trigger {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: 6px 12px;
+        font-size: inherit;
+        min-width: max-content;
+        font-weight: 400;
+        line-height: 130%;
+        cursor: pointer;
+        border-radius: 100px;
+        transition: all 0.3s ease;
+        color: var(--text-color-secondary);
+
+        &:hover {
+          color: var(--text-color);
+        }
+
+        &.active {
+          background: var(--border-color);
+          color: var(--text-color);
+        }
+      }
+    }
+
+    .tab-content {
+      padding: 24px;
+      background: var(--white);
+      border-radius: 20px;
+      .tab-title {
+        font-size: 18px;
+        line-height: 130%;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+      .tab-list {
+        padding-left: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        li {
+          font-size: 14px;
+          list-style: disc;
+
+          &::marker {
+            color: var(--primary-color);
+          }
+        }
+      }
+      .storage-section {
+        margin-bottom: 24px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      .tab-note {
+        font-size: 16px;
+        line-height: 130%;
+        font-weight: 400;
+        color: var(--text-color-secondary);
+        margin-top: 24px;
+      }
+
+      .nutrition-table {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        .nutrition-row {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          gap: 40px;
+          font-size: 14px;
+          .nutrition-label {
+            color: var(--text-color-secondary);
+            flex: 1;
+            text-align: left;
+          }
+          .nutrition-value {
+            flex: 1;
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 1023.9px) {
@@ -220,6 +338,16 @@
       .featured-products-grid {
         .product-card {
           width: 100%;
+        }
+      }
+    }
+    .product-tabs {
+      .tabs-header {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        &::-webkit-scrollbar {
+          display: none;
         }
       }
     }
