@@ -184,44 +184,54 @@
 }
 
 @media (max-width: 479.9px) {
-  .promo-banner {
-    .promo-codes-flex {
-      .promo-code-card {
-        flex-direction: column;
-        &:before {
-          top: 50%;
-          left: 0;
-          right: auto;
-          transform: translate(-50%, -80%);
+  .main-container {
+    .hero-section {
+      .hero-content {
+        .hero-buttons-container {
+          flex-direction: column;
+          text-align: center;
         }
-        &:after {
-          top: 50%;
-          right: 0;
-          left: auto;
-          transform: translate(50%, -80%);
-        }
-        .promo-code-badge {
-          width: 100%;
-          height: 200px;
-          min-height: 200px;
+      }
+    }
+    .promo-banner {
+      .promo-codes-flex {
+        .promo-code-card {
+          flex-direction: column;
+          &:before {
+            top: 50%;
+            left: 0;
+            right: auto;
+            transform: translate(-50%, -50%);
+          }
           &:after {
-            transform: translate(0, -25%) rotate(90deg);
-            left: 50%;
-            height: 400px;
+            top: 50%;
+            right: 0;
+            left: auto;
+            transform: translate(50%, -50%);
           }
-        }
-        .promo-code-content {
-          width: 100%;
-          height: 200px;
-          min-height: 200px;
-          padding: 24px;
-          .copy-code-btn {
-            bottom: 24px;
-            top: auto;
+          .promo-code-badge {
+            width: 100%;
+            height: 200px;
+            min-height: 200px;
+            &:after {
+              transform: translate(0, -25%) rotate(90deg);
+              left: 50%;
+              height: 400px;
+            }
           }
-          .promo-code-text {
-            h3 {
-              font-size: 20px;
+          .promo-code-content {
+            width: 100%;
+            height: 200px;
+            min-height: 200px;
+            padding: 24px;
+            .copy-code-btn {
+              bottom: 24px;
+              top: auto;
+            }
+            .promo-code-text {
+              h3 {
+                font-size: 20px;
+              }
             }
           }
         }
