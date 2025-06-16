@@ -83,6 +83,7 @@
     border-radius: 32px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 40px;
     h1 {
       margin-bottom: 20px;

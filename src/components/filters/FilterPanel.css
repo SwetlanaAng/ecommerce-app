@@ -104,9 +104,13 @@
         font-size: 16px;
         color: var(--text-color-secondary);
         opacity: 1;
+        transition: color 0.3s ease;
       }
       &:hover {
-        background-color: var(--accent-color-hover);
+        background-color: none;
+        button {
+          color: var(--text-color);
+        }
       }
     }
   }
