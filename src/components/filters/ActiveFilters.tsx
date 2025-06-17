@@ -48,10 +48,14 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({ filters, onRemoveFilter }
       )}
 
       {filters.flavors && filters.flavors.length > 0 && (
-        <div className="active-filter-tag">
-          Flavor: {capitalizeFirstLetter(filters.flavors[0])}
-          <button onClick={() => onRemoveFilter('flavor')}>×</button>
-        </div>
+        <>
+          {filters.flavors.map(flavor => (
+            <div className="active-filter-tag" key={flavor}>
+              Flavor: {capitalizeFirstLetter(flavor)}
+              <button onClick={() => onRemoveFilter('flavor', flavor)}>×</button>
+            </div>
+          ))}
+        </>
       )}
 
       {filters.isBestSeller && (

@@ -132,7 +132,7 @@ const Main = () => {
       category: 'Ordering & Delivery',
       question: 'What are your shipping times and costs?',
       answer:
-        'We offer various shipping options, including standard and expedited delivery. Standard shipping typically takes [X-Y] business days, and expedited options are available for faster delivery. Shipping costs are calculated at checkout based on your location and chosen speed. You can see an estimate before finalizing your purchase.',
+        'We offer various shipping options, including standard and expedited delivery. Standard shipping typically takes [1-2] business days, and expedited options are available for faster delivery. Shipping costs are calculated at checkout based on your location and chosen speed. You can see an estimate before finalizing your purchase.',
     },
     {
       category: 'Ordering & Delivery',

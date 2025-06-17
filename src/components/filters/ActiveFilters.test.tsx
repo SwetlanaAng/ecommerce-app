@@ -65,7 +65,7 @@ describe('ActiveFilters', () => {
         'button'
       )
     );
-    expect(onRemoveFilter).toHaveBeenCalledWith('flavor');
+    expect(onRemoveFilter).toHaveBeenCalledWith('flavor', 'chocolate');
 
     fireEvent.click(screen.getByText(/Clear All/));
     expect(onRemoveFilter).toHaveBeenCalledWith('all');
@@ -83,5 +83,24 @@ describe('ActiveFilters', () => {
       within(screen.getByText(/Best Seller/).closest('.active-filter-tag')!).getByRole('button')
     );
     expect(onRemoveFilter).toHaveBeenCalledWith('isBestSeller');
+  });
+
+  it('renders multiple flavors as separate tags and allows individual removal', () => {
+    const filters: ProductFilters = {
+      flavors: ['chocolate', 'vanilla', 'strawberry'],
+      priceRange: {},
+      isBestSeller: false,
+    };
+
+    const { onRemoveFilter } = setup(filters);
+
+    expect(screen.getByText(/Flavor: Chocolate/)).toBeInTheDocument();
+    expect(screen.getByText(/Flavor: Vanilla/)).toBeInTheDocument();
+    expect(screen.getByText(/Flavor: Strawberry/)).toBeInTheDocument();
+
+    fireEvent.click(
+      within(screen.getByText(/Flavor: Vanilla/).closest('.active-filter-tag')!).getByRole('button')
+    );
+    expect(onRemoveFilter).toHaveBeenCalledWith('flavor', 'vanilla');
   });
 });

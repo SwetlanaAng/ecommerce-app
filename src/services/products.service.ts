@@ -18,7 +18,8 @@ const buildFilterPredicates = (filters?: ProductFilters): string[] => {
     }
 
     if (filters.flavors && filters.flavors.length > 0) {
-      predicates.push(`variants.attributes.flavors.key:"${filters.flavors[0]}"`);
+      const flavorValues = filters.flavors.map(flavor => `"${flavor}"`).join(',');
+      predicates.push(`variants.attributes.flavors.key:${flavorValues}`);
     }
 
     if (filters.isBestSeller === true) {
@@ -64,9 +65,8 @@ async function fetchProductsWithQuery(
     baseFilters.flavors.length > 0 &&
     !baseFilters.flavors.includes('all')
   ) {
-    baseFilters.flavors.forEach(flavor => {
-      url += `&filter=variants.attributes.flavors.key:"${flavor}"`;
-    });
+    const flavorValues = baseFilters.flavors.map(flavor => `"${flavor}"`).join(',');
+    url += `&filter=variants.attributes.flavors.key:${flavorValues}`;
   }
 
   if (baseFilters?.categoryId) {

@@ -378,7 +378,7 @@
           transition: all 0.2s ease;
           cursor: pointer;
           &:hover {
-            background-color: var(--border-color);
+            transform: translateY(-4px);
           }
           .faq-question {
             display: flex;
@@ -594,7 +594,6 @@
         }
         .hero-buttons-container {
           flex-direction: column;
-          text-align: center;
         }
       }
     }

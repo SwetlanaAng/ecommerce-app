@@ -29,7 +29,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
     <>
       <Select
         labelText="Country"
-        className="select"
         onChange={onAddressChange}
         name="billing_country"
         value={address?.billing_country || formData?.billing_country || 'US'}

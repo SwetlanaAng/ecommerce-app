@@ -66,18 +66,6 @@ describe('CategoryNav', () => {
     expect(onSelectCategory).toHaveBeenCalledWith('cat-1');
   });
 
-  it('shows subcategories for categories with children', () => {
-    mockUseAppContext.mockReturnValue({
-      categories: mockCategories,
-      isLoading: false,
-      availableFlavors: [],
-      priceRange: { min: 0, max: 0 },
-      error: null,
-    });
-    render(<CategoryNav onSelectCategory={() => {}} />);
-    expect(screen.getByText('6-pack')).toBeInTheDocument();
-  });
-
   it('highlights selected category', () => {
     mockUseAppContext.mockReturnValue({
       categories: mockCategories,

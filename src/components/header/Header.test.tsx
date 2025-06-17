@@ -76,7 +76,6 @@ describe('Header component', () => {
     expect(screen.getByAltText(/profile/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/profile menu/i)).toBeInTheDocument();
 
-    // Logout button is not visible by default (inside dropdown)
     expect(screen.queryByAltText(/logout/i)).not.toBeInTheDocument();
   });
 
@@ -92,7 +91,6 @@ describe('Header component', () => {
     const profileButton = screen.getByLabelText(/profile menu/i);
     fireEvent.click(profileButton);
 
-    // Now the dropdown should be visible
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('john@example.com')).toBeInTheDocument();
     expect(screen.getByText(/account settings/i)).toBeInTheDocument();
@@ -123,11 +121,9 @@ describe('Header component', () => {
 
     renderHeader();
 
-    // First open the dropdown
     const profileButton = screen.getByLabelText(/profile menu/i);
     fireEvent.click(profileButton);
 
-    // Then click the logout button
     const logoutButton = screen.getByText(/sign out/i);
     fireEvent.click(logoutButton);
 
@@ -145,14 +141,10 @@ describe('Header component', () => {
 
     const profileButton = screen.getByLabelText(/profile menu/i);
     fireEvent.click(profileButton);
-
-    // Dropdown should be visible
     expect(screen.getByText('John Doe')).toBeInTheDocument();
 
-    // Click outside (on document body)
     fireEvent.mouseDown(document.body);
 
-    // Dropdown should be hidden
     expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
   });
 
@@ -214,8 +206,7 @@ describe('Header component', () => {
     const profileButton = screen.getByLabelText(/profile menu/i);
     fireEvent.click(profileButton);
 
-    // Check that email appears in both profile-name and profile-email divs
     const profileElements = screen.getAllByText('john@example.com');
-    expect(profileElements).toHaveLength(2); // Should appear twice - as name and email
+    expect(profileElements).toHaveLength(2);
   });
 });

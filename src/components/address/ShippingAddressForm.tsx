@@ -29,7 +29,6 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
     <>
       <Select
         labelText="Country"
-        className="select"
         onChange={onAddressChange}
         name="shipping_country"
         value={address?.shipping_country || formData?.shipping_country || 'US'}

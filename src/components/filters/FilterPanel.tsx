@@ -27,9 +27,18 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
   }, [filters.priceRange, priceRange.min, priceRange.max]);
 
   const handleFlavorChange = (flavor: string) => {
+    const currentFlavors = filters.flavors || [];
+    let newFlavors: string[];
+
+    if (currentFlavors.includes(flavor)) {
+      newFlavors = currentFlavors.filter(f => f !== flavor);
+    } else {
+      newFlavors = [...currentFlavors, flavor];
+    }
+
     onFilterChange({
       ...filters,
-      flavors: [flavor],
+      flavors: newFlavors,
     });
   };
 

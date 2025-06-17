@@ -192,13 +192,13 @@
           top: 50%;
           left: 0;
           right: auto;
-          transform: translate(-50%, -80%);
+          transform: translate(-50%, -50%);
         }
         &:after {
           top: 50%;
           right: 0;
           left: auto;
-          transform: translate(50%, -80%);
+          transform: translate(50%, -50%);
         }
         .promo-code-badge {
           width: 100%;

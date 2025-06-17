@@ -3,13 +3,42 @@
   width: 100%;
   min-width: 200px;
   padding: 15px;
+  padding-right: 45px;
   border-radius: 12px;
   border: 1px solid #f0f0f0;
   color: var(--text-color);
   transition: all 0.3s ease;
-  &:hover {
-    border-color: var(--text-color);
-  }
+  background: #fff;
+}
+
+.select:hover {
+  border-color: var(--text-color);
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-dropdown-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+  color: var(--text-color);
+}
+
+.select:open + .select-dropdown-icon {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.select-wrapper:hover .select-dropdown-icon {
+  color: var(--text-color);
 }
 
 select,
@@ -17,24 +46,12 @@ select,
   appearance: base-select;
 }
 
-select {
-  background: #fff;
-  padding: 10px;
-  transition: 0.4s;
-}
-
-select:hover,
-select:focus {
-  background: #fff;
-}
-
 select::picker-icon {
-  color: var(--text-color);
-  transition: 0.4s rotate;
+  display: none;
 }
 
 select:open::picker-icon {
-  rotate: 180deg;
+  display: none;
 }
 
 ::picker(select) {

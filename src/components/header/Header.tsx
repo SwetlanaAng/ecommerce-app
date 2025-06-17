@@ -102,7 +102,7 @@ const Header: React.FC<HeaderProps> = () => {
       },
       {
         path: AppRouterPaths.ABOUT_US,
-        text: 'About',
+        text: 'About Us',
       },
     ];
 

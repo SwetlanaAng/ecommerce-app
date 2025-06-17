@@ -181,7 +181,7 @@ const Catalog: React.FC = () => {
     });
   };
 
-  const handleRemoveFilter = (filterType: string) => {
+  const handleRemoveFilter = (filterType: string, value?: string) => {
     switch (filterType) {
       case 'minPrice':
         setFilters({
@@ -202,10 +202,18 @@ const Catalog: React.FC = () => {
         });
         break;
       case 'flavor':
-        setFilters({
-          ...filters,
-          flavors: [],
-        });
+        if (value) {
+          const newFlavors = (filters.flavors || []).filter(f => f !== value);
+          setFilters({
+            ...filters,
+            flavors: newFlavors,
+          });
+        } else {
+          setFilters({
+            ...filters,
+            flavors: [],
+          });
+        }
         break;
       case 'isBestSeller':
         setFilters({

@@ -65,7 +65,6 @@
   color: #898989;
 }
 
-/* Active filter styles */
 .active-filters {
   display: flex;
   flex-wrap: wrap;
