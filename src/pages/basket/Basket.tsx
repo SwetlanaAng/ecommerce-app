@@ -153,7 +153,7 @@ const Basket: React.FC = () => {
                       disabled={isUpdating}
                       title="Decrease quantity"
                     >
-                      ‒
+                      −
                     </button>
                     <span className="quantity-display">{item.quantity}</span>
                     <button
