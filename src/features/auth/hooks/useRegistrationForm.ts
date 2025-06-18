@@ -10,6 +10,8 @@ export const useRegistrationForm = () => {
     register,
     formState: { errors, isSubmitting },
     setValue,
+    reset,
+    getValues,
   } = useForm<FormFields>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
@@ -64,11 +66,20 @@ export const useRegistrationForm = () => {
               ...newData.shippingAddress,
               [fieldName]: value,
             };
+            setValue(`shipping_${fieldName}` as keyof FormFields, value, {
+              shouldValidate: true,
+              shouldDirty: true,
+              shouldTouch: true,
+            });
           }
 
           return newData;
         });
-        setValue(name as keyof FormFields, value, { shouldValidate: true });
+        setValue(name as keyof FormFields, value, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
       }
     },
     [sameAsShipping, setValue]
@@ -88,14 +99,52 @@ export const useRegistrationForm = () => {
           },
         }));
 
-        setValue('shipping_city', billingAddress.city, { shouldValidate: true });
-        setValue('shipping_street', billingAddress.street, { shouldValidate: true });
-        setValue('shipping_postalCode', billingAddress.postalCode, { shouldValidate: true });
-        setValue('shipping_isDefault', billingAddress.isDefault, { shouldValidate: true });
+        setValue('shipping_city', billingAddress.city || '', {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
+        setValue('shipping_street', billingAddress.street || '', {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
+        setValue('shipping_postalCode', billingAddress.postalCode || '', {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
+        setValue('shipping_isDefault', billingAddress.isDefault || false, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
+      } else {
+        const currentValues = getValues();
+
+        setAddressData(prev => ({
+          ...prev,
+          shippingAddress: { ...initialAddress },
+        }));
+
+        reset(
+          {
+            ...currentValues,
+            shipping_city: '',
+            shipping_street: '',
+            shipping_postalCode: '',
+            shipping_isDefault: false,
+            sameAsShipping: false,
+          },
+          {
+            keepErrors: false,
+            keepDirty: false,
+            keepTouched: false,
+          }
+        );
       }
-      setValue('sameAsShipping', checked, { shouldValidate: true });
     },
-    [addressData.billingAddress, setValue]
+    [addressData.billingAddress, setValue, reset, getValues]
   );
 
   const handleDefaultAddressChange = useCallback(
