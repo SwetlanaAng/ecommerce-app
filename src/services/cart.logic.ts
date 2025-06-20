@@ -61,6 +61,7 @@ async function updateCartTotal(cart: Cart): Promise<Cart> {
   const newCart = { ...cart };
   const subtotal = calculateCartTotal(newCart);
   let totalDiscountAmount = 0;
+  let discountedSubtotal = subtotal;
 
   if (newCart.discountCodes && newCart.discountCodes.length > 0) {
     const allDiscountCodes = getDiscountCodesData();
@@ -71,16 +72,34 @@ async function updateCartTotal(cart: Cart): Promise<Cart> {
       const cartDiscountId = appliedDiscountCode.cartDiscounts[0].id;
       const discountDetails = await getCartDiscount(cartDiscountId);
       if (discountDetails && discountDetails.value.type === 'relative') {
-        totalDiscountAmount = (subtotal * discountDetails.value.permyriad) / 10000;
+        const { predicate } = discountDetails.target;
+        if (predicate && predicate.includes('categories.id')) {
+          const categoryId = predicate.split('"')[1];
+          const holidayItemsTotal = await newCart.lineItems.reduce(async (accPromise, item) => {
+            const acc = await accPromise;
+            const product = await getProductById(item.productId);
+            const isInCategory = product.categories.some(
+              (cat: { id: string }) => cat.id === categoryId
+            );
+            if (isInCategory) {
+              const itemPrice = typeof item.price === 'number' ? item.price : 0;
+              return acc + itemPrice * item.quantity;
+            }
+            return acc;
+          }, Promise.resolve(0));
+          totalDiscountAmount = (holidayItemsTotal * discountDetails.value.permyriad) / 10000;
+        } else {
+          totalDiscountAmount = (subtotal * discountDetails.value.permyriad) / 10000;
+        }
       }
     }
   }
 
-  const discountedTotal = subtotal - totalDiscountAmount;
+  discountedSubtotal = subtotal - totalDiscountAmount;
 
   newCart.totalPrice = {
     ...newCart.totalPrice,
-    centAmount: Math.round(discountedTotal * Math.pow(10, newCart.totalPrice.fractionDigits)),
+    centAmount: Math.round(discountedSubtotal * Math.pow(10, newCart.totalPrice.fractionDigits)),
   };
 
   if (totalDiscountAmount > 0) {

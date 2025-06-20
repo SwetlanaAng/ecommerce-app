@@ -274,6 +274,10 @@ export interface CartDiscount {
     type: string;
     permyriad: number;
   };
+  target: {
+    type: string;
+    predicate: string;
+  };
   name: { [key: string]: string };
   description: { [key: string]: string };
   isActive: boolean;

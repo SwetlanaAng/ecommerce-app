@@ -40,7 +40,7 @@
     "cartPredicate": "1=1",
     "target": {
       "type": "lineItems",
-      "predicate": "1=1"
+      "predicate": "categories.id contains any (\"b7348747-560f-4e83-b61f-a46c072a3bd9\")"
     },
     "name": {
       "en-US": "15% off holiday items"
