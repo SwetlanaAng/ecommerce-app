@@ -63,10 +63,16 @@ async function updateCartTotal(cart: Cart): Promise<Cart> {
   let totalDiscountAmount = 0;
 
   if (newCart.discountCodes && newCart.discountCodes.length > 0) {
+    const allDiscountCodes = getDiscountCodesData();
     const discountCodeId = newCart.discountCodes[0].discountCode.id;
-    const discountDetails = await getCartDiscount(discountCodeId);
-    if (discountDetails && discountDetails.value.type === 'relative') {
-      totalDiscountAmount = (subtotal * discountDetails.value.permyriad) / 10000;
+    const appliedDiscountCode = allDiscountCodes.find(dc => dc.id === discountCodeId);
+
+    if (appliedDiscountCode && appliedDiscountCode.cartDiscounts.length > 0) {
+      const cartDiscountId = appliedDiscountCode.cartDiscounts[0].id;
+      const discountDetails = await getCartDiscount(cartDiscountId);
+      if (discountDetails && discountDetails.value.type === 'relative') {
+        totalDiscountAmount = (subtotal * discountDetails.value.permyriad) / 10000;
+      }
     }
   }
 
