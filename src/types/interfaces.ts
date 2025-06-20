@@ -91,6 +91,7 @@ export interface Product {
       name: string;
       value:
         | string
+        | boolean
         | {
             key: string;
             label: string;

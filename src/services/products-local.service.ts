@@ -23,12 +23,23 @@ function filterByFlavors(product: Product, flavors?: string[]): boolean {
   const productFlavor = product.masterVariant.attributes?.find(attr => attr.name === 'flavors');
   if (!productFlavor) return false;
 
-  const flavorKey =
-    typeof productFlavor.value === 'object' && 'key' in productFlavor.value
-      ? productFlavor.value.key
-      : productFlavor.value;
+  let flavorKey: string | undefined;
 
-  return flavors.includes(flavorKey);
+  if (
+    typeof productFlavor.value === 'object' &&
+    productFlavor.value &&
+    'key' in productFlavor.value
+  ) {
+    flavorKey = productFlavor.value.key;
+  } else if (typeof productFlavor.value === 'string') {
+    flavorKey = productFlavor.value;
+  }
+
+  if (flavorKey) {
+    return flavors.includes(flavorKey);
+  }
+
+  return false;
 }
 
 function filterByAttributes(product: Product, filters?: ProductFilters): boolean {
@@ -48,11 +59,11 @@ function filterByAttributes(product: Product, filters?: ProductFilters): boolean
 
   const productIsBestSeller =
     product.masterVariant.attributes?.some(
-      attr => attr.name === 'isBestSeller' && attr.value === 'true'
+      attr => attr.name === 'isBestSeller' && attr.value === true
     ) || false;
   const productIsGlutenFree =
     product.masterVariant.attributes?.some(
-      attr => attr.name === 'isGlutenFree' && attr.value === 'true'
+      attr => attr.name === 'isGlutenFree' && attr.value === true
     ) || false;
 
   if (bestSellerFilterOn && glutenFreeFilterOn) {
