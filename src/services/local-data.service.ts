@@ -79,7 +79,7 @@ export function getCategoriesData(): CategoryData[] {
 
 export function getDiscountCodesData(): DiscountCode[] {
   if (!discountCodesCache) {
-    discountCodesCache = discountCodesData as DiscountCode[];
+    discountCodesCache = discountCodesData as unknown as DiscountCode[];
   }
   return discountCodesCache;
 }

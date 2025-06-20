@@ -20,9 +20,9 @@
         "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
       }
     },
-    "code": "SUMMER10",
+    "code": "CART10",
     "name": {
-      "en-US": "SUMMER10"
+      "en-US": "CART10"
     },
     "description": {
       "en-US": "Enjoy 10% off your entire order — a perfect excuse to treat yourself to more of what you love"
@@ -35,7 +35,6 @@
     ],
     "isActive": true,
     "references": [],
-    "validUntil": "2025-08-30T21:00:00.000Z",
     "groups": []
   },
   {
