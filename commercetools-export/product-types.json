@@ -1,0 +1,109 @@
+[
+  {
+    "id": "db751585-ed99-4626-bdcf-1600c048f5c5",
+    "version": 29,
+    "versionModifiedAt": "2025-06-13T12:11:14.760Z",
+    "createdAt": "2025-05-13T09:02:17.423Z",
+    "lastModifiedAt": "2025-06-13T12:11:14.760Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "name": "Macaron",
+    "description": "Macaron product type for various flavors, packs, and occasions",
+    "classifier": "Complex",
+    "attributes": [
+      {
+        "name": "isBestSeller",
+        "label": {
+          "en-US": "BestSeller"
+        },
+        "inputTip": {
+          "en-US": ""
+        },
+        "isRequired": false,
+        "type": {
+          "name": "boolean"
+        },
+        "attributeConstraint": "None",
+        "isSearchable": true,
+        "inputHint": "SingleLine",
+        "displayGroup": "Other",
+        "level": "Variant"
+      },
+      {
+        "name": "flavors",
+        "label": {
+          "en-US": "flavors"
+        },
+        "inputTip": {
+          "en-US": ""
+        },
+        "isRequired": false,
+        "type": {
+          "name": "enum",
+          "values": [
+            {
+              "key": "pistachio",
+              "label": "Pistachio"
+            },
+            {
+              "key": "chocolate",
+              "label": "Chocolate"
+            },
+            {
+              "key": "raspberry",
+              "label": "Raspberry"
+            },
+            {
+              "key": "vanilla",
+              "label": "Vanilla"
+            },
+            {
+              "key": "lemon",
+              "label": "Lemon"
+            },
+            {
+              "key": "caramel",
+              "label": "Caramel"
+            }
+          ]
+        },
+        "attributeConstraint": "None",
+        "isSearchable": true,
+        "inputHint": "SingleLine",
+        "displayGroup": "Other",
+        "level": "Variant"
+      },
+      {
+        "name": "isGlutenFree",
+        "label": {
+          "en-US": "GlutenFree"
+        },
+        "inputTip": {
+          "en-US": ""
+        },
+        "isRequired": false,
+        "type": {
+          "name": "boolean"
+        },
+        "attributeConstraint": "None",
+        "isSearchable": true,
+        "inputHint": "SingleLine",
+        "displayGroup": "Other",
+        "level": "Variant"
+      }
+    ],
+    "key": "macaron"
+  }
+]

@@ -1,0 +1,311 @@
+[
+  {
+    "id": "d67e1b6c-9d06-4516-88e8-15581fb18922",
+    "version": 1,
+    "versionModifiedAt": "2025-05-13T08:33:38.864Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-13T08:33:38.864Z",
+    "lastModifiedAt": "2025-05-13T08:33:38.864Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "name": {
+      "en-US": "Packaging"
+    },
+    "slug": {
+      "en-US": "packaging"
+    },
+    "ancestors": [],
+    "orderHint": "0.2",
+    "assets": []
+  },
+  {
+    "id": "f9645d23-043d-4419-8596-d3cf5787337b",
+    "version": 1,
+    "versionModifiedAt": "2025-05-13T08:36:03.220Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-13T08:36:03.220Z",
+    "lastModifiedAt": "2025-05-13T08:36:03.220Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "key": "pack-6",
+    "name": {
+      "en-US": "6-pack"
+    },
+    "slug": {
+      "en-US": "6-pack"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "d67e1b6c-9d06-4516-88e8-15581fb18922"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "d67e1b6c-9d06-4516-88e8-15581fb18922"
+    },
+    "orderHint": "0.21",
+    "assets": []
+  },
+  {
+    "id": "ab7cd227-52c7-4193-b721-960738481ab8",
+    "version": 1,
+    "versionModifiedAt": "2025-05-13T08:37:24.216Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-13T08:37:24.216Z",
+    "lastModifiedAt": "2025-05-13T08:37:24.216Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "key": "pack-12",
+    "name": {
+      "en-US": "12-pack"
+    },
+    "slug": {
+      "en-US": "12-pack"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "d67e1b6c-9d06-4516-88e8-15581fb18922"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "d67e1b6c-9d06-4516-88e8-15581fb18922"
+    },
+    "orderHint": "0.22",
+    "assets": []
+  },
+  {
+    "id": "d38488af-5696-4b5f-a59a-6ae19a1d7261",
+    "version": 1,
+    "versionModifiedAt": "2025-05-13T08:38:23.330Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-13T08:38:23.330Z",
+    "lastModifiedAt": "2025-05-13T08:38:23.330Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "key": "pack-24",
+    "name": {
+      "en-US": "24-pack"
+    },
+    "slug": {
+      "en-US": "24-pack"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "d67e1b6c-9d06-4516-88e8-15581fb18922"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "d67e1b6c-9d06-4516-88e8-15581fb18922"
+    },
+    "orderHint": "0.23",
+    "assets": []
+  },
+  {
+    "id": "02ad86af-d351-4616-97cf-add6e174002a",
+    "version": 1,
+    "versionModifiedAt": "2025-05-13T08:40:14.686Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-13T08:40:14.686Z",
+    "lastModifiedAt": "2025-05-13T08:40:14.686Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "key": "special",
+    "name": {
+      "en-US": "Special"
+    },
+    "slug": {
+      "en-US": "special"
+    },
+    "ancestors": [],
+    "orderHint": "0.3",
+    "assets": []
+  },
+  {
+    "id": "b7348747-560f-4e83-b61f-a46c072a3bd9",
+    "version": 1,
+    "versionModifiedAt": "2025-05-13T08:40:57.098Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-13T08:40:57.098Z",
+    "lastModifiedAt": "2025-05-13T08:40:57.098Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "key": "holiday",
+    "name": {
+      "en-US": "Holiday"
+    },
+    "slug": {
+      "en-US": "holiday"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "02ad86af-d351-4616-97cf-add6e174002a"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "02ad86af-d351-4616-97cf-add6e174002a"
+    },
+    "orderHint": "0.31",
+    "assets": []
+  },
+  {
+    "id": "01b3f7f7-bf62-4ead-92ae-5b29701a500e",
+    "version": 1,
+    "versionModifiedAt": "2025-05-13T08:41:42.386Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-13T08:41:42.386Z",
+    "lastModifiedAt": "2025-05-13T08:41:42.386Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "key": "wedding",
+    "name": {
+      "en-US": "Wedding"
+    },
+    "slug": {
+      "en-US": "wedding"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "02ad86af-d351-4616-97cf-add6e174002a"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "02ad86af-d351-4616-97cf-add6e174002a"
+    },
+    "orderHint": "0.32",
+    "assets": []
+  },
+  {
+    "id": "8d60c3e2-ba8e-4731-b49c-710ecc2916cb",
+    "version": 1,
+    "versionModifiedAt": "2025-05-13T08:42:47.953Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-13T08:42:47.953Z",
+    "lastModifiedAt": "2025-05-13T08:42:47.953Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "key": "kids",
+    "name": {
+      "en-US": "Kids"
+    },
+    "slug": {
+      "en-US": "kids"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "02ad86af-d351-4616-97cf-add6e174002a"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "02ad86af-d351-4616-97cf-add6e174002a"
+    },
+    "orderHint": "0.33",
+    "assets": []
+  }
+]

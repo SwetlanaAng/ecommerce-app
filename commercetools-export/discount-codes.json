@@ -1,0 +1,79 @@
+[
+  {
+    "id": "bd8bf676-02cc-4b93-aba2-b8f44be6bd2a",
+    "version": 5,
+    "versionModifiedAt": "2025-06-15T17:37:44.485Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-31T13:19:07.573Z",
+    "lastModifiedAt": "2025-06-15T17:37:44.485Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "code": "SUMMER10",
+    "name": {
+      "en-US": "SUMMER10"
+    },
+    "description": {
+      "en-US": "Enjoy 10% off your entire order — a perfect excuse to treat yourself to more of what you love"
+    },
+    "cartDiscounts": [
+      {
+        "typeId": "cart-discount",
+        "id": "5fc3285d-c770-462e-85a2-10346594f59b"
+      }
+    ],
+    "isActive": true,
+    "references": [],
+    "validUntil": "2025-08-30T21:00:00.000Z",
+    "groups": []
+  },
+  {
+    "id": "7f292912-68b1-46a0-acb8-0b2c9e0e5581",
+    "version": 4,
+    "versionModifiedAt": "2025-06-15T17:37:25.765Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-06-08T14:43:22.704Z",
+    "lastModifiedAt": "2025-06-15T17:37:25.765Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "03b014ea-fdb2-484e-b8f9-73c8bcba84d7"
+      }
+    },
+    "code": "HOLIDAY15",
+    "name": {
+      "en-US": "HOLIDAY15"
+    },
+    "description": {
+      "en-US": "Get 15% off all items in our “Holiday” category — the sweetest way to celebrate any occasion"
+    },
+    "cartDiscounts": [
+      {
+        "typeId": "cart-discount",
+        "id": "65a6f4b3-0b18-4c35-ab1c-8445fb4de4e4"
+      }
+    ],
+    "isActive": true,
+    "references": [],
+    "groups": []
+  }
+]
