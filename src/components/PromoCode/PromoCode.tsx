@@ -12,6 +12,7 @@ const PromoCode: React.FC = () => {
     useCartWithPromoCodes();
   const [promoCodeInput, setPromoCodeInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [removingId, setRemovingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (promoCodeError) {
@@ -40,8 +41,10 @@ const PromoCode: React.FC = () => {
   };
 
   const handleRemovePromoCode = async (promocodeId: string) => {
+    setRemovingId(promocodeId);
     await removePromoCode(promocodeId);
     toast.success('Promo code removed successfully!');
+    setRemovingId(null);
   };
 
   const buttonText = isSubmitting ? '...' : <img src={arrowIcon} alt="arrow" />;
@@ -79,8 +82,9 @@ const PromoCode: React.FC = () => {
                 onClick={() => handleRemovePromoCode(code.id)}
                 className="remove-promo-btn"
                 title="Remove promo code"
+                disabled={removingId === code.id}
               >
-                ×
+                {removingId === code.id ? '...' : '×'}
               </button>
             </div>
           ))}

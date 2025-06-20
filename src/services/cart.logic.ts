@@ -385,8 +385,13 @@ export async function applyPromoCode(code: string): Promise<{
     },
   };
 
-  cart.discountCodes = [...(cart.discountCodes || []), newDiscountCode];
-  const updatedCart = await updateCartTotal(cart);
+  const newCart = {
+    ...cart,
+    discountCodes: [...(cart.discountCodes || []), newDiscountCode],
+    version: cartVersion++,
+  };
+
+  const updatedCart = await updateCartTotal(newCart);
 
   saveCart(updatedCart);
 
@@ -402,9 +407,13 @@ export async function removePromoCode(
     return { success: false, error: 'Promo code not found in cart.' };
   }
 
-  cart.discountCodes = cart.discountCodes.filter(dc => dc.discountCode.id !== discountId);
+  const newCart = {
+    ...cart,
+    discountCodes: cart.discountCodes.filter(dc => dc.discountCode.id !== discountId),
+    version: cartVersion++,
+  };
 
-  const updatedCart = await updateCartTotal(cart);
+  const updatedCart = await updateCartTotal(newCart);
   saveCart(updatedCart);
   return { success: true, cart: updatedCart };
 }
