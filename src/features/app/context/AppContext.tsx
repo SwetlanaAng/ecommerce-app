@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { getCategoryHierarchy } from '../../../services/category.service';
-import { getProductFlavors, getPriceRange } from '../../../services/products.service';
+import { getCategoryHierarchy } from '../../../services/category-local.service';
+import { getProductFlavors, getPriceRange } from '../../../services/products-local.service';
 import { CategoryWithChildren } from '../../../types/interfaces';
 import { AppContext, AppContextType } from './AppContextTypes';
 

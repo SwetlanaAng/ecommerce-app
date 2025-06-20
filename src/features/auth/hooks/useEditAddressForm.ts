@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Address } from '../../../types/address.types';
@@ -10,13 +10,16 @@ import {
 } from '../../../schemas/aditAddressSchema';
 
 export const useBillingAddressForm = (data?: Address) => {
-  const initialFormData: BillingAddressModal = {
-    billing_country: data?.country || 'US',
-    billing_city: data?.city || '',
-    billing_street: data?.street || '',
-    billing_postalCode: data?.postalCode || '',
-    billing_isDefault: data?.isDefault || false,
-  };
+  const initialFormData: BillingAddressModal = useMemo(
+    () => ({
+      billing_country: data?.country || 'US',
+      billing_city: data?.city || '',
+      billing_street: data?.street || '',
+      billing_postalCode: data?.postalCode || '',
+      billing_isDefault: data?.isDefault || false,
+    }),
+    [data]
+  );
 
   const {
     handleSubmit,
@@ -66,13 +69,16 @@ export const useBillingAddressForm = (data?: Address) => {
 };
 
 export const useShippingAddressForm = (data?: Address) => {
-  const initialFormData: ShippingAddressModal = {
-    shipping_country: data?.country || 'US',
-    shipping_city: data?.city || '',
-    shipping_street: data?.street || '',
-    shipping_postalCode: data?.postalCode || '',
-    shipping_isDefault: data?.isDefault || false,
-  };
+  const initialFormData: ShippingAddressModal = useMemo(
+    () => ({
+      shipping_country: data?.country || 'US',
+      shipping_city: data?.city || '',
+      shipping_street: data?.street || '',
+      shipping_postalCode: data?.postalCode || '',
+      shipping_isDefault: data?.isDefault || false,
+    }),
+    [data]
+  );
 
   const {
     handleSubmit,
@@ -92,7 +98,7 @@ export const useShippingAddressForm = (data?: Address) => {
     Object.entries(initialFormData).forEach(([key, value]) => {
       setValue(key as keyof ShippingAddressModal, value, { shouldValidate: true });
     });
-  }, [setValue]);
+  }, [setValue, initialFormData]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

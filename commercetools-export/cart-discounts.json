@@ -1,0 +1,56 @@
+[
+  {
+    "id": "5fc3285d-c770-462e-85a2-10346594f59b",
+    "version": 1,
+    "versionModifiedAt": "2025-05-31T13:19:07.573Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-05-31T13:19:07.573Z",
+    "lastModifiedAt": "2025-05-31T13:19:07.573Z",
+    "value": {
+      "type": "relative",
+      "permyriad": 1000
+    },
+    "cartPredicate": "1=1",
+    "target": {
+      "type": "lineItems",
+      "predicate": "1=1"
+    },
+    "name": {
+      "en-US": "10% off entire order"
+    },
+    "description": {
+      "en-US": "10% discount on the entire order"
+    },
+    "isActive": true,
+    "requiresDiscountCode": true,
+    "stackingMode": "Stacking",
+    "references": []
+  },
+  {
+    "id": "65a6f4b3-0b18-4c35-ab1c-8445fb4de4e4",
+    "version": 1,
+    "versionModifiedAt": "2025-06-08T14:43:22.704Z",
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2025-06-08T14:43:22.704Z",
+    "lastModifiedAt": "2025-06-08T14:43:22.704Z",
+    "value": {
+      "type": "relative",
+      "permyriad": 1500
+    },
+    "cartPredicate": "1=1",
+    "target": {
+      "type": "lineItems",
+      "predicate": "1=1"
+    },
+    "name": {
+      "en-US": "15% off holiday items"
+    },
+    "description": {
+      "en-US": "15% discount on items from the 'Holiday' category"
+    },
+    "isActive": true,
+    "requiresDiscountCode": true,
+    "stackingMode": "Stacking",
+    "references": []
+  }
+]

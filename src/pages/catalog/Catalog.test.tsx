@@ -49,8 +49,8 @@ jest.mock('../../lib/utils/productDataAdapters/toCardAdapter', () =>
   }))
 );
 
-import { getProductsList, searchProducts } from '../../services/products.service';
-import { getCategoryById, getCategoryPath } from '../../services/category.service';
+import { getProductsList, searchProducts } from '../../services/products-local.service';
+import { getCategoryById, getCategoryPath } from '../../services/category-local.service';
 
 const mockedProducts = [
   { id: '1', name: { 'en-US': 'Vanilla Macaron' } },

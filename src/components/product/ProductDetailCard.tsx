@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Product } from '../../types/interfaces';
+import { Product, ProductCardProps } from '../../types/interfaces';
 import { toast } from 'react-toastify';
 import { useCart } from '../../features/cart/hooks/useCart';
 import ImageModal from '../image/ImageModal';
 import starIcon from '../../assets/star.svg';
 import Button from '../button/Button';
 import ProductCard from './ProductCard';
-import { getProductsList } from '../../services/products.service';
+import { getProductsList } from '../../services/products-local.service';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
 
 import './ProductDetailCard.css';
@@ -30,9 +30,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     ? priceInfo.discounted.value.centAmount / 10 ** priceInfo.discounted.value.fractionDigits
     : null;
 
-  const { category } = toCardAdapter(product);
-  const categoryDisplay = category.includes('pack') ? category.split('-')[0] : null;
-
+  const [category, setCategory] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalIndex, setModalIndex] = useState(0);
@@ -42,10 +40,10 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [showFullDesc, setShowFullDesc] = useState(false);
   const descPreview = desc.length > 210 ? desc.slice(0, 210) + '… ' : desc;
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [adaptedFeaturedProducts, setAdaptedFeaturedProducts] = useState<ProductCardProps[]>([]);
   const [activeTab, setActiveTab] = useState('nutrition');
 
-  const packSize = Number.parseInt(categoryDisplay || '6') || 6;
+  const packSize = Number.parseInt(category.includes('pack') ? category.split('-')[0] : '6') || 6;
 
   const packDescriptions: { [key: number]: string } = {
     6: 'Just a Little Treat',
@@ -66,11 +64,11 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     const fetchFeaturedProducts = async () => {
       try {
         const products = await getProductsList();
-        if (products && products.length > 4) {
+        if (products) {
           const shuffled = products.sort(() => 0.5 - Math.random());
-          setFeaturedProducts(shuffled.slice(0, 4));
-        } else {
-          setFeaturedProducts(products);
+          const selected = shuffled.slice(0, 4);
+          const adapted = await Promise.all(selected.map(toCardAdapter));
+          setAdaptedFeaturedProducts(adapted);
         }
       } catch (error) {
         console.error('Error fetching featured products:', error);
@@ -94,6 +92,18 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
     setInCart(!!item);
     setLineItemId(item?.id || null);
   }, [cart, product.id]);
+
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        const adapted = await toCardAdapter(product);
+        setCategory(adapted.category);
+      } catch (error) {
+        console.error('Error getting category:', error);
+      }
+    };
+    getCategory();
+  }, [product]);
 
   const handlePrev = () => {
     setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
@@ -418,8 +428,8 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
           </div>
         </div>
         <div className="featured-products-grid">
-          {featuredProducts.map(product => (
-            <ProductCard key={product.id} {...toCardAdapter(product)} />
+          {adaptedFeaturedProducts.map(product => (
+            <ProductCard key={product.id} {...product} />
           ))}
         </div>
       </div>

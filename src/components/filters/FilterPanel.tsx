@@ -24,7 +24,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
       setMinPrice(filters.priceRange?.min ?? priceRange.min);
       setMaxPrice(filters.priceRange?.max ?? priceRange.max);
     }
-  }, [filters.priceRange, priceRange.min, priceRange.max]);
+  }, [filters.priceRange, priceRange.min, priceRange.max, minPrice, maxPrice]);
 
   const handleFlavorChange = (flavor: string) => {
     const currentFlavors = filters.flavors || [];
@@ -182,7 +182,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onFilterChange, onRe
               labelText="Best Seller"
             />
           </div>
-          <div className="best-seller-option">
+          <div className="gluten-free-option">
             <Input
               type="checkbox"
               id="gluten-free"

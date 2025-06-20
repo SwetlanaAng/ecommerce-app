@@ -3,9 +3,11 @@ import {
   getPromoCodesWithDetails,
   getActiveDiscountCodes,
   PromoCodeData,
-} from '../services/promocodes.service';
-import { getCartWithPromoCode, removeDiscountCode } from '../services/cart.service';
-import { getTokenFromStorage } from '../services/registration.service';
+} from '../services/promocodes-local.service';
+import {
+  applyPromoCode as applyPromoCodeLocal,
+  removePromoCode as removePromoCodeLocal,
+} from '../services/cart.logic';
 
 export interface ActivePromoCode {
   id: string;
@@ -28,16 +30,8 @@ export interface UsePromoCodeReturn {
   activePromoCodes: ActivePromoCode[];
   promoCodeError: string | null;
 
-  addPromoCode: (
-    code: string,
-    cartId: string,
-    cartVersion: number
-  ) => Promise<{ success: boolean; result?: unknown; error?: string }>;
-  removePromoCode: (
-    promocodeId: string,
-    cartId: string,
-    cartVersion: number
-  ) => Promise<{ success: boolean; result?: unknown }>;
+  addPromoCode: (code: string) => Promise<{ success: boolean; result?: unknown; error?: string }>;
+  removePromoCode: (promocodeId: string) => Promise<{ success: boolean; result?: unknown }>;
   refreshAvailablePromoCodes: () => Promise<void>;
   updateActivePromoCodes: (cartDiscountCodes: CartDiscountCode[]) => Promise<void>;
 }
@@ -147,19 +141,18 @@ export const usePromoCode = (): UsePromoCodeReturn => {
     }
   }, []);
 
-  const addPromoCode = useCallback(async (code: string, cartId: string, cartVersion: number) => {
+  const addPromoCode = useCallback(async (code: string) => {
     setPromoCodeError(null);
 
     try {
-      const token = await getTokenFromStorage();
-      const result = await getCartWithPromoCode(code, cartId, token, cartVersion.toString());
+      const result = await applyPromoCodeLocal(code);
 
-      if (typeof result === 'string') {
-        setPromoCodeError(result);
-        return { success: false, error: result };
+      if (!result.success) {
+        setPromoCodeError(result.error || 'Failed to apply promo code');
+        return { success: false, error: result.error };
       }
 
-      return { success: true, result };
+      return { success: true, result: result.cart };
     } catch {
       const errorMessage = 'Failed to add promo code';
       setPromoCodeError(errorMessage);
@@ -167,26 +160,22 @@ export const usePromoCode = (): UsePromoCodeReturn => {
     }
   }, []);
 
-  const removePromoCode = useCallback(
-    async (promocodeId: string, cartId: string, cartVersion: number) => {
-      setPromoCodeError(null);
+  const removePromoCode = useCallback(async (promocodeId: string) => {
+    setPromoCodeError(null);
 
-      try {
-        const token = await getTokenFromStorage();
-        const result = await removeDiscountCode(cartId, token, cartVersion.toString(), promocodeId);
+    try {
+      const result = await removePromoCodeLocal(promocodeId);
 
-        if (result) {
-          return { success: true, result };
-        }
-
-        return { success: false };
-      } catch {
-        setPromoCodeError('Failed to remove promo code');
-        return { success: false };
+      if (result.success) {
+        return { success: true, result: result.cart };
       }
-    },
-    []
-  );
+
+      return { success: false };
+    } catch {
+      setPromoCodeError('Failed to remove promo code');
+      return { success: false };
+    }
+  }, []);
 
   useEffect(() => {
     if (isInitialMount.current) {

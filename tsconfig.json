@@ -17,6 +17,6 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true
   },
-  "include": ["src"],
+  "include": ["src", "commercetools-export"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

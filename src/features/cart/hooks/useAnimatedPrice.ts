@@ -57,7 +57,7 @@ export const useAnimatedPrice = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [targetValue, duration]);
+  }, [targetValue, duration, currentValue]);
 
   return {
     value: Number(currentValue.toFixed(precision)),

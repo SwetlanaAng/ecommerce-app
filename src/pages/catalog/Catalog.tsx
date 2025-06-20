@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ProductCard from '../../components/product/ProductCard';
 import { ProductCardProps, ProductFilters } from '../../types/interfaces';
-import { getProductsList, SortOption, searchProducts } from '../../services/products.service';
+import { getProductsList, SortOption, searchProducts } from '../../services/products-local.service';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
 import SkeletonCard from '../../components/skeleton/SkeletonCard';
 import Select from '../../components/select/Select';
@@ -13,12 +13,17 @@ import FilterPanel from '../../components/filters/FilterPanel';
 import ActiveFilters from '../../components/filters/ActiveFilters';
 import CategoryNav from '../../components/category-nav/CategoryNav';
 import Breadcrumbs from '../../components/breadcrumbs/Breadcrumbs';
-import { getCategoryById, getCategoryPath, CategoryPath } from '../../services/category.service';
+import {
+  getCategoryById,
+  getCategoryPath,
+  CategoryPath,
+} from '../../services/category-local.service';
 import './Catalog.css';
 
 const Catalog: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -128,7 +133,6 @@ const Catalog: React.FC = () => {
       const nextOffset = offset + BATCH_SIZE;
 
       if (searchQuery && fullSearchResults) {
-        await new Promise(resolve => setTimeout(resolve, 300));
         batch = fullSearchResults.slice(offset, nextOffset);
         setProducts(prev => [...prev, ...batch]);
         setHasMore(nextOffset < fullSearchResults.length);
@@ -151,10 +155,51 @@ const Catalog: React.FC = () => {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setSearchQuery(query);
+
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    searchTimeoutRef.current = setTimeout(() => {
+      handleSearchWithTransition(query);
+    }, 500);
   };
 
+  const handleSearchWithTransition = useCallback(
+    async (query: string) => {
+      setError(null);
+      setOffset(0);
+      setHasMore(true);
+
+      if (query) {
+        const all = await searchProducts(query, filters, sortOption);
+        const adapted = await Promise.all(all.map(toCardAdapter));
+        setFullSearchResults(adapted);
+        setProducts(adapted.slice(0, BATCH_SIZE));
+        setHasMore(adapted.length > BATCH_SIZE);
+        setOffset(BATCH_SIZE);
+      } else {
+        const list = await getProductsList(BATCH_SIZE + 1, '0', sortOption, filters);
+        const batch = await Promise.all(list.slice(0, BATCH_SIZE).map(toCardAdapter));
+        setProducts(batch);
+        setHasMore(list.length > BATCH_SIZE);
+        setOffset(BATCH_SIZE);
+      }
+    },
+    [filters, sortOption]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(e.target.value as SortOption);
+    const newSortOption = e.target.value as SortOption;
+    setSortOption(newSortOption);
   };
 
   const handleCategorySelect = (categoryId: string) => {
@@ -162,14 +207,15 @@ const Catalog: React.FC = () => {
   };
 
   const handleFilterChange = (newFilters: ProductFilters) => {
-    setFilters({
+    const updatedFilters = {
       ...newFilters,
       categoryId: filters.categoryId,
-    });
+    };
+    setFilters(updatedFilters);
   };
 
   const handleResetFilters = () => {
-    setFilters({
+    const resetFilters = {
       flavors: [],
       priceRange: {
         min: undefined,
@@ -178,65 +224,70 @@ const Catalog: React.FC = () => {
       isBestSeller: undefined,
       isGlutenFree: undefined,
       categoryId: filters.categoryId,
-    });
+    };
+    setFilters(resetFilters);
   };
 
   const handleRemoveFilter = (filterType: string, value?: string) => {
+    let updatedFilters = { ...filters };
+
     switch (filterType) {
       case 'minPrice':
-        setFilters({
+        updatedFilters = {
           ...filters,
           priceRange: {
             ...filters.priceRange,
             min: undefined,
           },
-        });
+        };
         break;
       case 'maxPrice':
-        setFilters({
+        updatedFilters = {
           ...filters,
           priceRange: {
             ...filters.priceRange,
             max: undefined,
           },
-        });
+        };
         break;
       case 'flavor':
         if (value) {
-          const newFlavors = (filters.flavors || []).filter(f => f !== value);
-          setFilters({
+          const newFlavors = (filters.flavors || []).filter((f: string) => f !== value);
+          updatedFilters = {
             ...filters,
             flavors: newFlavors,
-          });
+          };
         } else {
-          setFilters({
+          updatedFilters = {
             ...filters,
             flavors: [],
-          });
+          };
         }
         break;
       case 'isBestSeller':
-        setFilters({
+        updatedFilters = {
           ...filters,
           isBestSeller: undefined,
-        });
+        };
         break;
       case 'isGlutenFree':
-        setFilters({
+        updatedFilters = {
           ...filters,
           isGlutenFree: undefined,
-        });
+        };
         break;
       case 'category':
         navigate('/catalog');
-        break;
+        return;
       case 'all':
         handleResetFilters();
         navigate('/catalog');
-        break;
+        return;
       default:
-        break;
+        return;
     }
+
+    setFilters(updatedFilters);
   };
 
   if (error) {

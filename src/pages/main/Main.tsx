@@ -3,8 +3,8 @@ import Button from '../../components/button/Button';
 import ProductCard from '../../components/product/ProductCard';
 import PromoCodeBanner from '../../components/PromoCodeBanner/PromoCodeBanner';
 import { useEffect, useState } from 'react';
-import { getProductsList } from '../../services/products.service';
-import { Product } from '../../types/interfaces';
+import { getProductsList } from '../../services/products-local.service';
+import { ProductCardProps } from '../../types/interfaces';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
 import customer1 from '../../assets/customer-1.jpg';
 import customer2 from '../../assets/customer-2.jpg';
@@ -29,7 +29,7 @@ import './Main.css';
 
 const Main = () => {
   const navigate = useNavigate();
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [adaptedProducts, setAdaptedProducts] = useState<ProductCardProps[]>([]);
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
   useEffect(() => {
@@ -37,7 +37,8 @@ const Main = () => {
       try {
         const products = await getProductsList(4);
         if (products) {
-          setFeaturedProducts(products);
+          const adapted = await Promise.all(products.map(toCardAdapter));
+          setAdaptedProducts(adapted);
         }
       } catch (error) {
         console.error('Error fetching featured products:', error);
@@ -238,8 +239,8 @@ const Main = () => {
           </div>
         </div>
         <div className="featured-products-grid">
-          {featuredProducts.map(product => (
-            <ProductCard key={product.id} {...toCardAdapter(product)} />
+          {adaptedProducts.map(product => (
+            <ProductCard key={product.id} {...product} />
           ))}
         </div>
       </section>

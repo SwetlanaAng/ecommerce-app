@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -9,13 +9,16 @@ import {
 } from '../../../schemas/aditAddressSchema';
 
 export const useAddBillingAddressForm = () => {
-  const initialFormData: BillingAddressModal = {
-    billing_country: 'US',
-    billing_city: '',
-    billing_street: '',
-    billing_postalCode: '',
-    billing_isDefault: false,
-  };
+  const initialFormData: BillingAddressModal = useMemo(
+    () => ({
+      billing_country: 'US',
+      billing_city: '',
+      billing_street: '',
+      billing_postalCode: '',
+      billing_isDefault: false,
+    }),
+    []
+  );
 
   const {
     handleSubmit,
@@ -56,7 +59,7 @@ export const useAddBillingAddressForm = () => {
   const reset = useCallback(() => {
     resetForm();
     setFormData(initialFormData);
-  }, [resetForm]);
+  }, [resetForm, initialFormData]);
 
   return {
     formData,
@@ -70,13 +73,16 @@ export const useAddBillingAddressForm = () => {
 };
 
 export const useAddShippingAddressForm = () => {
-  const initialFormData: ShippingAddressModal = {
-    shipping_country: 'US',
-    shipping_city: '',
-    shipping_street: '',
-    shipping_postalCode: '',
-    shipping_isDefault: false,
-  };
+  const initialFormData: ShippingAddressModal = useMemo(
+    () => ({
+      shipping_country: 'US',
+      shipping_city: '',
+      shipping_street: '',
+      shipping_postalCode: '',
+      shipping_isDefault: false,
+    }),
+    []
+  );
 
   const {
     handleSubmit,
@@ -117,7 +123,7 @@ export const useAddShippingAddressForm = () => {
   const reset = useCallback(() => {
     resetForm();
     setFormData(initialFormData);
-  }, [resetForm]);
+  }, [resetForm, initialFormData]);
 
   return {
     formData,

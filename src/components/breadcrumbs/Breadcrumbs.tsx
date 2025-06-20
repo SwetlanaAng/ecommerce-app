@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Breadcrumbs.css';
-import { CategoryPath } from '../../services/category.service';
+import { CategoryPath } from '../../services/category-local.service';
 
 interface BreadcrumbsProps {
   categoryPath?: CategoryPath[];

@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { useParams } from 'react-router-dom';
 import ProductDetails from './ProductDetails';
-import { getProductBySlug } from '../../services/product.service';
+import { getProductBySlug } from '../../services/product-local.service';
 
 interface MockProductDetailCardProps {
   product?: {

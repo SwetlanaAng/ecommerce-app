@@ -1,27 +1,14 @@
-import React, { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { Cart } from '../../../types/interfaces';
+import React, { useState, useEffect, ReactNode, useCallback } from 'react';
 import {
   getCart,
   sendToCart,
   removeLineItemFromCart,
   updateLineItemQuantity,
   clearCart as clearCartLogic,
+  addProductToCart,
 } from '../../../services/cart.logic';
-
-export interface CartContextType {
-  cart: Cart | null;
-  cartItemsCount: number;
-  isLoading: boolean;
-  error: string | null;
-  addToCart: (productId: string) => Promise<void>;
-  removeFromCart: (lineItemId: string) => Promise<void>;
-  updateCartItemQuantity: (lineItemId: string, quantity: number) => Promise<void>;
-  clearCart: () => Promise<void>;
-  refreshCart: () => Promise<void>;
-  setCart: (cart: Cart) => void;
-}
-
-export const CartContext = createContext<CartContextType | undefined>(undefined);
+import { CartContext, CartContextType } from './CartContextType';
+import { Cart } from '../../../types/interfaces';
 
 interface CartProviderProps {
   children: ReactNode;
@@ -39,7 +26,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     try {
       const cartData = await getCart();
       setCart(cartData);
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError('Failed to load cart');
       setCart(null);
     } finally {
@@ -62,7 +50,36 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       } else {
         await refreshCart();
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
+      setError('Failed to add item to cart');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addProductToCartWithDetails = async (productDetails: {
+    productId: string;
+    name: string;
+    price: number;
+    imageUrl: string;
+    variant?: {
+      id: number;
+      attributes: Array<{ name: string; value: unknown }>;
+    };
+  }) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const updatedCart = await addProductToCart(productDetails);
+      if (updatedCart) {
+        setCart(updatedCart);
+      } else {
+        await refreshCart();
+      }
+    } catch (err) {
+      console.error(err);
       setError('Failed to add item to cart');
     } finally {
       setIsLoading(false);
@@ -73,23 +90,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     if (!cart) return;
 
     setError(null);
-
-    const hasDiscountCodes = cart.discountCodes && cart.discountCodes.length > 0;
-    const hasAppliedDiscounts = cart.lineItems.some(
-      item => item.appliedDiscounts && item.appliedDiscounts.length > 0
-    );
-
-    if (hasDiscountCodes || hasAppliedDiscounts) {
-      try {
-        const updatedCart = await removeLineItemFromCart(lineItemId);
-        if (updatedCart) {
-          setCart(updatedCart);
-        }
-      } catch {
-        setError('Failed to remove item from cart');
-      }
-      return;
-    }
 
     const optimisticCart = {
       ...cart,
@@ -102,7 +102,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       if (updatedCart) {
         setCart(updatedCart);
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError('Failed to remove item from cart');
       setCart(cart);
     }
@@ -112,23 +113,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     if (!cart) return;
 
     setError(null);
-
-    const hasDiscountCodes = cart.discountCodes && cart.discountCodes.length > 0;
-    const hasAppliedDiscounts = cart.lineItems.some(
-      item => item.appliedDiscounts && item.appliedDiscounts.length > 0
-    );
-
-    if (hasDiscountCodes || hasAppliedDiscounts) {
-      try {
-        const updatedCart = await updateLineItemQuantity(lineItemId, quantity);
-        if (updatedCart) {
-          setCart(updatedCart);
-        }
-      } catch {
-        setError('Failed to update item quantity');
-      }
-      return;
-    }
 
     const optimisticCart = {
       ...cart,
@@ -154,7 +138,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       if (updatedCart) {
         setCart(updatedCart);
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError('Failed to update item quantity');
       setCart(cart);
     }
@@ -167,7 +152,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     try {
       const updatedCart = await clearCartLogic();
       setCart(updatedCart);
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError('Failed to clear cart');
     } finally {
       setIsLoading(false);
@@ -182,6 +168,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     isLoading,
     error,
     addToCart,
+    addProductToCart: addProductToCartWithDetails,
     removeFromCart,
     updateCartItemQuantity,
     clearCart,

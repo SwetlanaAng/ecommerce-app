@@ -114,7 +114,7 @@ export interface Product {
   hasStagedChanges: boolean;
   published: boolean;
   key: string;
-  taxCategory: {
+  taxCategory?: {
     typeId: string;
     id: string;
   };
@@ -249,5 +249,83 @@ export interface Cart {
         currencyCode: string;
       };
     }>;
+  };
+}
+
+export interface DiscountCode {
+  id: string;
+  version: number;
+  code: string;
+  name: { [key: string]: string };
+  description: { [key: string]: string };
+  cartDiscounts: Array<{
+    typeId: string;
+    id: string;
+  }>;
+  isActive: boolean;
+  validUntil: string;
+}
+
+export interface CartDiscount {
+  id: string;
+  version: number;
+  value: {
+    type: string;
+    permyriad: number;
+  };
+  name: { [key: string]: string };
+  description: { [key: string]: string };
+  isActive: boolean;
+  requiresDiscountCode: boolean;
+}
+
+export interface CommercetoolsProduct {
+  id: string;
+  version: number;
+  key: string;
+  productType: {
+    id: string;
+  };
+  masterData: {
+    current: {
+      name: { 'en-US': string };
+      description?: { 'en-US': string };
+      slug: { 'en-US': string };
+      categories: Array<{
+        typeId: string;
+        id: string;
+      }>;
+      masterVariant: {
+        id: number;
+        prices: Array<{
+          id: string;
+          value: {
+            type: string;
+            currencyCode: string;
+            centAmount: number;
+            fractionDigits: number;
+          };
+        }>;
+      };
+      searchKeywords: Array<{
+        text: string;
+      }>;
+    };
+    hasStagedChanges: boolean;
+    published: boolean;
+  };
+  taxCategory?: {
+    typeId: string;
+    id: string;
+  };
+  createdAt: string;
+  lastModifiedAt: string;
+}
+
+export interface CommercetoolsCategory {
+  id: string;
+  name: { 'en-US': string };
+  parent?: {
+    id: string;
   };
 }

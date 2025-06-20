@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useCartWithPromoCodes } from '../../hooks/useCartWithPromoCodes';
+import { ActivePromoCode } from '../../hooks/usePromoCode';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import arrowIcon from '../../assets/arrow.svg';
@@ -71,7 +72,7 @@ const PromoCode: React.FC = () => {
 
       {activePromoCodes.length > 0 && (
         <div className="active-promo-codes">
-          {activePromoCodes.map(code => (
+          {activePromoCodes.map((code: ActivePromoCode) => (
             <div key={code.id} className="active-promo-code applied">
               <span>{code.name || code.code || code.id.substring(0, 8) + '...'}</span>
               <button

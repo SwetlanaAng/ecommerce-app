@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Product } from '../../types/interfaces';
 import { useParams } from 'react-router-dom';
-import { getProductBySlug } from '../../services/product.service';
+import { getProductBySlug } from '../../services/product-local.service';
 import ProductDetailCard from '../../components/product/ProductDetailCard';
 import Loader from '../../components/loader/Loader';
 import Breadcrumb from '../../components/breadcrumbs/Breadcrumbs';

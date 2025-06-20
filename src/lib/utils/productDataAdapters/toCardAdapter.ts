@@ -1,6 +1,7 @@
 import { Product, ProductCardProps } from '../../../types/interfaces';
+import { getCategoriesData } from '../../../services/local-data.service';
 
-export default function toCardAdapter(product: Product): ProductCardProps {
+export default async function toCardAdapter(product: Product): Promise<ProductCardProps> {
   const variant = product.masterVariant;
   const priceData = variant.prices[0];
   const originalPrice = priceData?.value.centAmount / 100 || 0;
@@ -13,15 +14,17 @@ export default function toCardAdapter(product: Product): ProductCardProps {
   const name = product.name['en-US'] || '';
   const description = product.description?.['en-US'] || '';
 
-  const packagingCategory = product.categories.find(cat =>
-    cat.obj?.name?.['en-US']?.toLowerCase().includes('pack')
-  );
+  const categoriesData = getCategoriesData();
 
   let category = '';
-  if (packagingCategory?.obj?.name?.['en-US']) {
-    const categoryName = packagingCategory.obj.name['en-US'];
-    if (['6-pack', '12-pack', '24-pack'].includes(categoryName)) {
-      category = categoryName;
+  for (const productCategory of product.categories) {
+    const categoryData = categoriesData.find(cat => cat.id === productCategory.id);
+    if (categoryData?.name?.['en-US']) {
+      const categoryName = categoryData.name['en-US'];
+      if (['6-pack', '12-pack', '24-pack'].includes(categoryName)) {
+        category = categoryName;
+        break;
+      }
     }
   }
 
@@ -46,6 +49,10 @@ export default function toCardAdapter(product: Product): ProductCardProps {
     const value = isGlutenFreeAttr.value;
     if (typeof value === 'boolean') {
       isGlutenFree = value;
+    } else if (typeof value === 'string') {
+      isGlutenFree = value === 'true';
+    } else if (typeof value === 'object' && 'key' in value) {
+      isGlutenFree = value.key === 'true';
     }
   }
   const filters = { isBestSeller, isGlutenFree };
