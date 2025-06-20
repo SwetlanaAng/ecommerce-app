@@ -17,8 +17,8 @@ let discountCodesCache: DiscountCode[] | null = null;
 let cartDiscountsCache: CartDiscount[] | null = null;
 
 function transformProductToAppFormat(ctProduct: CommercetoolsProduct): Product {
-  const masterData = ctProduct.masterData.current;
-  const masterVariant = masterData.masterVariant;
+  const { current, hasStagedChanges, published } = ctProduct.masterData;
+  const { masterVariant } = current;
 
   return {
     id: ctProduct.id,
@@ -28,10 +28,10 @@ function transformProductToAppFormat(ctProduct: CommercetoolsProduct): Product {
       typeId: 'product-type',
       id: ctProduct.productType.id,
     },
-    name: ctProduct.masterData.current.name,
-    description: ctProduct.masterData.current.description,
-    slug: ctProduct.masterData.current.slug,
-    categories: ctProduct.masterData.current.categories.map(cat => ({
+    name: current.name,
+    description: current.description,
+    slug: current.slug,
+    categories: current.categories.map(cat => ({
       typeId: cat.typeId,
       id: cat.id,
     })),
@@ -41,9 +41,9 @@ function transformProductToAppFormat(ctProduct: CommercetoolsProduct): Product {
       images: masterVariant.images,
       attributes: masterVariant.attributes,
     },
-    searchKeywords: masterData.searchKeywords,
-    hasStagedChanges: ctProduct.masterData.hasStagedChanges,
-    published: ctProduct.masterData.published,
+    searchKeywords: current.searchKeywords as { en: [{ text: string }] },
+    hasStagedChanges,
+    published,
     taxCategory: ctProduct.taxCategory,
     priceMode: 'Embedded',
     createdAt: ctProduct.createdAt,

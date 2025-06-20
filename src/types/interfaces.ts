@@ -307,10 +307,25 @@ export interface CommercetoolsProduct {
             fractionDigits: number;
           };
         }>;
+        images: Array<{
+          url: string;
+          dimensions: {
+            w: number;
+            h: number;
+          };
+        }>;
+        attributes: Array<{
+          name: string;
+          value:
+            | string
+            | boolean
+            | {
+                key: string;
+                label: string;
+              };
+        }>;
       };
-      searchKeywords: Array<{
-        text: string;
-      }>;
+      searchKeywords: unknown;
     };
     hasStagedChanges: boolean;
     published: boolean;
