@@ -50,18 +50,23 @@ function createEmptyCart(): Cart {
   };
 }
 
-function calculateCartTotal(cart: Cart): number {
-  return cart.lineItems.reduce((total, item) => {
-    const itemPrice = typeof item.price === 'number' ? item.price : 0;
-    return total + itemPrice * item.quantity;
-  }, 0);
-}
-
 async function updateCartTotal(cart: Cart): Promise<Cart> {
   const newCart = { ...cart };
-  const subtotal = calculateCartTotal(newCart);
+
+  newCart.lineItems.forEach(item => {
+    if (item.appliedDiscounts && item.appliedDiscounts.length > 0) {
+      const cartDiscount = item.appliedDiscounts.find(d => d.discountType === 'cart');
+      if (cartDiscount) {
+        if (item.originalPrice) {
+          item.price = item.originalPrice;
+        }
+        delete item.originalPrice;
+        delete item.appliedDiscounts;
+      }
+    }
+  });
+
   let totalDiscountAmount = 0;
-  let discountedSubtotal = subtotal;
 
   if (newCart.discountCodes && newCart.discountCodes.length > 0) {
     const allDiscountCodes = getDiscountCodesData();
@@ -71,31 +76,70 @@ async function updateCartTotal(cart: Cart): Promise<Cart> {
     if (appliedDiscountCode && appliedDiscountCode.cartDiscounts.length > 0) {
       const cartDiscountId = appliedDiscountCode.cartDiscounts[0].id;
       const discountDetails = await getCartDiscount(cartDiscountId);
+
       if (discountDetails && discountDetails.value.type === 'relative') {
         const { predicate } = discountDetails.target;
+        const discountRate = discountDetails.value.permyriad / 10000;
+
         if (predicate && predicate.includes('categories.id')) {
           const categoryId = predicate.split('"')[1];
-          const holidayItemsTotal = await newCart.lineItems.reduce(async (accPromise, item) => {
-            const acc = await accPromise;
+
+          for (const item of newCart.lineItems) {
             const product = await getProductById(item.productId);
             const isInCategory = product.categories.some(
               (cat: { id: string }) => cat.id === categoryId
             );
+
             if (isInCategory) {
               const itemPrice = typeof item.price === 'number' ? item.price : 0;
-              return acc + itemPrice * item.quantity;
+              const discountAmount = itemPrice * discountRate;
+              totalDiscountAmount += discountAmount * item.quantity;
+
+              if (!item.originalPrice) {
+                item.originalPrice = itemPrice;
+              }
+              item.price = itemPrice - discountAmount;
+
+              if (!item.appliedDiscounts) {
+                item.appliedDiscounts = [];
+              }
+              item.appliedDiscounts.push({
+                discountType: 'cart',
+                discountAmount,
+                discountId: appliedDiscountCode.id,
+              });
             }
-            return acc;
-          }, Promise.resolve(0));
-          totalDiscountAmount = (holidayItemsTotal * discountDetails.value.permyriad) / 10000;
+          }
         } else {
-          totalDiscountAmount = (subtotal * discountDetails.value.permyriad) / 10000;
+          for (const item of newCart.lineItems) {
+            const itemPrice = typeof item.price === 'number' ? item.price : 0;
+            const discountAmount = itemPrice * discountRate;
+            totalDiscountAmount += discountAmount * item.quantity;
+
+            if (!item.originalPrice) {
+              item.originalPrice = itemPrice;
+            }
+            item.price = itemPrice - discountAmount;
+            if (!item.appliedDiscounts) {
+              item.appliedDiscounts = [];
+            }
+            item.appliedDiscounts.push({
+              discountType: 'cart',
+              discountAmount,
+              discountId: appliedDiscountCode.id,
+            });
+          }
         }
       }
     }
   }
 
-  discountedSubtotal = subtotal - totalDiscountAmount;
+  const subtotal = newCart.lineItems.reduce((total, item) => {
+    const price = item.originalPrice || item.price;
+    return total + (typeof price === 'number' ? price * item.quantity : 0);
+  }, 0);
+
+  const discountedSubtotal = subtotal - totalDiscountAmount;
 
   newCart.totalPrice = {
     ...newCart.totalPrice,

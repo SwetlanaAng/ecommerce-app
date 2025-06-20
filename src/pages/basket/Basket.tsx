@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useCart } from '../../features/cart/hooks/useCart';
+import { useCartWithPromoCodes } from '../../hooks/useCartWithPromoCodes';
 import { Link } from 'react-router-dom';
 import { CartItem } from '../../types/interfaces';
 import Loader from '../../components/loader/Loader';
@@ -13,7 +13,15 @@ import emptyCart from '../../assets/empty-cart.png';
 import './Basket.css';
 
 const Basket: React.FC = () => {
-  const { cart, isLoading, error, removeFromCart, updateCartItemQuantity, clearCart } = useCart();
+  const {
+    cart,
+    isLoading,
+    error,
+    removeFromCart,
+    updateCartItemQuantity,
+    clearCart,
+    activePromoCodes,
+  } = useCartWithPromoCodes();
   const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -74,8 +82,10 @@ const Basket: React.FC = () => {
   const totalAmount = cart.totalPrice.centAmount / Math.pow(10, cart.totalPrice.fractionDigits);
 
   const subtotalAmount = cart.lineItems.reduce((sum, item) => {
-    const itemOriginalPrice = item.isOnSale && item.originalPrice ? item.originalPrice : item.price;
-    return sum + (typeof itemOriginalPrice === 'number' ? itemOriginalPrice * item.quantity : 0);
+    const itemPriceForSubtotal = item.originalPrice ?? item.price;
+    return (
+      sum + (typeof itemPriceForSubtotal === 'number' ? itemPriceForSubtotal * item.quantity : 0)
+    );
   }, 0);
 
   const actualDiscountedAmount = subtotalAmount - totalAmount;
@@ -119,6 +129,8 @@ const Basket: React.FC = () => {
         <div className="cart-items">
           {cart.lineItems.map((item: CartItem) => {
             const isUpdating = updatingItems.has(item.id);
+            const hasDiscount =
+              item.isOnSale || (item.appliedDiscounts && item.appliedDiscounts.length > 0);
 
             return (
               <div key={item.id} className={`cart-item ${isUpdating ? 'updating' : ''}`}>
@@ -130,7 +142,7 @@ const Basket: React.FC = () => {
                   <div className="cart-item-details">
                     <h4 className="cart-item-name">{item.name}</h4>
                     <div className="cart-item-price">
-                      {item.isOnSale &&
+                      {hasDiscount &&
                         item.originalPrice &&
                         typeof item.originalPrice === 'number' && (
                           <AnimatedPrice
@@ -140,10 +152,13 @@ const Basket: React.FC = () => {
                         )}
                       <AnimatedPrice
                         value={typeof item.price === 'number' ? item.price : 0}
-                        className={`cart-item-current-price ${item.isOnSale ? 'discounted' : ''}`}
+                        className={`cart-item-current-price ${hasDiscount ? 'discounted' : ''}`}
                       />
                     </div>
-                    <DiscountInfo appliedDiscounts={item.appliedDiscounts} />
+                    <DiscountInfo
+                      appliedDiscounts={item.appliedDiscounts}
+                      activePromoCodes={activePromoCodes}
+                    />
                   </div>
 
                   <div className="cart-item-quantity">
