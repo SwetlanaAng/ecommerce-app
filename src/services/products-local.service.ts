@@ -91,6 +91,11 @@ function searchInProduct(product: Product, query: string): boolean {
   return name.includes(searchText) || description.includes(searchText);
 }
 
+function getFinalPrice(product: Product): number {
+  const price = product.masterVariant.prices[0];
+  return price?.discounted?.value.centAmount ?? price?.value.centAmount ?? 0;
+}
+
 function sortProducts(products: Product[], sort: SortOption): Product[] {
   const sortedProducts = [...products];
 
@@ -105,14 +110,14 @@ function sortProducts(products: Product[], sort: SortOption): Product[] {
       );
     case 'price asc':
       return sortedProducts.sort((a, b) => {
-        const priceA = a.masterVariant.prices[0]?.value.centAmount || 0;
-        const priceB = b.masterVariant.prices[0]?.value.centAmount || 0;
+        const priceA = getFinalPrice(a);
+        const priceB = getFinalPrice(b);
         return priceA - priceB;
       });
     case 'price desc':
       return sortedProducts.sort((a, b) => {
-        const priceA = a.masterVariant.prices[0]?.value.centAmount || 0;
-        const priceB = b.masterVariant.prices[0]?.value.centAmount || 0;
+        const priceA = getFinalPrice(a);
+        const priceB = getFinalPrice(b);
         return priceB - priceA;
       });
     default:
