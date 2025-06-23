@@ -2,6 +2,7 @@ import productsData from '../../commercetools-export/products.json';
 import categoriesData from '../../commercetools-export/categories.json';
 import discountCodesData from '../../commercetools-export/discount-codes.json';
 import cartDiscountsData from '../../commercetools-export/cart-discounts.json';
+import imageMapData from '../../commercetools-export/image-map.json';
 import {
   Product,
   CategoryData,
@@ -15,6 +16,7 @@ let productsCache: Product[] | null = null;
 let categoriesCache: CategoryData[] | null = null;
 let discountCodesCache: DiscountCode[] | null = null;
 let cartDiscountsCache: CartDiscount[] | null = null;
+let imageMapCache: Record<string, string> | null = null;
 
 function transformProductToAppFormat(ctProduct: CommercetoolsProduct): Product {
   const { current, hasStagedChanges, published } = ctProduct.masterData;
@@ -89,4 +91,11 @@ export function getCartDiscountsData(): CartDiscount[] {
     cartDiscountsCache = cartDiscountsData as CartDiscount[];
   }
   return cartDiscountsCache;
+}
+
+export function getImageMapData(): Record<string, string> {
+  if (!imageMapCache) {
+    imageMapCache = imageMapData as Record<string, string>;
+  }
+  return imageMapCache;
 }

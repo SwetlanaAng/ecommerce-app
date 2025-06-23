@@ -1,5 +1,5 @@
 import { Product, ProductCardProps } from '../../../types/interfaces';
-import { getCategoriesData } from '../../../services/local-data.service';
+import { getCategoriesData, getImageMapData } from '../../../services/local-data.service';
 
 export default async function toCardAdapter(product: Product): Promise<ProductCardProps> {
   const variant = product.masterVariant;
@@ -10,7 +10,10 @@ export default async function toCardAdapter(product: Product): Promise<ProductCa
     : undefined;
   const isOnSale = !!priceData?.discounted;
   const price = discountedPrice || originalPrice;
-  const imageUrl = variant.images[0]?.url || '';
+  const remoteImageUrl = variant.images[0]?.url || '';
+  const imageMap = getImageMapData();
+  const localImage = imageMap[remoteImageUrl];
+  const imageUrl = localImage ? `/${localImage}` : remoteImageUrl;
   const name = product.name['en-US'] || '';
   const description = product.description?.['en-US'] || '';
 

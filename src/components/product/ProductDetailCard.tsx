@@ -9,6 +9,7 @@ import Button from '../button/Button';
 import ProductCard from './ProductCard';
 import { getProductsList } from '../../services/products-local.service';
 import toCardAdapter from '../../lib/utils/productDataAdapters/toCardAdapter';
+import { getImageMapData } from '../../services/local-data.service';
 
 import './ProductDetailCard.css';
 
@@ -23,6 +24,14 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   const title = name['en-US'];
   const desc = description?.['en-US'] || 'No description.';
   const images = masterVariant.images;
+  const imageMap = getImageMapData();
+  const localImages = images.map(img => {
+    const localPath = imageMap[img.url];
+    return {
+      ...img,
+      url: localPath ? `/${localPath}` : img.url,
+    };
+  });
   const priceInfo = masterVariant.prices[0];
   const base = priceInfo.value.centAmount / 10 ** priceInfo.value.fractionDigits;
   const curr = '$';
@@ -106,11 +115,11 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
   }, [product]);
 
   const handlePrev = () => {
-    setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
+    setCurrentIndex(prev => (prev === 0 ? localImages.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
+    setCurrentIndex(prev => (prev === localImages.length - 1 ? 0 : prev + 1));
   };
 
   const handleAdd = async () => {
@@ -372,10 +381,10 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
         </div>
 
         <div className="detail-images">
-          {images.length > 0 && (
+          {localImages.length > 0 && (
             <div className="slider">
               <img
-                src={images[currentIndex].url}
+                src={localImages[currentIndex].url}
                 alt={`${title} image ${currentIndex + 1}`}
                 className="slider-image"
                 onClick={() => {
@@ -384,7 +393,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
                 }}
               />
 
-              {images.length > 1 && (
+              {localImages.length > 1 && (
                 <>
                   <button className="slider-btn prev" onClick={handlePrev}>
                     ⟨
@@ -396,9 +405,9 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
               )}
             </div>
           )}
-          {images.length > 1 && (
+          {localImages.length > 1 && (
             <div className="detail-images-thumbs">
-              {images.map((img, idx) => (
+              {localImages.map((img, idx) => (
                 <img
                   key={idx}
                   src={img.url}
@@ -411,7 +420,7 @@ const ProductDetailCard: React.FC<Props> = ({ product }) => {
           )}
         </div>
         <ImageModal
-          images={images}
+          images={localImages}
           isOpen={isModalOpen}
           initialIndex={modalIndex}
           onClose={() => setIsModalOpen(false)}
