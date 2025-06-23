@@ -31,11 +31,11 @@ jest.mock('../../components/filters/ActiveFilters', () => () => <div>Mocked Acti
 jest.mock('../../components/category-nav/CategoryNav', () => () => <div>Mocked CategoryNav</div>);
 jest.mock('../../components/breadcrumbs/Breadcrumbs', () => () => <div>Mocked Breadcrumbs</div>);
 
-jest.mock('../../services/products.service', () => ({
+jest.mock('../../services/products-local.service', () => ({
   getProductsList: jest.fn(),
   searchProducts: jest.fn(),
 }));
-jest.mock('../../services/category.service', () => ({
+jest.mock('../../services/category-local.service', () => ({
   getCategoryById: jest.fn(),
   getCategoryPath: jest.fn(),
 }));

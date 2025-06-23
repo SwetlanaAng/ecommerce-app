@@ -22,7 +22,7 @@ jest.mock('../../features/cart/hooks/useCart', () => ({
   }),
 }));
 
-jest.mock('../../services/products.service', () => ({
+jest.mock('../../services/products-local.service', () => ({
   getProductsList: jest.fn().mockResolvedValue([]),
 }));
 

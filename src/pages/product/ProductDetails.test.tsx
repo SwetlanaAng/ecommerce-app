@@ -21,7 +21,7 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-jest.mock('../../services/product.service', () => ({
+jest.mock('../../services/product-local.service', () => ({
   getProductBySlug: jest.fn(),
 }));
 

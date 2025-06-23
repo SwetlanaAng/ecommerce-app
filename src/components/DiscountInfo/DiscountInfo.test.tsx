@@ -35,9 +35,8 @@ describe('DiscountInfo', () => {
         discountId: 'test-cart-discount',
       },
     ];
-
-    render(<DiscountInfo appliedDiscounts={discounts} />);
-
+    const activePromoCodes = [{ id: 'test-cart-discount', code: 'HOLIDAY15' }];
+    render(<DiscountInfo appliedDiscounts={discounts} activePromoCodes={activePromoCodes} />);
     expect(screen.getByText('HOLIDAY15')).toBeInTheDocument();
     expect(screen.getByText('HOLIDAY15').closest('.discount-badge')).toHaveClass('cart');
   });
@@ -55,12 +54,10 @@ describe('DiscountInfo', () => {
         discountId: 'test-cart-discount',
       },
     ];
-
-    render(<DiscountInfo appliedDiscounts={discounts} />);
-
+    const activePromoCodes = [{ id: 'test-cart-discount', code: 'HOLIDAY15' }];
+    render(<DiscountInfo appliedDiscounts={discounts} activePromoCodes={activePromoCodes} />);
     expect(screen.getByText('Sale')).toBeInTheDocument();
     expect(screen.getByText('HOLIDAY15')).toBeInTheDocument();
-
     const discountBadges = screen.getAllByText(/Sale|HOLIDAY15/);
     expect(discountBadges).toHaveLength(2);
   });
@@ -135,11 +132,11 @@ describe('DiscountInfo', () => {
       {
         discountType: 'cart' as const,
         discountAmount: 15,
+        discountId: 'test-cart-discount',
       },
     ];
-
-    render(<DiscountInfo appliedDiscounts={discounts} />);
-
+    const activePromoCodes = [{ id: 'test-cart-discount', code: 'HOLIDAY15' }];
+    render(<DiscountInfo appliedDiscounts={discounts} activePromoCodes={activePromoCodes} />);
     const discountTypeSpan = screen.getByText('HOLIDAY15');
     expect(discountTypeSpan).toHaveClass('discount-type');
     expect(discountTypeSpan.closest('.discount-badge')).toHaveClass('discount-badge', 'cart');

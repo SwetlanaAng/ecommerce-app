@@ -14,7 +14,7 @@ jest.mock('../../services/keys', () => ({
   },
 }));
 
-jest.mock('../../services/cart.service', () => ({
+jest.mock('../../services/cart.logic', () => ({
   getCart: jest.fn(),
   createCart: jest.fn(),
   addProductToCart: jest.fn(),

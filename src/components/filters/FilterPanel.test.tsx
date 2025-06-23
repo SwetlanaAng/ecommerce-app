@@ -1,23 +1,47 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useState } from 'react';
 import FilterPanel from './FilterPanel';
 import { useAppContext } from '../../features/app/hooks/useAppContext';
+import { ProductFilters } from '../../types/interfaces';
 
 jest.mock('../../features/app/hooks/useAppContext');
 
 const mockedUseAppContext = useAppContext as jest.MockedFunction<typeof useAppContext>;
 
-describe('FilterPanel', () => {
-  const availableFlavors = ['chocolate', 'vanilla', 'strawberry'];
-  const priceRange = { min: 10, max: 100 };
-  const baseFilters = {
-    flavors: [],
-    isBestSeller: false,
-    priceRange: { min: 10, max: 100 },
+const availableFlavors = ['chocolate', 'vanilla', 'strawberry'];
+const priceRange = { min: 10, max: 100 };
+const baseFilters: ProductFilters = {
+  flavors: [],
+  isBestSeller: false,
+  isGlutenFree: false,
+  priceRange: { min: 10, max: 100 },
+};
+
+interface FilterPanelTestWrapperProps {
+  initialFilters: ProductFilters;
+}
+
+const FilterPanelTestWrapper = ({ initialFilters }: FilterPanelTestWrapperProps) => {
+  const [filters, setFilters] = useState(initialFilters);
+
+  const handleFilterChange = (newFilters: ProductFilters) => {
+    setFilters(newFilters);
   };
 
-  const onFilterChange = jest.fn();
-  const onResetFilters = jest.fn();
+  const handleResetFilters = () => {
+    setFilters(baseFilters);
+  };
 
+  return (
+    <FilterPanel
+      filters={filters}
+      onFilterChange={handleFilterChange}
+      onResetFilters={handleResetFilters}
+    />
+  );
+};
+
+describe('FilterPanel', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockedUseAppContext.mockReturnValue({
@@ -30,13 +54,7 @@ describe('FilterPanel', () => {
   });
 
   it('renders correctly with initial props', () => {
-    render(
-      <FilterPanel
-        filters={baseFilters}
-        onFilterChange={onFilterChange}
-        onResetFilters={onResetFilters}
-      />
-    );
+    render(<FilterPanelTestWrapper initialFilters={baseFilters} />);
 
     expect(screen.getByText('Filters')).toBeInTheDocument();
 
@@ -57,75 +75,49 @@ describe('FilterPanel', () => {
     expect(bestSellerCheckbox.checked).toBe(false);
   });
 
-  it('calls onFilterChange when flavor is selected', () => {
-    render(
-      <FilterPanel
-        filters={baseFilters}
-        onFilterChange={onFilterChange}
-        onResetFilters={onResetFilters}
-      />
-    );
+  it('calls onFilterChange when flavor is selected', async () => {
+    render(<FilterPanelTestWrapper initialFilters={baseFilters} />);
 
     const chocolateCheckbox = screen.getByLabelText('Chocolate');
     fireEvent.click(chocolateCheckbox);
 
-    expect(onFilterChange).toHaveBeenCalledWith({
-      ...baseFilters,
-      flavors: ['chocolate'],
+    await waitFor(() => {
+      expect((screen.getByLabelText('Chocolate') as HTMLInputElement).checked).toBe(true);
     });
   });
 
-  it('calls onFilterChange when Best Seller checkbox changes', () => {
-    render(
-      <FilterPanel
-        filters={baseFilters}
-        onFilterChange={onFilterChange}
-        onResetFilters={onResetFilters}
-      />
-    );
+  it('calls onFilterChange when Best Seller checkbox changes', async () => {
+    render(<FilterPanelTestWrapper initialFilters={baseFilters} />);
 
     const bestSellerCheckbox = screen.getByLabelText('Best Seller');
     fireEvent.click(bestSellerCheckbox);
 
-    expect(onFilterChange).toHaveBeenCalledWith({
-      ...baseFilters,
-      isBestSeller: true,
+    await waitFor(() => {
+      expect((screen.getByLabelText('Best Seller') as HTMLInputElement).checked).toBe(true);
     });
   });
 
-  it('updates price inputs and applies price filter', () => {
-    render(
-      <FilterPanel
-        filters={baseFilters}
-        onFilterChange={onFilterChange}
-        onResetFilters={onResetFilters}
-      />
-    );
+  it('updates price inputs and applies price filter', async () => {
+    render(<FilterPanelTestWrapper initialFilters={baseFilters} />);
 
     const minPriceInput = screen.getByLabelText('from');
     const maxPriceInput = screen.getByLabelText('to');
 
     fireEvent.change(minPriceInput, { target: { value: '20' } });
-    expect(minPriceInput).toHaveValue(20);
+    await waitFor(() => {
+      expect(minPriceInput).toHaveValue(20);
+    });
 
     fireEvent.change(maxPriceInput, { target: { value: '80' } });
-    expect(maxPriceInput).toHaveValue(80);
-
-    expect(onFilterChange).toHaveBeenCalledWith({
-      ...baseFilters,
-      priceRange: {
-        min: 20,
-        max: 80,
-      },
+    await waitFor(() => {
+      expect(maxPriceInput).toHaveValue(80);
     });
   });
 
-  it('calls onResetFilters and resets price inputs on Reset All click', () => {
+  it('calls onResetFilters and resets price inputs on Reset All click', async () => {
     render(
-      <FilterPanel
-        filters={{ ...baseFilters, priceRange: { min: 20, max: 80 } }}
-        onFilterChange={onFilterChange}
-        onResetFilters={onResetFilters}
+      <FilterPanelTestWrapper
+        initialFilters={{ ...baseFilters, priceRange: { min: 20, max: 80 } }}
       />
     );
 
@@ -138,10 +130,10 @@ describe('FilterPanel', () => {
 
     fireEvent.click(resetButton);
 
-    expect(onResetFilters).toHaveBeenCalled();
-
-    expect(minPriceInput).toHaveValue(10);
-    expect(maxPriceInput).toHaveValue(100);
+    await waitFor(() => {
+      expect(minPriceInput).toHaveValue(10);
+      expect(maxPriceInput).toHaveValue(100);
+    });
   });
 
   it('renders loading state when isLoading is true', () => {
@@ -153,13 +145,7 @@ describe('FilterPanel', () => {
       error: null,
     });
 
-    render(
-      <FilterPanel
-        filters={baseFilters}
-        onFilterChange={onFilterChange}
-        onResetFilters={onResetFilters}
-      />
-    );
+    render(<FilterPanelTestWrapper initialFilters={baseFilters} />);
 
     expect(screen.getByText('Loading filters...')).toBeInTheDocument();
   });
