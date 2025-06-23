@@ -364,7 +364,15 @@ const Catalog: React.FC = () => {
                   <p>No products found</p>
                 </div>
               ) : (
-                products.map((product, index) => <ProductCard {...product} key={index} />)
+                products.map((product, index) => (
+                  <div
+                    className="catalog-card-animated"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                    key={product.id || index}
+                  >
+                    <ProductCard {...product} />
+                  </div>
+                ))
               )}
             </div>
           )}

@@ -1,6 +1,6 @@
 .product-card {
   position: relative;
-  width: calc((100% - 40px) / 3);
+  width: 100%;
   display: block;
   text-decoration: none;
   color: inherit;
@@ -161,21 +161,6 @@
       width: 24px;
       height: 24px;
       transition: opacity 0.2s ease;
-    }
-  }
-}
-
-@media (max-width: 1150px) {
-  .product-card {
-    width: calc((100% - 20px) / 2);
-  }
-}
-
-@media (max-width: 479.9px) {
-  .product-card {
-    width: 100%;
-    .product-image {
-      height: 200px;
     }
   }
 }
