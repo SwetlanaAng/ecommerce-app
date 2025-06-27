@@ -79,16 +79,19 @@ const Basket: React.FC = () => {
     );
   }
 
-  const totalAmount = cart.totalPrice.centAmount / Math.pow(10, cart.totalPrice.fractionDigits);
-
   const subtotalAmount = cart.lineItems.reduce((sum, item) => {
-    const itemPriceForSubtotal = item.originalPrice ?? item.price;
-    return (
-      sum + (typeof itemPriceForSubtotal === 'number' ? itemPriceForSubtotal * item.quantity : 0)
-    );
+    const originalPrice = item.originalPrice || item.price;
+    return sum + (typeof originalPrice === 'number' ? originalPrice * item.quantity : 0);
+  }, 0);
+
+  const totalAmount = cart.lineItems.reduce((sum, item) => {
+    const currentPrice = item.price;
+    return sum + (typeof currentPrice === 'number' ? currentPrice * item.quantity : 0);
   }, 0);
 
   const actualDiscountedAmount = subtotalAmount - totalAmount;
+
+  const hasCart10PromoCode = activePromoCodes.some(promo => promo.code === 'CART10');
 
   return (
     <div className="basket-page">
@@ -129,8 +132,29 @@ const Basket: React.FC = () => {
         <div className="cart-items">
           {cart.lineItems.map((item: CartItem) => {
             const isUpdating = updatingItems.has(item.id);
-            const hasDiscount =
-              item.isOnSale || (item.appliedDiscounts && item.appliedDiscounts.length > 0);
+
+            const isOriginalItemDiscount = item.isOnSale && !item.appliedDiscounts?.length;
+
+            const hasHoliday15Discount = item.appliedDiscounts?.some(discount => {
+              const promoCode = activePromoCodes.find(pc => pc.id === discount.discountId);
+              return promoCode?.code === 'HOLIDAY15';
+            });
+
+            const shouldShowItemDiscount = hasHoliday15Discount || isOriginalItemDiscount;
+            const hasDiscount = shouldShowItemDiscount && (item.isOnSale || hasHoliday15Discount);
+
+            let displayPrice = typeof item.price === 'number' ? item.price : 0;
+
+            if (hasCart10PromoCode && item.appliedDiscounts) {
+              const cart10Discount = item.appliedDiscounts.find(discount => {
+                const promoCode = activePromoCodes.find(pc => pc.id === discount.discountId);
+                return promoCode?.code === 'CART10';
+              });
+
+              if (cart10Discount) {
+                displayPrice += cart10Discount.discountAmount;
+              }
+            }
 
             return (
               <div key={item.id} className={`cart-item ${isUpdating ? 'updating' : ''}`}>
@@ -151,14 +175,21 @@ const Basket: React.FC = () => {
                           />
                         )}
                       <AnimatedPrice
-                        value={typeof item.price === 'number' ? item.price : 0}
+                        value={displayPrice}
                         className={`cart-item-current-price ${hasDiscount ? 'discounted' : ''}`}
                       />
                     </div>
-                    <DiscountInfo
-                      appliedDiscounts={item.appliedDiscounts}
-                      activePromoCodes={activePromoCodes}
-                    />
+                    {shouldShowItemDiscount && (
+                      <DiscountInfo
+                        appliedDiscounts={item.appliedDiscounts?.filter(discount => {
+                          const promoCode = activePromoCodes.find(
+                            pc => pc.id === discount.discountId
+                          );
+                          return promoCode?.code !== 'CART10';
+                        })}
+                        activePromoCodes={activePromoCodes}
+                      />
+                    )}
                   </div>
 
                   <div className="cart-item-quantity">
@@ -182,9 +213,7 @@ const Basket: React.FC = () => {
                   </div>
 
                   <div className="cart-item-total">
-                    <AnimatedPrice
-                      value={typeof item.price === 'number' ? item.price * item.quantity : 0}
-                    />
+                    <AnimatedPrice value={displayPrice * item.quantity} />
                   </div>
                 </div>
 

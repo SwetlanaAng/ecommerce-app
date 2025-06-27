@@ -55,13 +55,26 @@ async function updateCartTotal(cart: Cart): Promise<Cart> {
 
   newCart.lineItems.forEach(item => {
     if (item.appliedDiscounts && item.appliedDiscounts.length > 0) {
-      const cartDiscount = item.appliedDiscounts.find(d => d.discountType === 'cart');
-      if (cartDiscount) {
-        if (item.originalPrice) {
+      const cartDiscounts = item.appliedDiscounts.filter(d => d.discountType === 'cart');
+      if (cartDiscounts.length > 0) {
+        if (item.isOnSale && item.originalPrice) {
+          let originalDiscountedPrice = item.originalPrice;
+
+          const totalPromoDiscount = cartDiscounts.reduce(
+            (sum, discount) => sum + discount.discountAmount,
+            0
+          );
+          originalDiscountedPrice = item.price + totalPromoDiscount;
+
+          item.price = originalDiscountedPrice;
+        } else if (item.originalPrice) {
           item.price = item.originalPrice;
+          delete item.originalPrice;
         }
-        delete item.originalPrice;
-        delete item.appliedDiscounts;
+        item.appliedDiscounts = item.appliedDiscounts?.filter(d => d.discountType !== 'cart');
+        if (item.appliedDiscounts?.length === 0) {
+          delete item.appliedDiscounts;
+        }
       }
     }
   });
@@ -70,36 +83,61 @@ async function updateCartTotal(cart: Cart): Promise<Cart> {
 
   if (newCart.discountCodes && newCart.discountCodes.length > 0) {
     const allDiscountCodes = getDiscountCodesData();
-    const discountCodeId = newCart.discountCodes[0].discountCode.id;
-    const appliedDiscountCode = allDiscountCodes.find(dc => dc.id === discountCodeId);
 
-    if (appliedDiscountCode && appliedDiscountCode.cartDiscounts.length > 0) {
-      const cartDiscountId = appliedDiscountCode.cartDiscounts[0].id;
-      const discountDetails = await getCartDiscount(cartDiscountId);
+    for (const discountCodeRef of newCart.discountCodes) {
+      const appliedDiscountCode = allDiscountCodes.find(
+        dc => dc.id === discountCodeRef.discountCode.id
+      );
 
-      if (discountDetails && discountDetails.value.type === 'relative') {
-        const { predicate } = discountDetails.target;
-        const discountRate = discountDetails.value.permyriad / 10000;
+      if (appliedDiscountCode && appliedDiscountCode.cartDiscounts.length > 0) {
+        const cartDiscountId = appliedDiscountCode.cartDiscounts[0].id;
+        const discountDetails = await getCartDiscount(cartDiscountId);
 
-        if (predicate && predicate.includes('categories.id')) {
-          const categoryId = predicate.split('"')[1];
+        if (discountDetails && discountDetails.value.type === 'relative') {
+          const { predicate } = discountDetails.target;
+          const discountRate = discountDetails.value.permyriad / 10000;
 
-          for (const item of newCart.lineItems) {
-            const product = await getProductById(item.productId);
-            const isInCategory = product.categories.some(
-              (cat: { id: string }) => cat.id === categoryId
-            );
+          if (predicate && predicate.includes('categories.id')) {
+            const categoryId = predicate.split('"')[1];
 
-            if (isInCategory) {
-              const itemPrice = typeof item.price === 'number' ? item.price : 0;
+            for (const item of newCart.lineItems) {
+              const product = await getProductById(item.productId);
+              const isInCategory = product.categories.some(
+                (cat: { id: string }) => cat.id === categoryId
+              );
+
+              if (isInCategory) {
+                const originalPrice = item.originalPrice || item.price;
+                const itemPrice = typeof originalPrice === 'number' ? originalPrice : 0;
+                const discountAmount = itemPrice * discountRate;
+                totalDiscountAmount += discountAmount * item.quantity;
+
+                if (!item.originalPrice) {
+                  item.originalPrice = item.isOnSale ? itemPrice : item.price;
+                }
+                item.price = item.price - discountAmount;
+
+                if (!item.appliedDiscounts) {
+                  item.appliedDiscounts = [];
+                }
+                item.appliedDiscounts.push({
+                  discountType: 'cart',
+                  discountAmount,
+                  discountId: appliedDiscountCode.id,
+                });
+              }
+            }
+          } else {
+            for (const item of newCart.lineItems) {
+              const originalPrice = item.originalPrice || item.price;
+              const itemPrice = typeof originalPrice === 'number' ? originalPrice : 0;
               const discountAmount = itemPrice * discountRate;
               totalDiscountAmount += discountAmount * item.quantity;
 
               if (!item.originalPrice) {
-                item.originalPrice = itemPrice;
+                item.originalPrice = item.isOnSale ? itemPrice : item.price;
               }
-              item.price = itemPrice - discountAmount;
-
+              item.price = item.price - discountAmount;
               if (!item.appliedDiscounts) {
                 item.appliedDiscounts = [];
               }
@@ -109,25 +147,6 @@ async function updateCartTotal(cart: Cart): Promise<Cart> {
                 discountId: appliedDiscountCode.id,
               });
             }
-          }
-        } else {
-          for (const item of newCart.lineItems) {
-            const itemPrice = typeof item.price === 'number' ? item.price : 0;
-            const discountAmount = itemPrice * discountRate;
-            totalDiscountAmount += discountAmount * item.quantity;
-
-            if (!item.originalPrice) {
-              item.originalPrice = itemPrice;
-            }
-            item.price = itemPrice - discountAmount;
-            if (!item.appliedDiscounts) {
-              item.appliedDiscounts = [];
-            }
-            item.appliedDiscounts.push({
-              discountType: 'cart',
-              discountAmount,
-              discountId: appliedDiscountCode.id,
-            });
           }
         }
       }
